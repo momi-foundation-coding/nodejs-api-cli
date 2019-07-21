@@ -1,34 +1,35 @@
 {
-  "name": "kemboijs-generator",
-  "version": "1.0.0",
-  "description": "This is one command kemboijs app generator. It is a scaffold for generating a customizable app for your nodejs APIs",
-  "main": "index.js",
-  "scripts": {
-    "test": "npm test"
-  },
-  "bin": {
-    "kemboijs-app": "./tasks/createapp.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/kemboijs/kemboijs-generator.git"
-  },
-  "keywords": [
-    "nodejs",
-    "nodejs",
-    "scaffold",
-    "kemboijs",
-    "generator",
-    "kemboijs",
-    "app",
-    "kemboijs",
-    "api",
-    "generator"
-  ],
-  "author": "Ezrqn Kemboi <ezrqnkemboi@gmail.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/kemboijs/kemboijs-generator/issues"
-  },
-  "homepage": "https://github.com/kemboijs/kemboijs-generator#readme"
+    "name": "kemboijs-generator",
+    "version": "1.0.0",
+    "description": "This is one command kemboijs app generator. It is a scaffold for generating a customizable app for your nodejs APIs",
+    "main": "index.js",
+    "scripts": {
+        "test": "npm test",
+        "start": "node ./tasks/createapp"
+    },
+    "bin": {
+        "kemboijs-app": "./tasks/createapp.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/kemboijs/kemboijs-generator.git"
+    },
+    "keywords": [
+        "nodejs",
+        "nodejs",
+        "scaffold",
+        "kemboijs",
+        "generator",
+        "kemboijs",
+        "app",
+        "kemboijs",
+        "api",
+        "generator"
+    ],
+    "author": "Ezrqn Kemboi <ezrqnkemboi@gmail.com>",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/kemboijs/kemboijs-generator/issues"
+    },
+    "homepage": "https://github.com/kemboijs/kemboijs-generator#readme"
 }
