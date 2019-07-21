@@ -11,8 +11,7 @@ const packageJson = {
     }
 }
 
-const gitIgnore = `
-# Logs
+const gitIgnore = `# Logs
 logs
 *.log
 npm-debug.log*
@@ -75,8 +74,7 @@ typings/
 .next
 
 # dist file ignored
-dist/
-`
+dist/`
 
 function writeFiles() {
     const packageJsonData = JSON.stringify(packageJson, null, "\t");
