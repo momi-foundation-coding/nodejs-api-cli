@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "test": "npm test",
-        "start": "node ./tasks/createapp"
+        "start": "babel-node ./tasks/createapp"
     },
     "bin": {
         "kemboijs-app": "./tasks/createapp.js"
