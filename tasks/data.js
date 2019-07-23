@@ -1,13 +1,15 @@
 // Package file data.
-export const packageJson = {
-    "name": "My App",
-    "version": "1.0.0",
-    "main": "index.js",
-    "scripts": {
-        "start": "node ./src/index.js",
-        "test": "run test"
+export const packageJson = (name) => (
+    {
+        "name": `${name.charAt(0).toUpperCase() + name.slice(1)}`,
+        "version": "1.0.0",
+        "main": "index.js",
+        "scripts": {
+            "start": "babel-node app.js",
+            "test": "nyc --reporter=text mocha --require @babel/register --exit"
+        }
     }
-}
+);
 
 export const gitIgnore = `# Logs
 logs
@@ -90,4 +92,17 @@ npm build
 # Run your tests
 npm test
 `
-)
+);
+
+export const babel = `{
+    "presets": [
+        [
+            "@babel/preset-env",
+            {
+                "targets": {
+                    "node": "current"
+                }
+            }
+        ]
+    ]
+}`

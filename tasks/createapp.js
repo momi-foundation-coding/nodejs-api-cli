@@ -1,7 +1,7 @@
 const fs = require("fs");
 const { exec } = require("child_process");
 const path = require("path");
-import { packageJson, gitIgnore, readMe } from './data';
+import { packageJson, gitIgnore, readMe, babel } from './data';
 
 function createFiles(name) {
     if (!name) {
@@ -9,23 +9,39 @@ function createFiles(name) {
     }
     const foldersToAdd = ['src/controllers', 'src/routes', 'src/middlewares', 'src/config', 'src/models', 'test']
     const folders = foldersToAdd.map(folder => `${name}/${folder}`);
+    // Create the main folder. Need investigation
     fs.mkdir(name, err => {
         if (err) throw err
     });
+
+    // Create different files such as packages, readme etc.
     const packageFile = fs.createWriteStream(`${name}/package.json`);
     const gitignoreFile = fs.createWriteStream(`${name}/.gitignore`);
     fs.createWriteStream(`${name}/.env`);
     const readmeFile = fs.createWriteStream(`${name}/README.md`);
     const appFile = fs.createWriteStream(`${name}/app.js`);
+    const babelFile = fs.createWriteStream(`${name}/.babelrc`);
+
+    // Get current directory
+    const currentDirectory = path.basename(__dirname);
+
+    // Application base directory
+    const appBaseDirectory = path.basename(name);
+
+    // Copy files to app.js
+    fs.copyFile(`${currentDirectory}/files/app.js`, `${appFile.path}`, err => {
+        if (err) throw err
+    });
 
     // Stringify data
-    const packageJsonData = JSON.stringify(packageJson, null, "\t");
+    const packageJsonData = JSON.stringify(packageJson(name), null, "\t");
     const gitIgnoreData = JSON.stringify(gitIgnore);
     const readMeData = JSON.stringify(readMe(name));
-
+    const babelData = JSON.stringify(babel);
     packageFile.write(packageJsonData);
     gitignoreFile.write(JSON.parse(gitIgnoreData));
     readmeFile.write(JSON.parse(readMeData));
+    babelFile.write(JSON.parse(babelData));
 
     packageFile.on('finish', () => {
         console.log('------successfully written to package.json file------');
@@ -43,11 +59,10 @@ function createFiles(name) {
     });
     readmeFile.end();
 
-    // Get current directory
-    // const currentDirectory = path.basename(__dirname);
-
-    // Application base directory
-    const appBaseDirectory = path.basename(name);
+    babelFile.on('finish', () => {
+        console.log('-----Finally we created our babelrc file--------');
+    });
+    babelFile.end();
 
     // For now, shell command is run inside this file, but need to be removed later
     const cmd = `cd ${appBaseDirectory}
@@ -57,7 +72,7 @@ function createFiles(name) {
     echo -------Please wait as we install your dependancies-------
     npm install express body-parser cors 
     echo Install dev dependancies, please wait...
-    npm install -D @babel/cli @babel/core @babel/node @babel/preset-env
+    npm install -D @babel/cli @babel/core @babel/node @babel/preset-env chai-http chai mocha nyc
     echo -------Dont worry, we are also install dev dependancies-------`
 
     // Install dependancies and dev dependancies
@@ -75,6 +90,10 @@ function createFiles(name) {
             if (err) throw err
             const files = `${folder}/index.js`;
             fs.createWriteStream(files);
+            // Copy files to test files
+            fs.copyFile(`${currentDirectory}/files/app.test.js`, `${name}/test/index.js`, err => {
+                if (err) throw err
+            });
             console.log(`----------created file----- ${files}------`);
         });
     });
@@ -84,9 +103,6 @@ function createFiles(name) {
 const createApp = (name) => {
     createFiles(name);
 }
-// async function createApp(name) {
-
-// };
 
 // Convert into a module that can be used as CLI
 exports = module.exports = createApp;
