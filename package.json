@@ -1,14 +1,10 @@
 {
-    "name": "kemboijs-generator",
-    "version": "1.0.0",
-    "description": "This is one command kemboijs app generator. It is a scaffold for generating a customizable app for your nodejs APIs",
-    "main": "index.js",
+    "name": "kemboijs-cli",
+    "version": "1.0.1",
+    "description": "This is one command kemboijs-cli for generating nodejs application. It is a scaffold for generating a customizable app for your nodejs APIs",
+    "main": "./tasks.createapp.js",
     "scripts": {
-        "test": "npm test",
-        "start": "babel-node ./tasks/createapp"
-    },
-    "bin": {
-        "kemboijs-app": "./tasks/createapp.js"
+        "start": "babel-node tasks/createapp.js"
     },
     "repository": {
         "type": "git",
@@ -31,5 +27,17 @@
     "bugs": {
         "url": "https://github.com/kemboijs/kemboijs-generator/issues"
     },
-    "homepage": "https://github.com/kemboijs/kemboijs-generator#readme"
+    "homepage": "https://github.com/kemboijs/kemboijs-generator#readme",
+    "devDependencies": {
+        "@babel/cli": "^7.5.5",
+        "@babel/core": "^7.5.5",
+        "@babel/node": "^7.5.5",
+        "@babel/preset-env": "^7.5.5"
+    },
+    "files": [
+        "tasks/",
+        "README.md",
+        "LICENCE",
+        ".babelrc"
+    ]
 }

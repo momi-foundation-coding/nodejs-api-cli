@@ -102,8 +102,12 @@ function createFiles(name) {
 // Creating the main application
 const createApp = (name) => {
     createFiles(name);
-}
+};
+
+// Remove the first 2 arguments
+const args = process.argv.slice(2);
 
 // Convert into a module that can be used as CLI
-exports = module.exports = createApp;
-// createApp("kemboi");
+args.forEach((value, index) => {
+    return createApp(value);
+});
