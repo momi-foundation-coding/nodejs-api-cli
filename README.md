@@ -8,7 +8,7 @@ This is a scaffold for generating new application for kemboijs (API based NodeJS
 # How to use
 
 - Install Globally `npm i -g kemboijs-cli`
-- Create app `kemboijs-cli myfirstapp`
+- Create app `kemboijs-cli create-app myapp`
 
 # Contributors
 

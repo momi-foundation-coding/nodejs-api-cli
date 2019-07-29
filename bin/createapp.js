@@ -1,7 +1,7 @@
 const fs = require("fs");
 const { exec } = require("child_process");
 const path = require("path");
-import { packageJson, gitIgnore, readMe, babel } from './data';
+import { packageJson, gitIgnore, readMe, babel } from '../tasks/data';
 
 function createFiles(name) {
     if (!name) {
@@ -27,11 +27,6 @@ function createFiles(name) {
 
     // Application base directory
     const appBaseDirectory = path.basename(name);
-
-    // Copy files to app.js
-    fs.copyFile(`${currentDirectory}/files/app.js`, `${appFile.path}`, err => {
-        if (err) throw err
-    });
 
     // Stringify data
     const packageJsonData = JSON.stringify(packageJson(name), null, "\t");
@@ -85,13 +80,18 @@ function createFiles(name) {
         console.log('------------Thanks for being patient-------------');
     });
 
+    // Copy files to app.js
+    fs.copyFile(`tasks/files/app.js`, `${appFile.path}`, err => {
+        if (err) throw err
+    });
+
     folders.forEach(function (folder) {
         fs.mkdir(folder, { recursive: true }, (err) => {
             if (err) throw err
             const files = `${folder}/index.js`;
             fs.createWriteStream(files);
             // Copy files to test files
-            fs.copyFile(`${currentDirectory}/files/app.test.js`, `${name}/test/index.js`, err => {
+            fs.copyFile(`tasks/files/app.test.js`, `${name}/test/index.js`, err => {
                 if (err) throw err
             });
             console.log(`----------created file----- ${files}------`);
