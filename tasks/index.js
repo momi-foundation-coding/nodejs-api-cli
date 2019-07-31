@@ -1,7 +1,7 @@
-import app from './files/app';
+const app = require("./files/app");
 const appTest = require("./files/app.test");
 
-export default file = {
+module.exports = {
     app,
     appTest
 }

@@ -4,7 +4,7 @@
 const fs = require("fs");
 const { exec } = require("child_process");
 const path = require("path");
-import { packageJson, gitIgnore, readMe, babel } from '../tasks/data';
+const dataInFiles = require("../tasks/data");
 
 function createFiles(name) {
     if (!name) {
@@ -32,10 +32,10 @@ function createFiles(name) {
     const appBaseDirectory = path.basename(name);
 
     // Stringify data
-    const packageJsonData = JSON.stringify(packageJson(name), null, "\t");
-    const gitIgnoreData = JSON.stringify(gitIgnore);
-    const readMeData = JSON.stringify(readMe(name));
-    const babelData = JSON.stringify(babel);
+    const packageJsonData = JSON.stringify(dataInFiles.packageJson(name), null, "\t");
+    const gitIgnoreData = JSON.stringify(dataInFiles.gitIgnore);
+    const readMeData = JSON.stringify(dataInFiles.readMe(name));
+    const babelData = JSON.stringify(dataInFiles.babel);
     packageFile.write(packageJsonData);
     gitignoreFile.write(JSON.parse(gitIgnoreData));
     readmeFile.write(JSON.parse(readMeData));

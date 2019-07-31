@@ -1,13 +1,13 @@
 {
     "name": "kemboijs-cli",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "description": "This is one command kemboijs-cli for generating nodejs application. It is a scaffold for generating a customizable app for your nodejs APIs",
     "main": "bin/createapp.js",
     "bin": {
         "kemboijs-cli": "./bin/createapp.js"
     },
     "scripts": {
-        "create-app": "babel-node bin/createapp.js"
+        "kemboijs-cli": "node bin/createapp.js"
     },
     "repository": {
         "type": "git",
@@ -31,12 +31,6 @@
         "url": "https://github.com/kemboijs/kemboijs-generator/issues"
     },
     "homepage": "https://github.com/kemboijs/kemboijs-generator#readme",
-    "devDependencies": {
-        "@babel/cli": "^7.5.5",
-        "@babel/core": "^7.5.5",
-        "@babel/node": "^7.5.5",
-        "@babel/preset-env": "^7.5.5"
-    },
     "files": [
         "tasks/",
         "README.md",

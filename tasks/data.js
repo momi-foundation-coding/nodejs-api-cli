@@ -1,5 +1,5 @@
 // Package file data.
-export const packageJson = (name) => (
+const packageJson = (name) => (
     {
         "name": `${name.charAt(0).toUpperCase() + name.slice(1)}`,
         "version": "1.0.0",
@@ -11,7 +11,7 @@ export const packageJson = (name) => (
     }
 );
 
-export const gitIgnore = `# Logs
+const gitIgnore = `# Logs
 logs
 *.log
 npm-debug.log*
@@ -76,7 +76,7 @@ typings/
 # dist file ignored
 dist/`
 
-export const readMe = (name) => (
+const readMe = (name) => (
     `# ${name.charAt(0).toUpperCase() + name.slice(1)}
 This is my first app generated using kemboijs-cli
 
@@ -94,7 +94,7 @@ npm test
 `
 );
 
-export const babel = `{
+const babel = `{
     "presets": [
         [
             "@babel/preset-env",
@@ -106,3 +106,10 @@ export const babel = `{
         ]
     ]
 }`
+
+module.exports = {
+    packageJson,
+    gitIgnore,
+    readMe,
+    babel
+}
