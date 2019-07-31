@@ -41,6 +41,13 @@ function createFiles(name) {
     readmeFile.write(JSON.parse(readMeData));
     babelFile.write(JSON.parse(babelData));
 
+    // Write data to app.js file
+    appFile.write(dataInFiles.appJs);
+
+    appFile.on('finish', () => {
+        console.log('--------Successfully written to app.js-----')
+    });
+
     packageFile.on('finish', () => {
         console.log('------successfully written to package.json file------');
     });
@@ -83,20 +90,15 @@ function createFiles(name) {
         console.log('------------Thanks for being patient-------------');
     });
 
-    // Copy files to app.js
-    fs.copyFile(`tasks/files/app.js`, `${appFile.path}`, err => {
-        if (err) throw err
-    });
-
     folders.forEach(function (folder) {
         fs.mkdir(folder, { recursive: true }, (err) => {
             if (err) throw err
             const files = `${folder}/index.js`;
             fs.createWriteStream(files);
-            // Copy files to test files
-            fs.copyFile(`tasks/files/app.test.js`, `${name}/test/index.js`, err => {
-                if (err) throw err
-            });
+            // Write data to test files
+            const testFileName = `${name}/test/index.js`;
+            const testFile = fs.createWriteStream(testFileName);
+            testFile.write(dataInFiles.appJsTest)
             console.log(`----------created file----- ${files}------`);
         });
     });

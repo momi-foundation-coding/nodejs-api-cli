@@ -107,9 +107,59 @@ const babel = `{
     ]
 }`
 
+const appJs =
+    `import express from 'express';
+import bodyParser from 'body-parser';
+import cors from 'cors';
+
+const port = 8000;
+const app = express();
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
+app.use(cors());
+
+// Url for homepage
+app.get('/', (req, res) => {
+    res.status(200).send({
+        message: "Welcome to first app"
+    });
+});
+
+app.listen(port, () => {
+    console.log("Server connected successfully")
+});
+
+export default app;
+`
+
+const appJsTest =
+    `import chai from 'chai';
+import chaHttp from 'chai-http';
+import app from '../app';
+
+chai.should();
+chai.use(chaHttp);
+
+describe('Testing app', () => {
+    it('return base url', (done) => {
+        chai.request(app)
+            .get('/')
+            .end((err, res) => {
+                res.should.have.status(200);
+                done();
+            });
+    });
+});
+`
+
 module.exports = {
     packageJson,
     gitIgnore,
     readMe,
-    babel
+    babel,
+    appJs,
+    appJsTest
 }
