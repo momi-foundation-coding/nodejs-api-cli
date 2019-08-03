@@ -1,15 +1,44 @@
-[![Build Status](https://travis-ci.org/kemboijs/kemboijs-cli.svg?branch=master)](https://travis-ci.org/kemboijs/kemboijs-cli)
-[![Maintainability](https://api.codeclimate.com/v1/badges/e6c0ab94bd05adbe3b04/maintainability)](https://codeclimate.com/github/kemboijs/kemboijs-generator/maintainability)
-[![Coverage Status](https://coveralls.io/repos/github/kemboijs/kemboijs-cli/badge.svg?branch=master)](https://coveralls.io/github/kemboijs/kemboijs-cli?branch=master)
-
-# kemboijs-generator
-This is a scaffold for generating new application for kemboijs (API based NodeJS framework)
+# kemboijs-cli  ![npm](https://img.shields.io/npm/dt/kemboijs-cli) ![David](https://img.shields.io/david/kemboijs/kemboijs-cli)
+When developing API based application in NodeJS, it is not easy to get it up set up as easy as possible. 
+The application include but not limited to applications build using Express, Sails.js, kemboijs, Koa.js, hapi, AdonisJS, Nest.js etc. 
+We decided to build this library/utility to help faster set up you API based application. 
+In the fisrt release, I will focus on supporting Express, but will imrpove on other frameworks and also nodejs itself without use of frameworks. 
+Also, we will aim at building utility that can enhance faster development of upcoming applications, building controllers, middlewares and also fixing issues on migrations in the near future.
 
 # How to use
 
-- Install Globally `npm i -g kemboijs-cli`
+- Install `npm i -g kemboijs-cli`
 - Create app `kemboijs-cli myapp`
 
-# Contributors
+NB: When installing make sure you have admin priviledges otherwise, you will have to use `sud npm i -g kemboijs-cli`
 
-- Ezrqn Kemboi
+# Folder Structure (More updates expected)
+```bash
+├── src                   
+    │   ├── config  
+    |       ├── index.js
+    │   ├── controllers  
+    |       ├── index.js
+    │   ├── middlewares      
+    |      ├── index.js    
+    │   ├── models          
+    |       ├── index.js
+    |   └── routers 
+    |      ├── index.js
+    |
+    ├── test                  
+    │   ├── index.js           
+    │   
+    └── app.js
+    └── README.md
+    └── package.json
+```
+
+# Contributors
+<a href="https://github.com/kemboijs/kemboijs-cli/graphs/contributors">
+  <img src="https://contributors-img.firebaseapp.com/image?repo=kemboijs/kemboijs-cli" width="100"/>
+</a>
+
+# Licence 
+
+[MIT](https://github.com/kemboijs/kemboijs-cli/blob/master/LICENSE)
