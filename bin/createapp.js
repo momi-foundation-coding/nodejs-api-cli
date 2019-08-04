@@ -13,19 +13,31 @@ const pass = new PassThrough();
 const installingDependancies = (name) => {
     const appBaseDirectory = path.basename(name);
     // For now, shell command is run inside this file, but need to be removed later
-    const cmd = `cd ${appBaseDirectory}
-    set -e 
-    echo setting up git for you application
-    git init
-    echo Will install your dependancies shortly....
-    echo We are installing dependancies, please wait...
-    echo -------Please wait as we install your dependancies-------
-    npm install express body-parser cors 
-    echo Install dev dependancies, please wait...
-    npm install -D @babel/cli @babel/core @babel/node @babel/preset-env chai-http chai mocha nyc
-    echo -------Dont worry, we are also install dev dependancies-------
-    echo adding files to git and committing
-    git add . && git commit -m "create app"`
+    const cmd = `
+        cd ${appBaseDirectory}
+        set -e 
+        echo setting up git for you application
+        git init
+        echo Will install your dependancies shortly....
+        echo We are installing dependancies, please wait...
+        npm install express 
+        npm install body-parser 
+        npm install cors 
+        npm install sequelize
+        npm install pg 
+        npm install pg-hstore
+        echo Install dev dependancies, please wait...
+        npm install -D @babel/cli 
+        npm install -D @babel/core 
+        npm install -D @babel/node 
+        npm install -D @babel/preset-env 
+        npm install -D chai-http 
+        npm install -D chai 
+        npm install -D mocha 
+        npm install -D nyc
+        echo adding files to git and committing
+        git add . && git commit -m "create app"
+    `
 
     // Install dependancies and dev dependancies
     exec(cmd, (error, stdout, stderror) => {
@@ -73,7 +85,7 @@ const createRouteDirFiles = (name) => {
     readmeFile.end();
 
     babelFile.on('finish', () => {
-        console.log('-----Finally we created our babelrc file--------');
+        console.log('-----Finally we created our .babelrc file--------');
     });
     babelFile.end();
 }
@@ -92,7 +104,7 @@ const openAppendFile = (pathName, data) => {
 }
 
 const createSrcDirAndFiles = (appName) => {
-    const foldersToAdd = ['src/controllers', 'src/routes', 'src/middlewares', 'src/config', 'src/models', 'test', 'src']
+    const foldersToAdd = ['src/controllers', 'src/routes', 'src/config', 'src/models', 'src/middlewares', 'test', 'src']
     const folders = foldersToAdd.map(folder => `${appName}/${folder}`);
     folders.forEach((folder) => {
         fs.mkdir(folder, { recursive: true }, err => {
@@ -101,19 +113,39 @@ const createSrcDirAndFiles = (appName) => {
             const mainFiles = `${folder}/index.js`;
             const fileName = fs.createWriteStream(mainFiles);
 
+            // Write sequelize instance and create models here
+            const modelsArr = [
+                `${appName}/src/models`
+            ]
+
+            if (modelsArr.includes(folder)) {
+                const sequelizeInstanceFile = `${appName}/src/models/sequelizeinstance.js`;
+                const sequelizeInstanceFileName = fs.createWriteStream(sequelizeInstanceFile);
+                if (sequelizeInstanceFileName.path === `${appName}/src/models/sequelizeinstance.js`) {
+                    const pathName = sequelizeInstanceFileName.path;
+                    const sequelizeData = dataInFiles.sequelizeInstanceData;
+                    openAppendFile(pathName, sequelizeData);
+                }
+                const userModels = `${appName}/src/models/user.js`;
+                const userModelsFileName = fs.createWriteStream(userModels);
+                if (userModelsFileName.path === `${appName}/src/models/user.js`) {
+                    openAppendFile(userModelsFileName.path, dataInFiles.userModelData);
+                }
+            }
+
             // Write to test file.
             if (fileName.path === `${appName}/test/index.js`) {
                 const pathName = fileName.path;
                 const data = dataInFiles.appJsTest;
                 openAppendFile(pathName, data);
-            }
+            };
 
             // Add data to the main entry point
             if (fileName.path === `${appName}/src/index.js`) {
                 const pathName = fileName.path;
                 const data = dataInFiles.appJs;
                 openAppendFile(pathName, data);
-            }
+            };
 
             // Paths that needs files such as homebase.js, config may not need it.
             const pathsThatNeedBaseFiles = [
@@ -140,7 +172,7 @@ const createSrcDirAndFiles = (appName) => {
                     const data = dataInFiles.homeBaseControllers;
                     openAppendFile(pathName, data);
                 }
-            }
+            };
 
             // Write to different files including the index.js and other files
             if (fileName.path === `${appName}/src/middlewares/index.js`) {
@@ -157,6 +189,9 @@ const createSrcDirAndFiles = (appName) => {
                 const pathName = fileName.path;
                 const data = dataInFiles.controllers;
                 openAppendFile(pathName, data);
+            }
+            if (fileName.path === `${appName}/src/models/index.js`) {
+                openAppendFile(fileName.path, `export { default as User } from './user';`)
             }
         });
     });
