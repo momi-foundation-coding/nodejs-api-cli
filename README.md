@@ -7,8 +7,10 @@ Also, we will aim at building utility that can enhance faster development of upc
 
 # How to use
 
-- Install `npm i -g kemboijs-cli`
-- Create app `kemboijs-cli myapp`
+- Install: `npm i -g kemboijs-cli`
+- Create app: `kemboijs-cli myapp`
+- Run app: `npm start`
+- Run tests: `npm test`
 
 NB: When installing make sure you have admin priviledges otherwise, you will have to use `sudo npm i -g kemboijs-cli`
 
@@ -18,17 +20,19 @@ NB: When installing make sure you have admin priviledges otherwise, you will hav
     |       ├ index.js
     │   ├─ controllers  
     |       ├ index.js
+    |       ├─ homebase.js
     │   ├─ middlewares      
-    |      ├ index.js    
+    |       ├ index.js  
+    |       ├─ homebase.js  
     │   ├─ models          
     |       ├ index.js
     |   └─ routers 
-    |      ├ index.js
-    |
+    |       ├ index.js
+    |       ├─ homebase.js  
     ├── test                  
     │   ├─ index.js           
     │   
-    └── app.js
+    └── index.js
     └── README.md
     └── package.json
 

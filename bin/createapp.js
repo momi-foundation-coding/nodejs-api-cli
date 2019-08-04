@@ -15,13 +15,17 @@ const installingDependancies = (name) => {
     // For now, shell command is run inside this file, but need to be removed later
     const cmd = `cd ${appBaseDirectory}
     set -e 
+    echo setting up git for you application
+    git init
     echo Will install your dependancies shortly....
     echo We are installing dependancies, please wait...
     echo -------Please wait as we install your dependancies-------
     npm install express body-parser cors 
     echo Install dev dependancies, please wait...
     npm install -D @babel/cli @babel/core @babel/node @babel/preset-env chai-http chai mocha nyc
-    echo -------Dont worry, we are also install dev dependancies-------`
+    echo -------Dont worry, we are also install dev dependancies-------
+    echo adding files to git and committing
+    git add . && git commit -m "create app"`
 
     // Install dependancies and dev dependancies
     exec(cmd, (error, stdout, stderror) => {
