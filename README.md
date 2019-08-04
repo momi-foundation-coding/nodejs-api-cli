@@ -14,20 +14,25 @@ Also, we will aim at building utility that can enhance faster development of upc
 
 NB: When installing make sure you have admin priviledges otherwise, you will have to use `sudo npm i -g kemboijs-cli`
 
+Also, after make sure to edit the database url in file `src/models/sequelizeinstance.js`.
+You can now call or edit the database models. The created model is User, under `src/models/user.js`
+
 # Folder Structure (More updates expected)
     ├── src                   
     │   ├─ config  
-    |       ├ index.js
+    |       ├─ index.js
     │   ├─ controllers  
-    |       ├ index.js
+    |       ├─ index.js
     |       ├─ homebase.js
     │   ├─ middlewares      
-    |       ├ index.js  
+    |       ├─ index.js  
     |       ├─ homebase.js  
     │   ├─ models          
-    |       ├ index.js
+    |       ├─ index.js
+    |       ├─ user.js 
+    |       ├─ sequelizeinstance.js 
     |   └─ routers 
-    |       ├ index.js
+    |       ├─ index.js
     |       ├─ homebase.js  
     ├── test                  
     │   ├─ index.js           

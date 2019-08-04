@@ -11,7 +11,8 @@ const packageJson = (name) => (
     }
 );
 
-const gitIgnore = `# Logs
+const gitIgnore =
+    `# Logs
 logs
 *.log
 npm-debug.log*
@@ -234,6 +235,46 @@ describe('Testing app', () => {
 });
 `
 
+const sequelizeInstanceData =
+    `import Sequelize from 'sequelize';
+
+const sequelize = new Sequelize('postgres://user:pass@example.com:5432/dbname');
+
+sequelize
+    .authenticate()
+    .then(() => {
+        console.log('Connection has been established successfully.');
+    })
+    .catch(err => {
+        console.error('Unable to connect to the database:', err);
+    });
+
+export default sequelize;
+`
+
+const userModelData =
+    `import { Model } from 'sequelize';
+import sequelize from './sequelizeinstance';
+
+export default class User extends Model { }
+User.init({
+    // attributes
+    firstName: {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
+    lastName: {
+        type: Sequelize.STRING
+        // allowNull defaults to true
+    }
+}, {
+    // Calling instance of sequelize created in file sequelizeinstance.js
+    sequelize,
+    modelName: 'user'
+    // options
+    });
+`
+
 module.exports = {
     packageJson,
     gitIgnore,
@@ -246,5 +287,7 @@ module.exports = {
     homeBaseControllers,
     controllers,
     homeBaseRouter,
-    routes
+    routes,
+    sequelizeInstanceData,
+    userModelData
 }
