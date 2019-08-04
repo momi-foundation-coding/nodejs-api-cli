@@ -7,7 +7,7 @@
         "kemboijs-cli": "./bin/createapp.js"
     },
     "scripts": {
-        "kemboijs-cli": "node bin/createapp.js"
+        "start": "node bin/createapp.js"
     },
     "repository": {
         "type": "git",

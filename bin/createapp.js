@@ -4,32 +4,43 @@
 const fs = require("fs");
 const { exec } = require("child_process");
 const path = require("path");
+const { PassThrough, Writable } = require("stream");
 const dataInFiles = require("../tasks/data");
 
-function createFiles(name) {
-    if (!name) {
-        console.log('------You must add the name of your application-------');
-    }
-    const foldersToAdd = ['src/controllers', 'src/routes', 'src/middlewares', 'src/config', 'src/models', 'test']
-    const folders = foldersToAdd.map(folder => `${name}/${folder}`);
-    // Create the main folder. Need investigation
-    fs.mkdir(name, err => {
-        if (err) throw err
-    });
+const writable = new Writable();
+const pass = new PassThrough();
 
+const installingDependancies = (name) => {
+    const appBaseDirectory = path.basename(name);
+    // For now, shell command is run inside this file, but need to be removed later
+    const cmd = `cd ${appBaseDirectory}
+    set -e 
+    echo Will install your dependancies shortly....
+    echo We are installing dependancies, please wait...
+    echo -------Please wait as we install your dependancies-------
+    npm install express body-parser cors 
+    echo Install dev dependancies, please wait...
+    npm install -D @babel/cli @babel/core @babel/node @babel/preset-env chai-http chai mocha nyc
+    echo -------Dont worry, we are also install dev dependancies-------`
+
+    // Install dependancies and dev dependancies
+    exec(cmd, (error, stdout, stderror) => {
+        if (error) {
+            console.error(`exec error: ${exec}`);
+        }
+        console.log(`stdout: ${stdout}`);
+        console.log(`stderror: ${stderror}`);
+        console.log('------------Thanks for being patient-------------');
+    });
+}
+
+const createRouteDirFiles = (name) => {
     // Create different files such as packages, readme etc.
     const packageFile = fs.createWriteStream(`${name}/package.json`);
     const gitignoreFile = fs.createWriteStream(`${name}/.gitignore`);
     fs.createWriteStream(`${name}/.env`);
     const readmeFile = fs.createWriteStream(`${name}/README.md`);
-    const appFile = fs.createWriteStream(`${name}/app.js`);
     const babelFile = fs.createWriteStream(`${name}/.babelrc`);
-
-    // Get current directory
-    const currentDirectory = path.basename(__dirname);
-
-    // Application base directory
-    const appBaseDirectory = path.basename(name);
 
     // Stringify data
     const packageJsonData = JSON.stringify(dataInFiles.packageJson(name), null, "\t");
@@ -40,13 +51,6 @@ function createFiles(name) {
     gitignoreFile.write(JSON.parse(gitIgnoreData));
     readmeFile.write(JSON.parse(readMeData));
     babelFile.write(JSON.parse(babelData));
-
-    // Write data to app.js file
-    appFile.write(dataInFiles.appJs);
-
-    appFile.on('finish', () => {
-        console.log('--------Successfully written to app.js-----')
-    });
 
     packageFile.on('finish', () => {
         console.log('------successfully written to package.json file------');
@@ -68,45 +72,108 @@ function createFiles(name) {
         console.log('-----Finally we created our babelrc file--------');
     });
     babelFile.end();
+}
 
-    // For now, shell command is run inside this file, but need to be removed later
-    const cmd = `cd ${appBaseDirectory}
-    set -e 
-    echo Will install your dependancies shortly....
-    echo We are installing dependancies, please wait...
-    echo -------Please wait as we install your dependancies-------
-    npm install express body-parser cors 
-    echo Install dev dependancies, please wait...
-    npm install -D @babel/cli @babel/core @babel/node @babel/preset-env chai-http chai mocha nyc
-    echo -------Dont worry, we are also install dev dependancies-------`
-
-    // Install dependancies and dev dependancies
-    exec(cmd, (error, stdout, stderror) => {
-        if (error) {
-            console.error(`exec error: ${exec}`);
-        }
-        console.log(`stdout: ${stdout}`);
-        console.log(`stderror: ${stderror}`);
-        console.log('------------Thanks for being patient-------------');
-    });
-
-    folders.forEach(function (folder) {
-        fs.mkdir(folder, { recursive: true }, (err) => {
-            if (err) throw err
-            const files = `${folder}/index.js`;
-            fs.createWriteStream(files);
-            // Write data to test files
-            const testFileName = `${name}/test/index.js`;
-            const testFile = fs.createWriteStream(testFileName);
-            testFile.write(dataInFiles.appJsTest)
-            console.log(`----------created file----- ${files}------`);
+// Opening files and writing to files utility function
+const openAppendFile = (pathName, data) => {
+    return fs.open(`${pathName}`, 'a', (err, fd) => {
+        if (err) throw err;
+        fs.appendFile(fd, `${data}`, 'utf8', (err) => {
+            fs.close(fd, (err) => {
+                if (err) throw err;
+            });
+            if (err) throw err;
         });
     });
 }
 
+const createSrcDirAndFiles = (appName) => {
+    const foldersToAdd = ['src/controllers', 'src/routes', 'src/middlewares', 'src/config', 'src/models', 'test', 'src']
+    const folders = foldersToAdd.map(folder => `${appName}/${folder}`);
+    folders.forEach((folder) => {
+        fs.mkdir(folder, { recursive: true }, err => {
+            if (err) throw err;
+            // Check created files and createstream of the files
+            const mainFiles = `${folder}/index.js`;
+            const fileName = fs.createWriteStream(mainFiles);
+
+            // Write to test file.
+            if (fileName.path === `${appName}/test/index.js`) {
+                const pathName = fileName.path;
+                const data = dataInFiles.appJsTest;
+                openAppendFile(pathName, data);
+            }
+
+            // Add data to the main entry point
+            if (fileName.path === `${appName}/src/index.js`) {
+                const pathName = fileName.path;
+                const data = dataInFiles.appJs;
+                openAppendFile(pathName, data);
+            }
+
+            // Paths that needs files such as homebase.js, config may not need it.
+            const pathsThatNeedBaseFiles = [
+                `${appName}/src/middlewares`,
+                `${appName}/src/routes`,
+                `${appName}/src/controllers`
+            ]
+            // Now create file homebase.js in specified directories
+            if (pathsThatNeedBaseFiles.includes(folder)) {
+                const directoryFiles = `${folder}/homebase.js`;
+                const directoryFileName = fs.createWriteStream(directoryFiles);
+                if (directoryFileName.path === `${appName}/src/middlewares/homebase.js`) {
+                    const pathName = directoryFileName.path;
+                    const data = dataInFiles.homeBaseMiddleware;
+                    openAppendFile(pathName, data);
+                }
+                if (directoryFileName.path === `${appName}/src/routes/homebase.js`) {
+                    const pathName = directoryFileName.path;
+                    const data = dataInFiles.homeBaseRouter;
+                    openAppendFile(pathName, data);
+                }
+                if (directoryFileName.path === `${appName}/src/controllers/homebase.js`) {
+                    const pathName = directoryFileName.path;
+                    const data = dataInFiles.homeBaseControllers;
+                    openAppendFile(pathName, data);
+                }
+            }
+
+            // Write to different files including the index.js and other files
+            if (fileName.path === `${appName}/src/middlewares/index.js`) {
+                const pathName = fileName.path;
+                const data = dataInFiles.middleware;
+                openAppendFile(pathName, data);
+            }
+            if (fileName.path === `${appName}/src/routes/index.js`) {
+                const pathName = fileName.path;
+                const data = dataInFiles.routes;
+                openAppendFile(pathName, data);
+            }
+            if (fileName.path === `${appName}/src/controllers/index.js`) {
+                const pathName = fileName.path;
+                const data = dataInFiles.controllers;
+                openAppendFile(pathName, data);
+            }
+        });
+    });
+}
+
+const createMainDir = name => {
+    if (!name) {
+        console.log('------You must add the name of your application-------');
+    }
+    fs.mkdir(name, err => {
+        if (err) throw err
+    });
+    const appBaseDirectory = path.basename(name);
+    createSrcDirAndFiles(appBaseDirectory);
+}
+
 // Creating the main application
-const createApp = (name) => {
-    createFiles(name);
+const createApp = async (name) => {
+    await createMainDir(name);
+    await createRouteDirFiles(name);
+    await installingDependancies(name);
 };
 
 // Remove the first 2 arguments

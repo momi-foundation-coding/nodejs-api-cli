@@ -5,7 +5,7 @@ const packageJson = (name) => (
         "version": "1.0.0",
         "main": "index.js",
         "scripts": {
-            "start": "babel-node app.js",
+            "start": "babel-node src/index.js",
             "test": "nyc --reporter=text mocha --require @babel/register --exit"
         }
     }
@@ -111,6 +111,7 @@ const appJs =
     `import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import routes from './routes';
 
 const port = 8000;
 const app = express();
@@ -120,11 +121,10 @@ app.use(bodyParser.urlencoded({
     extended: false
 }));
 app.use(cors());
-
-// Url for homepage
-app.get('/', (req, res) => {
-    res.status(200).send({
-        message: "Welcome to first app"
+app.use('/', routes);
+app.use('*', (req, res) => {
+    res.status(404).send({
+        message: "Url not found"
     });
 });
 
@@ -135,10 +135,68 @@ app.listen(port, () => {
 export default app;
 `
 
+const homeBaseMiddleware =
+    `export default function homeBaseMiddleware(req, res, next) {
+    next();
+}
+`
+
+const middleware = `export {default as HomeBaseMiddleware} from './homebase';`
+
+const homeBaseControllers =
+    `export default class HomebaseControllers{
+    static async getItems(req, res) {
+        return res.status(200).send({
+            message: "Welcome to first base endpoint"
+        });
+    }
+}
+`
+
+const controllers = `export { default as HomebaseControllers } from './homebase';`
+
+const homeBaseRouter =
+    `import { Router } from 'express';
+import { HomebaseControllers } from '../controllers';
+import { HomeBaseMiddleware } from '../middlewares';
+
+const router = new Router();
+
+// Router for homebase url
+router.route('/').get(
+    HomeBaseMiddleware,
+    HomebaseControllers.getItems
+);
+
+router.use((err, req, res, next) => {
+    if (err) throw err;
+});
+
+export default router;
+`
+
+const routes =
+    `import { Router } from 'express';
+import homeBaseRouters from './homebase';
+
+const router = new Router();
+
+// / url
+router.get('/', (req, res) => {
+    res.status(200).send({
+        message: "Welcome to my first app"
+    });
+});
+
+router.use('/homebase', homeBaseRouters);
+
+export default router;
+`
+
 const appJsTest =
     `import chai from 'chai';
 import chaHttp from 'chai-http';
-import app from '../app';
+import app from '../src';
 
 chai.should();
 chai.use(chaHttp);
@@ -152,6 +210,27 @@ describe('Testing app', () => {
                 done();
             });
     });
+    it('should return true for homebase url', (done) => {
+        chai.request(app)
+            .get('/homebase')
+            .then(res => {
+                res.should.have.status(200);
+                done();
+            })
+            .catch(function (err) {
+                setTimeout(function () {
+                    throw new err;
+                });
+            });
+    });
+    it('should return 404 when route not available', (done) => {
+        chai.request(app)
+            .get('/notfound')
+            .end((err, res) => {
+                res.should.have.status(404);
+                done();
+            });
+    });
 });
 `
 
@@ -161,5 +240,11 @@ module.exports = {
     readMe,
     babel,
     appJs,
-    appJsTest
+    appJsTest,
+    homeBaseMiddleware,
+    middleware,
+    homeBaseControllers,
+    controllers,
+    homeBaseRouter,
+    routes
 }
