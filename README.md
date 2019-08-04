@@ -10,29 +10,27 @@ Also, we will aim at building utility that can enhance faster development of upc
 - Install `npm i -g kemboijs-cli`
 - Create app `kemboijs-cli myapp`
 
-NB: When installing make sure you have admin priviledges otherwise, you will have to use `sud npm i -g kemboijs-cli`
+NB: When installing make sure you have admin priviledges otherwise, you will have to use `sudo npm i -g kemboijs-cli`
 
 # Folder Structure (More updates expected)
-```bash
-├── src                   
-    │   ├── config  
-    |       ├── index.js
-    │   ├── controllers  
-    |       ├── index.js
-    │   ├── middlewares      
-    |      ├── index.js    
-    │   ├── models          
-    |       ├── index.js
-    |   └── routers 
-    |      ├── index.js
+    ├── src                   
+    │   ├─ config  
+    |       ├ index.js
+    │   ├─ controllers  
+    |       ├ index.js
+    │   ├─ middlewares      
+    |      ├ index.js    
+    │   ├─ models          
+    |       ├ index.js
+    |   └─ routers 
+    |      ├ index.js
     |
     ├── test                  
-    │   ├── index.js           
+    │   ├─ index.js           
     │   
     └── app.js
     └── README.md
     └── package.json
-```
 
 # Contributors
 <a href="https://github.com/kemboijs/kemboijs-cli/graphs/contributors">
