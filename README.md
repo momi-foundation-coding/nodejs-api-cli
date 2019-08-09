@@ -20,6 +20,7 @@ Navigate to `src/models/sequelizeinstance.js`, edit the database name, username 
 You can also add these credentials to the `.env` file.
 ```javascript
   export DATABASE_URL = "postgres://user:pass@example.com:5432/dbname"
+  export TEST_DB = "postgres://user:pass@example.com:5432/testdb"
 ```
 
 In your `src/models/sequelizeinstance.js` file:
@@ -27,7 +28,9 @@ In your `src/models/sequelizeinstance.js` file:
 import dotenv from "dotenv";
 
 dotenv.config();
-const sequelize = new Sequelize(process.env.DATABASE_URL);
+
+const dbUrl = process.env === 'test' ? process.env.TEST_DB : process.env.DATABASE_URL;
+const sequelize = new Sequelize(dbUrl);
 ```
 
 You can now call or edit the database models. The created model is **User**, under `src/models/user.js`
@@ -38,17 +41,17 @@ You can now call or edit the database models. The created model is **User**, und
     |       ├─ index.js
     │   ├─ controllers  
     |       ├─ index.js
-    |       ├─ homebase.js
+    |       ├─ user.js
     │   ├─ middlewares      
     |       ├─ index.js  
-    |       ├─ homebase.js  
+    |       ├─ user.js  
     │   ├─ models          
     |       ├─ index.js
     |       ├─ user.js 
     |       ├─ sequelizeinstance.js 
     |   └─ routers 
     |       ├─ index.js
-    |       ├─ homebase.js  
+    |       ├─ user.js  
     ├── test                  
     │   ├─ index.js           
     │   

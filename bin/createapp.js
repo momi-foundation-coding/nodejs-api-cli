@@ -25,6 +25,7 @@ const installingDependancies = (name) => {
         npm install cors 
         npm install sequelize
         npm install pg 
+        npm install bcrypt
         npm install pg-hstore
         echo Install dev dependancies, please wait...
         npm install -D @babel/cli 
@@ -47,6 +48,19 @@ const installingDependancies = (name) => {
         console.log(`stdout: ${stdout}`);
         console.log(`stderror: ${stderror}`);
         console.log('------------Thanks for being patient-------------');
+    });
+}
+
+// Opening files and writing to files utility function
+const openAppendFile = (pathName, data) => {
+    return fs.open(`${pathName}`, 'a', (err, fd) => {
+        if (err) throw err;
+        fs.appendFile(fd, `${data}`, 'utf8', (err) => {
+            fs.close(fd, (err) => {
+                if (err) throw err;
+            });
+            if (err) throw err;
+        });
     });
 }
 
@@ -90,21 +104,8 @@ const createRouteDirFiles = (name) => {
     babelFile.end();
 }
 
-// Opening files and writing to files utility function
-const openAppendFile = (pathName, data) => {
-    return fs.open(`${pathName}`, 'a', (err, fd) => {
-        if (err) throw err;
-        fs.appendFile(fd, `${data}`, 'utf8', (err) => {
-            fs.close(fd, (err) => {
-                if (err) throw err;
-            });
-            if (err) throw err;
-        });
-    });
-}
-
 const createSrcDirAndFiles = (appName) => {
-    const foldersToAdd = ['src/controllers', 'src/routes', 'src/config', 'src/models', 'src/middlewares', 'test', 'src']
+    const foldersToAdd = ['src/controllers', 'src/routes', 'src/config', 'src/scripts', 'src/models', 'src/middlewares', 'test', 'src']
     const folders = foldersToAdd.map(folder => `${appName}/${folder}`);
     folders.forEach((folder) => {
         fs.mkdir(folder, { recursive: true }, err => {
@@ -112,6 +113,22 @@ const createSrcDirAndFiles = (appName) => {
             // Check created files and createstream of the files
             const mainFiles = `${folder}/index.js`;
             const fileName = fs.createWriteStream(mainFiles);
+
+            // Scripts file, which include running migrations and dropping db
+            const scriptsArr = [
+                `${appName}/src/scripts`
+            ]
+
+            if (scriptsArr.includes(folder)) {
+                const createDbFile = `${appName}/src/scripts/createdb.js`;
+                const createDbFileName = fs.createWriteStream(createDbFile);
+                const createDbData = dataInFiles.createDb;
+                openAppendFile(createDbFileName.path, createDbData);
+                const dropDbFile = `${appName}/src/scripts/dropdb.js`;
+                const dropDbFileName = fs.createWriteStream(dropDbFile);
+                const dropDbData = dataInFiles.dropDb;
+                openAppendFile(dropDbFileName.path, dropDbData);
+            }
 
             // Write sequelize instance and create models here
             const modelsArr = [
@@ -147,29 +164,29 @@ const createSrcDirAndFiles = (appName) => {
                 openAppendFile(pathName, data);
             };
 
-            // Paths that needs files such as homebase.js, config may not need it.
+            // Paths that needs files such as user.js, config may not need it.
             const pathsThatNeedBaseFiles = [
                 `${appName}/src/middlewares`,
                 `${appName}/src/routes`,
                 `${appName}/src/controllers`
             ]
-            // Now create file homebase.js in specified directories
+            // Now create file user.js in specified directories
             if (pathsThatNeedBaseFiles.includes(folder)) {
-                const directoryFiles = `${folder}/homebase.js`;
+                const directoryFiles = `${folder}/user.js`;
                 const directoryFileName = fs.createWriteStream(directoryFiles);
-                if (directoryFileName.path === `${appName}/src/middlewares/homebase.js`) {
+                if (directoryFileName.path === `${appName}/src/middlewares/user.js`) {
                     const pathName = directoryFileName.path;
-                    const data = dataInFiles.homeBaseMiddleware;
+                    const data = dataInFiles.userMiddleware;
                     openAppendFile(pathName, data);
                 }
-                if (directoryFileName.path === `${appName}/src/routes/homebase.js`) {
+                if (directoryFileName.path === `${appName}/src/routes/user.js`) {
                     const pathName = directoryFileName.path;
-                    const data = dataInFiles.homeBaseRouter;
+                    const data = dataInFiles.userRouter;
                     openAppendFile(pathName, data);
                 }
-                if (directoryFileName.path === `${appName}/src/controllers/homebase.js`) {
+                if (directoryFileName.path === `${appName}/src/controllers/user.js`) {
                     const pathName = directoryFileName.path;
-                    const data = dataInFiles.homeBaseControllers;
+                    const data = dataInFiles.userController;
                     openAppendFile(pathName, data);
                 }
             };

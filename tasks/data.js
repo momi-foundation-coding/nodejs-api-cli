@@ -6,7 +6,9 @@ const packageJson = (name) => (
         "main": "index.js",
         "scripts": {
             "start": "babel-node src/index.js",
-            "test": "nyc --reporter=text mocha --require @babel/register --exit"
+            "test": "nyc --reporter=text mocha --require @babel/register --exit",
+            "create:db": "babel-node src/scripts/createdb.js",
+            "drop:db": "babel-node src/scripts/dropdb.js"
         }
     }
 );
@@ -136,37 +138,134 @@ app.listen(port, () => {
 export default app;
 `
 
-const homeBaseMiddleware =
-    `export default function homeBaseMiddleware(req, res, next) {
+const userMiddleware =
+    `export default function userMiddleware(req, res, next) {
     next();
 }
 `
 
-const middleware = `export {default as HomeBaseMiddleware} from './homebase';`
+const middleware = `export {default as UserMiddleware} from './user';`
 
-const homeBaseControllers =
-    `export default class HomebaseControllers{
-    static async getItems(req, res) {
+const userController =
+    `import {User} from '../models';
+export default class UserController {
+    // Create a user
+    static async createUser(req, res) {
+        const userDetails = req.body;
+        const user = await User.create(userDetails);
+        if(!user) {
+            res.status(400).send({
+                message: "An error occurred while creating user"
+            });
+        }
+        res.status(201).send({
+            message: "User created successfully", 
+            user
+        });
+    }
+    // Get all users from the database
+    static async getUsers(req, res) {
+        const users =  await User.findAll();
+        if(!users || users.length <= 0) {
+            return res.status(404).send({
+                message: "There are no currently users"
+            });
+        }
         return res.status(200).send({
-            message: "Welcome to first base endpoint"
+            message: "Successfully retrieved users successfully.",
+            users
+        });
+    }
+    // Get a single user from the db
+    static async getUser(req, res) {
+        const { id } = req.params;
+        const user = await User.findAll({
+            where: {
+                id
+            },
+            attributes: { exclude: [ 'password' ] }
+        });
+        if(!user) {
+            res.status(404).send({
+                message: "The user with that id does not exist"
+            });
+        }
+        res.status(200).send({
+            message: "User details retrieved successfully",
+            user
+        })
+    }
+    // Update user details 
+    static async updateUser(req, res) {
+        const userDetails = req.body;
+        const { id } = req.params;
+        const user = await User.update(userDetails, {
+            where: {
+                id
+            }
+        });
+        if(!user) {
+            res.status(400).send({
+                message: "An error occurred while creating user"
+            });
+        }
+        res.status(200).send({
+            message: "User details updated successfully", 
+            user
+        });
+    }
+    // Delete user
+    static async deleteUser(req, res) {
+        const { id } = req.params;
+        const user = await User.destroy({
+            where: {
+                id
+            }
+        });
+        res.status(200).send({
+            message: "User deleted successfully"
         });
     }
 }
 `
 
-const controllers = `export { default as HomebaseControllers } from './homebase';`
+const controllers = `export { default as UserController } from './user';`
 
-const homeBaseRouter =
+const userRouter =
     `import { Router } from 'express';
-import { HomebaseControllers } from '../controllers';
-import { HomeBaseMiddleware } from '../middlewares';
+import { UserController } from '../controllers';
+import { UserMiddleware } from '../middlewares';
 
 const router = new Router();
 
-// Router for homebase url
+// Create a new user
+router.route('/').post(
+    UserMiddleware,
+    UserController.createUser
+);
+
+// Get all users
 router.route('/').get(
-    HomeBaseMiddleware,
-    HomebaseControllers.getItems
+    UserMiddleware,
+    UserController.getUsers
+);
+
+// Get single user
+router.route('/:id').get(
+    UserMiddleware,
+    UserController.getUser
+);
+
+// Update user details
+router.route('/:id').put(
+    UserMiddleware,
+    UserController.updateUser
+);
+
+// Delete a single user
+router.route('/:id').delete(
+    UserMiddleware,
+    UserController.deleteUser
 );
 
 router.use((err, req, res, next) => {
@@ -178,7 +277,7 @@ export default router;
 
 const routes =
     `import { Router } from 'express';
-import homeBaseRouters from './homebase';
+import userRouters from './user';
 
 const router = new Router();
 
@@ -189,7 +288,7 @@ router.get('/', (req, res) => {
     });
 });
 
-router.use('/homebase', homeBaseRouters);
+router.use('/user', userRouters);
 
 export default router;
 `
@@ -202,6 +301,8 @@ import app from '../src';
 chai.should();
 chai.use(chaHttp);
 
+const expect = chai.expect;
+
 describe('Testing app', () => {
     it('return base url', (done) => {
         chai.request(app)
@@ -211,19 +312,71 @@ describe('Testing app', () => {
                 done();
             });
     });
-    it('should return true for homebase url', (done) => {
+    it('should return all users', (done) => {
         chai.request(app)
-            .get('/homebase')
-            .then(res => {
-                res.should.have.status(200);
+            .get('/user')
+            .end((err, res) => {
+                expect(err).to.be.null;
+                expect(res).to.have.status(200);
                 done();
-            })
-            .catch(function (err) {
-                setTimeout(function () {
-                    throw new err;
-                });
             });
     });
+    it('should create a new user', (done) => {
+        const userData = {
+            firstName: "John",
+            lastName: "Doe",
+            email: "johndoe@email.com",
+            password: "secretpassword"
+        }
+        chai.request(app)
+            .post('/user')
+            .send(userData)
+            .end((err, res) => {
+                expect(err).to.be.null;
+                expect(res).to.have.status(201);
+                done();
+            });
+    });
+    it('should return a single user', (done) => {
+        chai.request(app)
+            .get('/user/1')
+            .end((err, res) => {
+                expect(err).to.be.null
+                expect(res).to.have.status(200)
+                done();
+            });
+    });
+
+    it('should update user details', (done) => {
+        const userData = {
+            firstName: "John1",
+            email: "johndoe1@email.com",
+            password: "secretpassword"
+        }
+        chai.request(app)
+            .put('/user/1')
+            .send(userData)
+            .end((err, res) => {
+                expect(err).to.be.null;
+                expect(res).to.have.status(200);
+                done();
+            });
+    });
+
+    /**
+     * Always delete is the last test to be done
+     * In the near future, we will work on making sure we have beforeEach and afterEach hooks
+     */
+    it('should return delete a user', (done) => {
+        chai.request(app)
+            .delete('/user/1')
+            .end((err, res) => {
+                expect(err).to.be.null
+                expect(res).to.have.status(200)
+                done();
+            });
+    });
+
     it('should return 404 when route not available', (done) => {
         chai.request(app)
             .get('/notfound')
@@ -232,7 +385,7 @@ describe('Testing app', () => {
                 done();
             });
     });
-});
+});    
 `
 
 const sequelizeInstanceData =
@@ -253,7 +406,8 @@ export default sequelize;
 `
 
 const userModelData =
-    `import { Model } from 'sequelize';
+    `import Sequelize, { Model } from 'sequelize';
+import bcrypt from 'bcrypt';
 import sequelize from './sequelizeinstance';
 
 export default class User extends Model { }
@@ -266,13 +420,52 @@ User.init({
     lastName: {
         type: Sequelize.STRING
         // allowNull defaults to true
+    },
+    email: {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
+    password: {
+        type: Sequelize.STRING,
+        allowNull: false
     }
 }, {
+    // Can add more validation for these methods
+    hooks: {
+        beforeCreate: async (user, options) => {
+            const salt = await bcrypt.genSaltSync(8);
+            user.password = await bcrypt.hashSync(user.password, salt);
+        },
+        beforeUpdate: async (user, options) => {
+            const salt = await bcrypt.genSaltSync(8);
+            user.password = await bcrypt.hashSync(user.password, salt);
+        }
+    },
     // Calling instance of sequelize created in file sequelizeinstance.js
     sequelize,
     modelName: 'user'
     // options
     });
+`
+
+const dropDb =
+    `import { User } from '../models';
+
+User.drop(() => {
+    console.log('Successfully dropped db')
+}).catch(error => {
+    console.log("The Error", error);
+});
+`
+
+const createDb =
+    `import { User } from '../models';
+
+User.sync().then(() => {
+    console.log("Successfully created User tables tables")
+}).catch(error => {
+    console.log("The error: ", error)
+});
 `
 
 module.exports = {
@@ -282,12 +475,14 @@ module.exports = {
     babel,
     appJs,
     appJsTest,
-    homeBaseMiddleware,
+    userMiddleware,
     middleware,
-    homeBaseControllers,
+    userController,
     controllers,
-    homeBaseRouter,
+    userRouter,
     routes,
     sequelizeInstanceData,
-    userModelData
+    userModelData,
+    createDb,
+    dropDb
 }
