@@ -10,12 +10,14 @@ Also, we will aim at building utility that can enhance faster development of upc
 - Install: `npm i -g kemboijs-cli`
 - Create app: `kemboijs-cli myapp`
 - Run app: `npm start`
+- Drop tables: `npm run drop:db`
+- Create tables: `npm run create:db`
 - Run tests: `npm test`
 
 NB: When installing make sure you have admin priviledges otherwise, you will have to use `sudo npm i -g kemboijs-cli`
 
 ## Edit Database details
-Navigate to `src/models/sequelizeinstance.js`, edit the database name, username or password. 
+Navigate to `src/models/setup.js`, edit the database name, username or password. 
 
 You can also add these credentials to the `.env` file.
 ```javascript
@@ -23,7 +25,7 @@ You can also add these credentials to the `.env` file.
   export TEST_DB = "postgres://user:pass@example.com:5432/testdb"
 ```
 
-In your `src/models/sequelizeinstance.js` file:
+In your `src/models/setup.js` file:
 ```javascript
 import dotenv from "dotenv";
 
@@ -48,10 +50,14 @@ You can now call or edit the database models. The created model is **User**, und
     │   ├─ models          
     |       ├─ index.js
     |       ├─ user.js 
-    |       ├─ sequelizeinstance.js 
+    |       ├─ setup.js 
     |   └─ routers 
     |       ├─ index.js
     |       ├─ user.js  
+    |   └─ scripts 
+    |       ├─ createdb.js
+    |       ├─ dropdb.js  
+    |       ├─ index.js  
     ├── test                  
     │   ├─ index.js           
     │   
