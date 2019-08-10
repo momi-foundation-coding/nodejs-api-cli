@@ -72,36 +72,24 @@ const createRouteDirFiles = (name) => {
     const readmeFile = fs.createWriteStream(`${name}/README.md`);
     const babelFile = fs.createWriteStream(`${name}/.babelrc`);
 
-    // Stringify data
+    // Create data var for all the 
+    const gitIgnoreData = dataInFiles.gitIgnore;
     const packageJsonData = JSON.stringify(dataInFiles.packageJson(name), null, "\t");
-    const gitIgnoreData = JSON.stringify(dataInFiles.gitIgnore);
-    const readMeData = JSON.stringify(dataInFiles.readMe(name));
-    const babelData = JSON.stringify(dataInFiles.babel);
-    packageFile.write(packageJsonData);
-    gitignoreFile.write(JSON.parse(gitIgnoreData));
-    readmeFile.write(JSON.parse(readMeData));
-    babelFile.write(JSON.parse(babelData));
+    const readMeData = dataInFiles.readMe(name);
+    const babelData = dataInFiles.babel;
 
-    packageFile.on('finish', () => {
-        console.log('------successfully written to package.json file------');
+    // Create an array for all files needed [pathname, data]
+    const fileDataArr = [
+        { pathname: packageFile.path, data: packageJsonData },
+        { pathname: gitignoreFile.path, data: gitIgnoreData },
+        { pathname: readmeFile.path, data: readMeData },
+        { pathname: babelFile.path, data: babelData },
+    ]
+
+    // For each file, append data using fn openAppendFile
+    fileDataArr.forEach(file => {
+        openAppendFile(file.pathname, file.data)
     });
-
-    packageFile.end();
-
-    gitignoreFile.on('finish', () => {
-        console.log('----------Written data to .gitignore file-------------');
-    });
-    gitignoreFile.end();
-
-    readmeFile.on('finish', () => {
-        console.log('------------Written successfully to readme------------');
-    });
-    readmeFile.end();
-
-    babelFile.on('finish', () => {
-        console.log('-----Finally we created our .babelrc file--------');
-    });
-    babelFile.end();
 }
 
 const createSrcDirAndFiles = (appName) => {
@@ -120,10 +108,12 @@ const createSrcDirAndFiles = (appName) => {
             ]
 
             if (scriptsArr.includes(folder)) {
+                // Create a script to create tables 
                 const createDbFile = `${appName}/src/scripts/createdb.js`;
                 const createDbFileName = fs.createWriteStream(createDbFile);
                 const createDbData = dataInFiles.createDb;
                 openAppendFile(createDbFileName.path, createDbData);
+                // Create a script to drop tables
                 const dropDbFile = `${appName}/src/scripts/dropdb.js`;
                 const dropDbFileName = fs.createWriteStream(dropDbFile);
                 const dropDbData = dataInFiles.dropDb;
@@ -136,18 +126,17 @@ const createSrcDirAndFiles = (appName) => {
             ]
 
             if (modelsArr.includes(folder)) {
-                const sequelizeInstanceFile = `${appName}/src/models/sequelizeinstance.js`;
-                const sequelizeInstanceFileName = fs.createWriteStream(sequelizeInstanceFile);
-                if (sequelizeInstanceFileName.path === `${appName}/src/models/sequelizeinstance.js`) {
-                    const pathName = sequelizeInstanceFileName.path;
-                    const sequelizeData = dataInFiles.sequelizeInstanceData;
-                    openAppendFile(pathName, sequelizeData);
-                }
+                // Set up for sequelize database
+                const sequelizeSetupFile = `${appName}/src/models/setup.js`;
+                const sequelizeSetupFileName = fs.createWriteStream(sequelizeSetupFile);
+                const pathName = sequelizeSetupFileName.path;
+                const sequelizeData = dataInFiles.sequelizeSetupData;
+                openAppendFile(pathName, sequelizeData);
+
+                // Create user table and its fields 
                 const userModels = `${appName}/src/models/user.js`;
                 const userModelsFileName = fs.createWriteStream(userModels);
-                if (userModelsFileName.path === `${appName}/src/models/user.js`) {
-                    openAppendFile(userModelsFileName.path, dataInFiles.userModelData);
-                }
+                openAppendFile(userModelsFileName.path, dataInFiles.userModelData);
             }
 
             // Write to test file.
@@ -172,6 +161,10 @@ const createSrcDirAndFiles = (appName) => {
             ]
             // Now create file user.js in specified directories
             if (pathsThatNeedBaseFiles.includes(folder)) {
+                /**
+                 * In the base directories create user.js file
+                 * [For middleware, routes, controllers]
+                */
                 const directoryFiles = `${folder}/user.js`;
                 const directoryFileName = fs.createWriteStream(directoryFiles);
                 if (directoryFileName.path === `${appName}/src/middlewares/user.js`) {
@@ -214,6 +207,11 @@ const createSrcDirAndFiles = (appName) => {
     });
 }
 
+/**
+ * func to create the main directory
+ * later we can allow user to manipulate if app is already existing
+ * such as adding more controllers or tables/models
+*/
 const createMainDir = name => {
     if (!name) {
         console.log('------You must add the name of your application-------');

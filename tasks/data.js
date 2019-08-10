@@ -388,7 +388,7 @@ describe('Testing app', () => {
 });    
 `
 
-const sequelizeInstanceData =
+const sequelizeSetupData =
     `import Sequelize from 'sequelize';
 
 const sequelize = new Sequelize('postgres://user:pass@example.com:5432/dbname');
@@ -408,7 +408,7 @@ export default sequelize;
 const userModelData =
     `import Sequelize, { Model } from 'sequelize';
 import bcrypt from 'bcrypt';
-import sequelize from './sequelizeinstance';
+import sequelize from './setup';
 
 export default class User extends Model { }
 User.init({
@@ -441,7 +441,7 @@ User.init({
             user.password = await bcrypt.hashSync(user.password, salt);
         }
     },
-    // Calling instance of sequelize created in file sequelizeinstance.js
+    // Calling instance of sequelize created in file setup.js
     sequelize,
     modelName: 'user'
     // options
@@ -481,7 +481,7 @@ module.exports = {
     controllers,
     userRouter,
     routes,
-    sequelizeInstanceData,
+    sequelizeSetupData,
     userModelData,
     createDb,
     dropDb
