@@ -27,6 +27,7 @@ const installingDependancies = (name) => {
         npm install pg 
         npm install bcrypt
         npm install pg-hstore
+        npm install dotenv
         echo Install dev dependancies, please wait...
         npm install -D @babel/cli 
         npm install -D @babel/core 
@@ -71,20 +72,23 @@ const createRouteDirFiles = (name) => {
     fs.createWriteStream(`${name}/.env`);
     const readmeFile = fs.createWriteStream(`${name}/README.md`);
     const babelFile = fs.createWriteStream(`${name}/.babelrc`);
+    const envExampleFile = fs.createWriteStream(`${name}/.envExample`);
 
     // Create data var for all the 
     const gitIgnoreData = dataInFiles.gitIgnore;
     const packageJsonData = JSON.stringify(dataInFiles.packageJson(name), null, "\t");
     const readMeData = dataInFiles.readMe(name);
     const babelData = dataInFiles.babel;
+    const envExampleData = dataInFiles.envExample;
 
     // Create an array for all files needed [pathname, data]
     const fileDataArr = [
-        { pathname: packageFile.path, data: packageJsonData },
-        { pathname: gitignoreFile.path, data: gitIgnoreData },
-        { pathname: readmeFile.path, data: readMeData },
-        { pathname: babelFile.path, data: babelData },
-    ]
+      { pathname: packageFile.path, data: packageJsonData },
+      { pathname: gitignoreFile.path, data: gitIgnoreData },
+      { pathname: readmeFile.path, data: readMeData },
+      { pathname: babelFile.path, data: babelData },
+      { pathname: envExampleFile.path, data: envExampleData }
+    ];
 
     // For each file, append data using fn openAppendFile
     fileDataArr.forEach(file => {
