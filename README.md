@@ -21,8 +21,9 @@ Navigate to `src/models/setup.js`, edit the database name, username or password.
 
 You can also add these credentials to the `.env` file.
 ```javascript
-  export DATABASE_URL = "postgres://user:pass@example.com:5432/dbname"
-  export TEST_DB = "postgres://user:pass@example.com:5432/testdb"
+  DATABASE_URL="postgres://user:pass@example.com:5432/dbname"
+  TEST_DB="postgres://user:pass@example.com:5432/testdb"
+  NODE_ENV="development"
 ```
 
 In your `src/models/setup.js` file:
@@ -31,7 +32,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const dbUrl = process.env === 'test' ? process.env.TEST_DB : process.env.DATABASE_URL;
+const dbUrl = process.env.NODE_ENV === 'test' ? process.env.TEST_DB : process.env.DATABASE_URL;
 const sequelize = new Sequelize(dbUrl);
 ```
 

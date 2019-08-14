@@ -388,10 +388,17 @@ describe('Testing app', () => {
 });    
 `
 
-const sequelizeSetupData =
-    `import Sequelize from 'sequelize';
+const sequelizeSetupData = `import Sequelize from 'sequelize';
+import dotenv from 'dotenv';
 
-const sequelize = new Sequelize('postgres://user:pass@example.com:5432/dbname');
+dotenv.config();
+
+const dbUrl =
+  process.env.NODE_ENV === "test"
+    ? process.env.TEST_DATABASE_URL
+    : process.env.DATABASE_URL;
+
+const sequelize = new Sequelize(dbUrl);
 
 sequelize
     .authenticate()
@@ -401,9 +408,8 @@ sequelize
     .catch(err => {
         console.error('Unable to connect to the database:', err);
     });
-
 export default sequelize;
-`
+`;
 
 const userModelData =
     `import Sequelize, { Model } from 'sequelize';
@@ -468,21 +474,28 @@ User.sync().then(() => {
 });
 `
 
+const envExample = `
+TEST_DATABASE_URL="postgres://localhost:5432/dbnameTest"
+DATABASE_URL="postgres://localhost:5432/dbname"
+NODE_ENV="development"
+`;
+
 module.exports = {
-    packageJson,
-    gitIgnore,
-    readMe,
-    babel,
-    appJs,
-    appJsTest,
-    userMiddleware,
-    middleware,
-    userController,
-    controllers,
-    userRouter,
-    routes,
-    sequelizeSetupData,
-    userModelData,
-    createDb,
-    dropDb
-}
+  packageJson,
+  gitIgnore,
+  readMe,
+  babel,
+  appJs,
+  appJsTest,
+  userMiddleware,
+  middleware,
+  userController,
+  controllers,
+  userRouter,
+  routes,
+  sequelizeSetupData,
+  userModelData,
+  createDb,
+  dropDb,
+  envExample
+};
