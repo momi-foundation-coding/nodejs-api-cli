@@ -1,11 +1,21 @@
 #!/usr/bin/env node
 'use strict';
 
+/**
+ * External imports/Nodejs imports
+ */
 const fs = require("fs");
 const { exec } = require("child_process");
 const path = require("path");
+const readline = require("readline");
 const { PassThrough, Writable } = require("stream");
+
+/**
+ * Internal imports
+ */
 const dataInFiles = require("../tasks/data");
+const chooseYourColorText = require("./consolecolors");
+const colorSet = require("./colorsets");
 
 const writable = new Writable();
 const pass = new PassThrough();
@@ -49,6 +59,35 @@ const installingDependancies = (name) => {
         console.log(`stderror: ${stderror}`);
         console.log('------------Thanks for being patient-------------');
     });
+}
+
+/**
+ * Func to see if true for two values. 
+ * @param {*} firstValue 
+ * @param {*} secondValue 
+ * It does not substitute === or !== 
+ */
+
+const isObjectSame = (firstValue, secondValue) => {
+    return Object.is(firstValue, secondValue);
+}
+
+/**
+ * Start of an error message
+ */
+
+const startErrorMessageConsole = () => {
+    chooseYourColorText(colorSet.error, "--------------------Start----------------------");
+    chooseYourColorText(colorSet.error, "--------------------Error----------------------");
+}
+
+/**
+ * End of error message
+ */
+
+const endErrorMessageConsole = () => {
+    chooseYourColorText(colorSet.error, "--------------------Error----------------------");
+    chooseYourColorText(colorSet.error, "--------------------End----------------------");
 }
 
 // Opening files and writing to files utility function
@@ -234,6 +273,95 @@ const createApp = async (name) => {
 const args = process.argv.slice(2);
 
 // Convert into a module that can be used as CLI
-args.forEach((value, index) => {
-    return createApp(value);
+// args.forEach((value, index) => {
+//     return createApp(value);
+// });
+
+const createServer = (name, packages) => {
+    console.log({ name })
+    console.log({ packages })
+    process.exit(0)
+}
+
+// Create a readline interface with a completer
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
 });
+
+// Create an inquirer to ask user for inputs
+args.forEach((value, index) => {
+    if (!value || value !== 'init') {
+        console.log('Use kemboijs-cli init [For dev: npm start init]');
+        process.exit(1);
+    }
+    let packagesRequired = {};
+    const appName = [];
+    /**
+     * Use write to write to the command line.
+     * Create a Readstream for the same.
+     * Also checking on module tty if it is possible to be used.
+    */
+
+    rl.question('What is the name of your application? ', (name) => {
+        appName.push({ name });
+        rl.question('Which framework do you want to use? ', (framework) => {
+            /**
+             * Catch name of framework in lowercase and
+             * Check against the available frameworks
+             */
+            const framValueCheck = isObjectSame(framework.toLowerCase().trim(), "express") ||
+                isObjectSame(framework.toLowerCase().trim(), "kemboijs")
+
+            if (framValueCheck === false) {
+                // Do some console log for error messages
+                startErrorMessageConsole();
+                chooseYourColorText(colorSet.error, "You either typed framework wrongly or \n unsupported framework at the moment")
+                endErrorMessageConsole();
+                rl.close();
+            }
+            packagesRequired.framework = framework;
+            rl.question("Which database do you want to use? ", (database) => {
+                const checkDatabaseIfValid = isObjectSame(database.toLowerCase().trim(), "postgres") ||
+                    isObjectSame(database.toLowerCase().trim(), "mongodb");
+                if (checkDatabaseIfValid === false) {
+                    startErrorMessageConsole();
+                    chooseYourColorText(colorSet.error, "-------------Either typed wrong or \n we are not supporting the database--------")
+                    endErrorMessageConsole();
+                }
+
+                packagesRequired.database = database;
+                rl.question(`Which ORM is your choice? `, (orm) => {
+                    if (packagesRequired.database === "postgres") {
+                        console.log({ packagesRequired })
+                        // Allow only postgres ORMs
+                    } else if (packagesRequired.database === "mongodb") {
+                        // Allow only mongodb ORMs
+                    }
+                    packagesRequired.orm = orm;
+                    rl.question("Do you needs tests? ", (test) => {
+                        /**
+                         * When user does not need test, run the applications
+                         * Make it case insensitive
+                         * Call createServer() when answer is No otherwise continue
+                         */
+
+                        test.toLowerCase() === 'no' ? createServer(appName, packagesRequired) : null;
+                        rl.question("Choose your test runner? ", (testRunner) => {
+                            packagesRequired.testRunner = testRunner;
+                            rl.question("Choose BDD tools? ", (bdd) => {
+                                packagesRequired.bdd = bdd;
+                                createServer(appName, packagesRequired);
+                            })
+                        })
+                    })
+                })
+            })
+        });
+    });
+
+    rl.on('close', () => {
+        console.log("An error occurred or terminated successfully.")
+        process.exit(0);
+    });
+})
