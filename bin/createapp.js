@@ -4,11 +4,17 @@
 const fs = require("fs");
 const { exec } = require("child_process");
 const path = require("path");
-const { PassThrough, Writable } = require("stream");
-const dataInFiles = require("../tasks/data");
+// const { PassThrough, Writable } = require("stream");
 
-const writable = new Writable();
-const pass = new PassThrough();
+/**
+ * Internal imports goes here
+ */
+const dataInFiles = require("../tasks/data");
+const chooseYourColorText = require('./consolecolors');
+const colorSet = require("./colorsets");
+
+// const writable = new Writable();
+// const pass = new PassThrough();
 
 const installingDependancies = (name) => {
     const appBaseDirectory = path.basename(name);
@@ -44,11 +50,11 @@ const installingDependancies = (name) => {
     // Install dependancies and dev dependancies
     exec(cmd, (error, stdout, stderror) => {
         if (error) {
-            console.error(`exec error: ${exec}`);
+            chooseYourColorText(colorSet.error, `exec error: ${exec}`);
         }
-        console.log(`stdout: ${stdout}`);
-        console.log(`stderror: ${stderror}`);
-        console.log('------------Thanks for being patient-------------');
+        chooseYourColorText(colorSet.normal, `stdout: ${stdout}`);
+        chooseYourColorText(colorSet.error, `stderror: ${stderror}`);
+        chooseYourColorText(colorSet.log, '------------Thanks for being patient-------------');
     });
 }
 
@@ -218,7 +224,7 @@ const createSrcDirAndFiles = (appName) => {
 */
 const createMainDir = name => {
     if (!name) {
-        console.log('------You must add the name of your application-------');
+        chooseYourColorText(colorSet.error, '------You must add the name of your application-------');
     }
     fs.mkdir(name, err => {
         if (err) throw err
