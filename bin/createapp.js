@@ -4,7 +4,6 @@
 const fs = require("fs");
 const { exec } = require("child_process");
 const path = require("path");
-// const { PassThrough, Writable } = require("stream");
 
 /**
  * Internal imports goes here
@@ -12,9 +11,6 @@ const path = require("path");
 const dataInFiles = require("../tasks/data");
 const chooseYourColorText = require('./consolecolors');
 const colorSet = require("./colorsets");
-
-// const writable = new Writable();
-// const pass = new PassThrough();
 
 const installingDependancies = (name) => {
     const appBaseDirectory = path.basename(name);
@@ -30,10 +26,8 @@ const installingDependancies = (name) => {
         npm install body-parser 
         npm install cors 
         npm install sequelize
-        npm install pg 
-        npm install bcrypt
-        npm install pg-hstore
         npm install dotenv
+        npm install bcrypt
         echo Install dev dependancies, please wait...
         npm install -D @babel/cli 
         npm install -D @babel/core 
@@ -75,7 +69,7 @@ const createRouteDirFiles = (name) => {
     // Create different files such as packages, readme etc.
     const packageFile = fs.createWriteStream(`${name}/package.json`);
     const gitignoreFile = fs.createWriteStream(`${name}/.gitignore`);
-    fs.createWriteStream(`${name}/.env`);
+    const envFile = fs.createWriteStream(`${name}/.env`);
     const readmeFile = fs.createWriteStream(`${name}/README.md`);
     const babelFile = fs.createWriteStream(`${name}/.babelrc`);
     const envExampleFile = fs.createWriteStream(`${name}/.envExample`);
@@ -89,11 +83,12 @@ const createRouteDirFiles = (name) => {
 
     // Create an array for all files needed [pathname, data]
     const fileDataArr = [
-      { pathname: packageFile.path, data: packageJsonData },
-      { pathname: gitignoreFile.path, data: gitIgnoreData },
-      { pathname: readmeFile.path, data: readMeData },
-      { pathname: babelFile.path, data: babelData },
-      { pathname: envExampleFile.path, data: envExampleData }
+        { pathname: packageFile.path, data: packageJsonData },
+        { pathname: gitignoreFile.path, data: gitIgnoreData },
+        { pathname: readmeFile.path, data: readMeData },
+        { pathname: babelFile.path, data: babelData },
+        { pathname: envFile.path, data: envExampleData },
+        { pathname: envExampleFile.path, data: envExampleData }
     ];
 
     // For each file, append data using fn openAppendFile

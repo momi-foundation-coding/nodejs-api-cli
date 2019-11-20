@@ -1,7 +1,7 @@
 // Package file data.
 const packageJson = (name) => (
     {
-        "name": `${name.charAt(0).toUpperCase() + name.slice(1)}`,
+        "name": `${name}`,
         "version": "1.0.0",
         "main": "index.js",
         "scripts": {
@@ -481,21 +481,21 @@ NODE_ENV="development"
 `;
 
 module.exports = {
-  packageJson,
-  gitIgnore,
-  readMe,
-  babel,
-  appJs,
-  appJsTest,
-  userMiddleware,
-  middleware,
-  userController,
-  controllers,
-  userRouter,
-  routes,
-  sequelizeSetupData,
-  userModelData,
-  createDb,
-  dropDb,
-  envExample
+    packageJson,
+    gitIgnore,
+    readMe,
+    babel,
+    appJs,
+    appJsTest,
+    userMiddleware,
+    middleware,
+    userController,
+    controllers,
+    userRouter,
+    routes,
+    sequelizeSetupData,
+    userModelData,
+    createDb,
+    dropDb,
+    envExample
 };
