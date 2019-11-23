@@ -1,19 +1,28 @@
 #!/usr/bin/env node
 'use strict';
 
+/**
+ * Nodejs internal modules
+ */
 const fs = require("fs");
-const { exec } = require("child_process");
+const { exec } = require('child_process');
 const path = require("path");
+
+/**
+ * External dependancies installed through npm
+ */
+var inquirer = require("inquirer");
 
 /**
  * Internal imports goes here
  */
 const dataInFiles = require("../tasks/data");
-const chooseYourColorText = require('./consolecolors');
+const chooseConsoleColorText = require('./consolecolors');
 const colorSet = require("./colorsets");
 
-const installingDependancies = (name) => {
-    const appBaseDirectory = path.basename(name);
+const installingDependancies = (details) => {
+    const { appName, framework, database, orm, testFramework, expectationLibrary } = details;
+    const appBaseDirectory = path.basename(appName);
     // For now, shell command is run inside this file, but need to be removed later
     const cmd = `
         cd ${appBaseDirectory}
@@ -22,10 +31,10 @@ const installingDependancies = (name) => {
         git init
         echo Will install your dependancies shortly....
         echo We are installing dependancies, please wait...
-        npm install express 
+        npm install ${framework.toLowerCase()} 
         npm install body-parser 
         npm install cors 
-        npm install sequelize
+        npm install ${orm.toLowerCase()}
         npm install dotenv
         npm install bcrypt
         echo Install dev dependancies, please wait...
@@ -34,21 +43,21 @@ const installingDependancies = (name) => {
         npm install -D @babel/node 
         npm install -D @babel/preset-env 
         npm install -D chai-http 
-        npm install -D chai 
-        npm install -D mocha 
+        npm install -D ${expectationLibrary.toLowerCase()} 
+        npm install -D ${testFramework.toLowerCase()} 
         npm install -D nyc
         echo adding files to git and committing
-        git add . && git commit -m "create app"
+        git add . && git commit -m "create app and set up app"
     `
 
     // Install dependancies and dev dependancies
     exec(cmd, (error, stdout, stderror) => {
         if (error) {
-            chooseYourColorText(colorSet.error, `exec error: ${exec}`);
+            chooseConsoleColorText(colorSet.error, `exec error: ${exec}`);
         }
-        chooseYourColorText(colorSet.normal, `stdout: ${stdout}`);
-        chooseYourColorText(colorSet.error, `stderror: ${stderror}`);
-        chooseYourColorText(colorSet.log, '------------Thanks for being patient-------------');
+        chooseConsoleColorText(colorSet.normal, `stdout: ${stdout}`);
+        chooseConsoleColorText(colorSet.error, `stderror: ${stderror}`);
+        chooseConsoleColorText(colorSet.log, '------------Thanks for being patient-------------');
     });
 }
 
@@ -97,9 +106,18 @@ const createRouteDirFiles = (name) => {
     });
 }
 
-const createSrcDirAndFiles = (appName) => {
-    const foldersToAdd = ['src/controllers', 'src/routes', 'src/config', 'src/scripts', 'src/models', 'src/middlewares', 'test', 'src']
-    const folders = foldersToAdd.map(folder => `${appName}/${folder}`);
+const createSrcDirAndFiles = (details) => {
+    const { appBaseDirectory, tests } = details;
+    let foldersToAdd = ['src/controllers', 'src/routes', 'src/config', 'src/scripts', 'src/models', 'src/middlewares', 'src']
+    if (tests) {
+        foldersToAdd = ['src/controllers', 'src/routes', 'src/config', 'src/scripts', 'src/models', 'src/middlewares', 'test', 'src']
+    }
+
+    const folders = foldersToAdd.map(folder => {
+        if (folder || folder !== undefined) {
+            return `${appBaseDirectory}/${folder}`
+        }
+    });
     folders.forEach((folder) => {
         fs.mkdir(folder, { recursive: true }, err => {
             if (err) throw err;
@@ -109,17 +127,17 @@ const createSrcDirAndFiles = (appName) => {
 
             // Scripts file, which include running migrations and dropping db
             const scriptsArr = [
-                `${appName}/src/scripts`
+                `${appBaseDirectory}/src/scripts`
             ]
 
             if (scriptsArr.includes(folder)) {
                 // Create a script to create tables 
-                const createDbFile = `${appName}/src/scripts/createdb.js`;
+                const createDbFile = `${appBaseDirectory}/src/scripts/createdb.js`;
                 const createDbFileName = fs.createWriteStream(createDbFile);
                 const createDbData = dataInFiles.createDb;
                 openAppendFile(createDbFileName.path, createDbData);
                 // Create a script to drop tables
-                const dropDbFile = `${appName}/src/scripts/dropdb.js`;
+                const dropDbFile = `${appBaseDirectory}/src/scripts/dropdb.js`;
                 const dropDbFileName = fs.createWriteStream(dropDbFile);
                 const dropDbData = dataInFiles.dropDb;
                 openAppendFile(dropDbFileName.path, dropDbData);
@@ -127,32 +145,32 @@ const createSrcDirAndFiles = (appName) => {
 
             // Write sequelize instance and create models here
             const modelsArr = [
-                `${appName}/src/models`
+                `${appBaseDirectory}/src/models`
             ]
 
             if (modelsArr.includes(folder)) {
                 // Set up for sequelize database
-                const sequelizeSetupFile = `${appName}/src/models/setup.js`;
+                const sequelizeSetupFile = `${appBaseDirectory}/src/models/setup.js`;
                 const sequelizeSetupFileName = fs.createWriteStream(sequelizeSetupFile);
                 const pathName = sequelizeSetupFileName.path;
                 const sequelizeData = dataInFiles.sequelizeSetupData;
                 openAppendFile(pathName, sequelizeData);
 
                 // Create user table and its fields 
-                const userModels = `${appName}/src/models/user.js`;
+                const userModels = `${appBaseDirectory}/src/models/user.js`;
                 const userModelsFileName = fs.createWriteStream(userModels);
                 openAppendFile(userModelsFileName.path, dataInFiles.userModelData);
             }
 
             // Write to test file.
-            if (fileName.path === `${appName}/test/index.js`) {
+            if (fileName.path === `${appBaseDirectory}/test/index.js`) {
                 const pathName = fileName.path;
                 const data = dataInFiles.appJsTest;
                 openAppendFile(pathName, data);
             };
 
             // Add data to the main entry point
-            if (fileName.path === `${appName}/src/index.js`) {
+            if (fileName.path === `${appBaseDirectory}/src/index.js`) {
                 const pathName = fileName.path;
                 const data = dataInFiles.appJs;
                 openAppendFile(pathName, data);
@@ -160,9 +178,9 @@ const createSrcDirAndFiles = (appName) => {
 
             // Paths that needs files such as user.js, config may not need it.
             const pathsThatNeedBaseFiles = [
-                `${appName}/src/middlewares`,
-                `${appName}/src/routes`,
-                `${appName}/src/controllers`
+                `${appBaseDirectory}/src/middlewares`,
+                `${appBaseDirectory}/src/routes`,
+                `${appBaseDirectory}/src/controllers`
             ]
             // Now create file user.js in specified directories
             if (pathsThatNeedBaseFiles.includes(folder)) {
@@ -172,17 +190,17 @@ const createSrcDirAndFiles = (appName) => {
                 */
                 const directoryFiles = `${folder}/user.js`;
                 const directoryFileName = fs.createWriteStream(directoryFiles);
-                if (directoryFileName.path === `${appName}/src/middlewares/user.js`) {
+                if (directoryFileName.path === `${appBaseDirectory}/src/middlewares/user.js`) {
                     const pathName = directoryFileName.path;
                     const data = dataInFiles.userMiddleware;
                     openAppendFile(pathName, data);
                 }
-                if (directoryFileName.path === `${appName}/src/routes/user.js`) {
+                if (directoryFileName.path === `${appBaseDirectory}/src/routes/user.js`) {
                     const pathName = directoryFileName.path;
                     const data = dataInFiles.userRouter;
                     openAppendFile(pathName, data);
                 }
-                if (directoryFileName.path === `${appName}/src/controllers/user.js`) {
+                if (directoryFileName.path === `${appBaseDirectory}/src/controllers/user.js`) {
                     const pathName = directoryFileName.path;
                     const data = dataInFiles.userController;
                     openAppendFile(pathName, data);
@@ -190,22 +208,22 @@ const createSrcDirAndFiles = (appName) => {
             };
 
             // Write to different files including the index.js and other files
-            if (fileName.path === `${appName}/src/middlewares/index.js`) {
+            if (fileName.path === `${appBaseDirectory}/src/middlewares/index.js`) {
                 const pathName = fileName.path;
                 const data = dataInFiles.middleware;
                 openAppendFile(pathName, data);
             }
-            if (fileName.path === `${appName}/src/routes/index.js`) {
+            if (fileName.path === `${appBaseDirectory}/src/routes/index.js`) {
                 const pathName = fileName.path;
                 const data = dataInFiles.routes;
                 openAppendFile(pathName, data);
             }
-            if (fileName.path === `${appName}/src/controllers/index.js`) {
+            if (fileName.path === `${appBaseDirectory}/src/controllers/index.js`) {
                 const pathName = fileName.path;
                 const data = dataInFiles.controllers;
                 openAppendFile(pathName, data);
             }
-            if (fileName.path === `${appName}/src/models/index.js`) {
+            if (fileName.path === `${appBaseDirectory}/src/models/index.js`) {
                 openAppendFile(fileName.path, `export { default as User } from './user';`)
             }
         });
@@ -217,28 +235,149 @@ const createSrcDirAndFiles = (appName) => {
  * later we can allow user to manipulate if app is already existing
  * such as adding more controllers or tables/models
 */
-const createMainDir = name => {
-    if (!name) {
-        chooseYourColorText(colorSet.error, '------You must add the name of your application-------');
-    }
-    fs.mkdir(name, err => {
-        if (err) throw err
+const createMainDir = (details) => {
+    const { appName, tests } = details;
+    fs.mkdir(appName, err => {
+        if (err) {
+            chooseConsoleColorText(colorSet.error, '\n\n--------There is a file with the same name chosen-----------\n');
+            process.exit(0);
+        } else {
+            const appBaseDirectory = path.basename(appName);
+            createSrcDirAndFiles({ appBaseDirectory, tests });
+        }
     });
-    const appBaseDirectory = path.basename(name);
-    createSrcDirAndFiles(appBaseDirectory);
 }
 
 // Creating the main application
-const createApp = async (name) => {
-    await createMainDir(name);
-    await createRouteDirFiles(name);
-    await installingDependancies(name);
+const createApp = async (details) => {
+    const { appName, framework, database, orm, tests, testFramework, expectationLibrary } = details;
+    await createMainDir({ appName, tests });
+    await createRouteDirFiles(appName);
+    await installingDependancies({ appName, framework, database, orm, testFramework, expectationLibrary });
 };
 
 // Remove the first 2 arguments
 const args = process.argv.slice(2);
 
 // Convert into a module that can be used as CLI
-args.forEach((value, index) => {
-    return createApp(value);
+args.forEach(async (value, index) => {
+    /**
+     * Need to test when user only writes kemboijs-cli
+     */
+
+    if (!value || value !== 'init') {
+        chooseConsoleColorText(colorSet.error, '------Use kemboijs-cli init to start a new project--------\n');
+        process.exit(0);
+    }
+
+    const appName = await inquirer.prompt([
+        {
+            name: 'appName',
+            message: 'What is the name of your application? ',
+            validate: function (value) {
+                /**
+                 * More validation for app name can be done in the future
+                 * E.g allowing only alpha or eliminating spaces and other stuff. 
+                 * Can just have regex here
+                 */
+
+                if (!value) {
+                    chooseConsoleColorText(colorSet.error, '\n\n------App name should not be empty-------\n')
+                    return process.exit(0);
+                }
+                return true;
+            }
+        },
+    ]);
+
+    const collectFrameworkAndDb = await inquirer.prompt([
+        {
+            type: 'list',
+            name: 'framework',
+            message: 'Which framework do you want to use?',
+            /**
+             * Need to add more choices e.g 
+             * choices: ['Express', 'KemboiJs', 'Koa'],
+             */
+            choices: ['Express'],
+            default: 'Express'
+        },
+        {
+            type: 'list',
+            name: 'database',
+            message: 'Which database do you want to use?',
+            /**
+             * Need to add more choices e.g 
+             * choices: ['Postgres', 'MongoDB'],
+             */
+            choices: ['Postgres'],
+            default: 'Postgres'
+        }
+    ]);
+
+    const { database } = collectFrameworkAndDb;
+
+    let ormChoices = [];
+
+    /**
+     * Select the ORMs based on the database provided above.
+     */
+    if (database === 'Postgres') {
+        ormChoices.push('Sequelize')
+    } else if (database === 'MongoDB') {
+        ormChoices.push('mongoose')
+    } else {
+        chooseConsoleColorText(colorSet.error, '------Error occurred while collecting database details------');
+        process.exit(0);
+    }
+
+    const collectOrm = await inquirer.prompt([
+        {
+            type: 'list',
+            name: 'orm',
+            message: 'Which ORM is your choice?',
+            choices: ormChoices
+        }
+    ]);
+
+    const needTests = await inquirer.prompt([
+        {
+            type: 'confirm',
+            name: 'tests',
+            message: 'Do you needs tests(Y/N)?',
+            default: ['Y']
+        }
+    ]);
+
+    let testRunner;
+    const { tests } = needTests;
+
+    if (tests) {
+        testRunner = await inquirer.prompt([
+            {
+                type: 'list',
+                name: 'testFramework',
+                message: 'Which testing framework do you want to use?',
+                /**
+                 * Need to add more choices e.g 
+                 * choices: ['Mocha', 'Jasmine'],
+                 */
+                choices: ['Mocha'],
+                default: 'Mocha'
+            }, {
+                type: 'list',
+                name: 'expectationLibrary',
+                message: 'Which expectation library do you want to use?',
+                choices: ['chai'],
+                default: 'chai'
+            }
+        ]);
+    } else {
+        return createApp({ ...appName, ...collectFrameworkAndDb, ...collectOrm, tests });
+    }
+
+    /**
+     * Spread to get details on the tools to make use of.
+     */
+    return createApp({ ...appName, ...collectFrameworkAndDb, ...collectOrm, tests, ...testRunner });
 });
