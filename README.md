@@ -8,13 +8,18 @@ Also, we will aim at building utility that can enhance faster development of upc
 # How to use
 
 - Install: `npm i -g kemboijs-cli`
-- Create app: `kemboijs-cli myapp`
+- Create app: `kemboijs-cli init`
+    - Follow the steps and select your options
 - Run app: `npm start`
 - Drop tables: `npm run drop:db`
 - Create tables: `npm run create:db`
 - Run tests: `npm test`
 
 NB: When installing make sure you have admin priviledges otherwise, you will have to use `sudo npm i -g kemboijs-cli`
+
+Steps: 
+  - Get help `kemboijs-cli -- -h` or `kemboijs-cli help`
+  - Get version of app `kemboijs-cli -- -v` or `kemboijs-cli version`
 
 ## Edit Database details
 Navigate to `src/models/setup.js`, edit the database name, username or password. 
