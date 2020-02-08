@@ -1,6 +1,6 @@
 {
     "name": "kemboijs-cli",
-    "version": "1.2.0",
+    "version": "1.3.0",
     "description": "This is one command kemboijs-cli for generating nodejs application. It is a scaffold for generating a customizable app for your nodejs APIs",
     "main": "./tasks/data.js",
     "bin": {
