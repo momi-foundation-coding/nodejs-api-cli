@@ -98,7 +98,7 @@ args.forEach(async (value, index) => {
 
         const { database } = collectFrameworkAndDb;
 
-        let ormChoices = [];
+        let ormChoices = ['No ORM'];
 
         /**
          * Select the ORMs based on the database provided above.
