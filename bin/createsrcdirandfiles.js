@@ -8,7 +8,7 @@ const openAppendFile = require("./openandappendfile");
 const dataInFiles = require("../tasks/data");
 
 const createSrcDirAndFiles = (details) => {
-    const { appBaseDirectory, tests } = details;
+    const { appBaseDirectory, tests, orm } = details;
     let foldersToAdd = ['src/controllers', 'src/routes', 'src/config', 'src/scripts', 'src/models', 'src/middlewares', 'src']
     if (tests) {
         foldersToAdd = ['src/controllers', 'src/routes', 'src/config', 'src/scripts', 'src/models', 'src/middlewares', 'test', 'src']
@@ -35,12 +35,26 @@ const createSrcDirAndFiles = (details) => {
                 // Create a script to create tables 
                 const createDbFile = `${appBaseDirectory}/src/scripts/createdb.js`;
                 const createDbFileName = fs.createWriteStream(createDbFile);
-                const createDbData = dataInFiles.createDb;
+                let createDbData;
+                if(orm && orm.toLowerCase() === 'sequelize'){
+                    createDbData = dataInFiles.createDb
+                }
+                else{
+                    createDbData = dataInFiles.noOrmcreateDb
+                }
                 openAppendFile(createDbFileName.path, createDbData);
                 // Create a script to drop tables
+
+                // Use the procedure down
                 const dropDbFile = `${appBaseDirectory}/src/scripts/dropdb.js`;
                 const dropDbFileName = fs.createWriteStream(dropDbFile);
-                const dropDbData = dataInFiles.dropDb;
+                let dropDbData;
+                if(orm && orm.toLowerCase() === 'sequelize'){
+                    dropDbData = dataInFiles.dropDb
+                }
+                else{
+                    dropDbData = dataInFiles.noOrmDropDb
+                }
                 openAppendFile(dropDbFileName.path, dropDbData);
             }
 
@@ -54,8 +68,14 @@ const createSrcDirAndFiles = (details) => {
                 const sequelizeSetupFile = `${appBaseDirectory}/src/models/setup.js`;
                 const sequelizeSetupFileName = fs.createWriteStream(sequelizeSetupFile);
                 const pathName = sequelizeSetupFileName.path;
-                const sequelizeData = dataInFiles.sequelizeSetupData;
-                openAppendFile(pathName, sequelizeData);
+                let modelData;
+                if(orm && orm.toLowerCase() === 'sequelize'){
+                    modelData = dataInFiles.sequelizeSetupData;
+                }
+                else{
+                    modelData = dataInFiles.noSequelizeSetupData;
+                }                
+                openAppendFile(pathName, modelData);
 
                 // Create user table and its fields 
                 const userModels = `${appBaseDirectory}/src/models/user.js`;
