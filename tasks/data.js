@@ -1,20 +1,17 @@
 // Package file data.
-const packageJson = (name) => (
-    {
-        "name": `${name}`,
-        "version": "1.0.0",
-        "main": "index.js",
-        "scripts": {
-            "start": "babel-node src/index.js",
-            "test": "nyc --reporter=text mocha --require @babel/register --exit",
-            "create:db": "babel-node src/scripts/createdb.js",
-            "drop:db": "babel-node src/scripts/dropdb.js"
-        }
-    }
-);
+const packageJson = name => ({
+  name: `${name}`,
+  version: "1.0.0",
+  main: "index.js",
+  scripts: {
+    start: "babel-node src/index.js",
+    test: "nyc --reporter=text mocha --require @babel/register --exit",
+    "create:db": "babel-node src/scripts/createdb.js",
+    "drop:db": "babel-node src/scripts/dropdb.js"
+  }
+});
 
-const gitIgnore =
-    `# Logs
+const gitIgnore = `# Logs
 logs
 *.log
 npm-debug.log*
@@ -77,10 +74,10 @@ typings/
 .next
 
 # dist file ignored
-dist/`
+dist/`;
 
-const readMe = (name) => (
-    `# ${name.charAt(0).toUpperCase() + name.slice(1)}
+const readMe = name =>
+  `# ${name.charAt(0).toUpperCase() + name.slice(1)}
 This is my first app generated using kemboijs-cli
 
 # Project setup
@@ -94,8 +91,7 @@ npm build
 
 # Run your tests
 npm test
-`
-);
+`;
 
 const babel = `{
     "presets": [
@@ -108,10 +104,9 @@ const babel = `{
             }
         ]
     ]
-}`
+}`;
 
-const appJs =
-    `import express from 'express';
+const appJs = `import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import routes from './routes';
@@ -136,18 +131,16 @@ app.listen(port, () => {
 });
 
 export default app;
-`
+`;
 
-const userMiddleware =
-    `export default function userMiddleware(req, res, next) {
+const userMiddleware = `export default function userMiddleware(req, res, next) {
     next();
 }
-`
+`;
 
-const middleware = `export {default as UserMiddleware} from './user';`
+const middleware = `export {default as UserMiddleware} from './user';`;
 
-const userController =
-    `import {User} from '../models';
+const userController = `import {User} from '../models';
 export default class UserController {
     // Create a user
     static async createUser(req, res) {
@@ -227,12 +220,11 @@ export default class UserController {
         });
     }
 }
-`
+`;
 
-const controllers = `export { default as UserController } from './user';`
+const controllers = `export { default as UserController } from './user';`;
 
-const userRouter =
-    `import { Router } from 'express';
+const userRouter = `import { Router } from 'express';
 import { UserController } from '../controllers';
 import { UserMiddleware } from '../middlewares';
 
@@ -273,10 +265,9 @@ router.use((err, req, res, next) => {
 });
 
 export default router;
-`
+`;
 
-const routes =
-    `import { Router } from 'express';
+const routes = `import { Router } from 'express';
 import userRouters from './user';
 
 const router = new Router();
@@ -291,10 +282,9 @@ router.get('/', (req, res) => {
 router.use('/user', userRouters);
 
 export default router;
-`
+`;
 
-const appJsTest =
-    `import chai from 'chai';
+const appJsTest = `import chai from 'chai';
 import chaHttp from 'chai-http';
 import app from '../src';
 
@@ -386,7 +376,7 @@ describe('Testing app', () => {
             });
     });
 });    
-`
+`;
 
 const sequelizeSetupData = `import Sequelize from 'sequelize';
 import dotenv from 'dotenv';
@@ -410,9 +400,27 @@ sequelize
     });
 export default sequelize;
 `;
+const noSequelizeSetupData = `import { Pool } from 'pg';
+import dotenv from 'dotenv';
 
-const userModelData =
-    `import Sequelize, { Model } from 'sequelize';
+dotenv.config();
+
+const env = process.env.NODE_ENV;
+
+const databaseUrl = env === 'test' ? process.env.TEST_DATABASE_URL : process.env.DATABASE_URL
+
+const pool = new Pool({
+  connectionString: databaseUrl,
+});
+
+export default {
+  query(text, params) {
+    return new Promise(() => {
+      pool.query(text, params);
+    });
+  },
+};`;
+const userModelData = `import Sequelize, { Model } from 'sequelize';
 import bcrypt from 'bcrypt';
 import sequelize from './setup';
 
@@ -452,27 +460,37 @@ User.init({
     modelName: 'user'
     // options
     });
-`
+`;
 
-const dropDb =
-    `import { User } from '../models';
-
+const dropDb = `import { User } from '../models';
 User.drop(() => {
     console.log('Successfully dropped db')
 }).catch(error => {
     console.log("The Error", error);
 });
-`
+`;
+const noOrmDropDb = `import { query } from '../models';
+query('drop database users', (err, result) => {
+if(err){
+    console.log("The Error", error); 
+}
+console.log('Successfully dropped db')
+});`;
 
-const createDb =
-    `import { User } from '../models';
-
+const createDb = `import { User } from '../models';
 User.sync().then(() => {
     console.log("Successfully created User tables tables")
 }).catch(error => {
     console.log("The error: ", error)
 });
-`
+`;
+const noOrmcreateDb = `import { query } from '../models';
+query('create database users', (err, result) => {
+if(err){
+    console.log("The Error", error); 
+}
+console.log('Successfully dropped db')
+});`;
 
 const envExample = `
 TEST_DATABASE_URL="postgres://localhost:5432/dbnameTest"
@@ -481,21 +499,24 @@ NODE_ENV="development"
 `;
 
 module.exports = {
-    packageJson,
-    gitIgnore,
-    readMe,
-    babel,
-    appJs,
-    appJsTest,
-    userMiddleware,
-    middleware,
-    userController,
-    controllers,
-    userRouter,
-    routes,
-    sequelizeSetupData,
-    userModelData,
-    createDb,
-    dropDb,
-    envExample
+  packageJson,
+  gitIgnore,
+  readMe,
+  babel,
+  appJs,
+  appJsTest,
+  userMiddleware,
+  middleware,
+  userController,
+  controllers,
+  userRouter,
+  routes,
+  sequelizeSetupData,
+  userModelData,
+  createDb,
+  dropDb,
+  envExample,
+  noOrmDropDb,
+  noOrmcreateDb,
+  noSequelizeSetupData
 };

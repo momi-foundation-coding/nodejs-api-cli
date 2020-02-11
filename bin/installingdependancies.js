@@ -17,6 +17,7 @@ const installingDependancies = (details) => {
     if (orm && orm.toLowerCase() === "sequelize") {
         pgForORM = "pg"
     }
+    
     // For now, shell command is run inside this file, but need to be removed later
     const cmd = `
         cd ${appBaseDirectory}
@@ -28,7 +29,7 @@ const installingDependancies = (details) => {
         npm install ${framework.toLowerCase()} 
         npm install body-parser 
         npm install cors 
-        npm install ${orm.toLowerCase()}
+       ${ orm ? `npm install ${orm.toLowerCase()}`:''}
         ${pgForORM ? `npm install ${pgForORM.toLowerCase()}` : ''}
         npm install dotenv
         npm install bcrypt
@@ -38,8 +39,8 @@ const installingDependancies = (details) => {
         npm install -D @babel/node 
         npm install -D @babel/preset-env 
         npm install -D chai-http 
-        npm install -D ${expectationLibrary.toLowerCase()} 
-        npm install -D ${testFramework.toLowerCase()} 
+        ${expectationLibrary ? `npm install -D ${expectationLibrary.toLowerCase()}`:''}
+        ${testFramework ? `npm install -D ${testFramework.toLowerCase()}`:''} 
         npm install -D nyc
         echo adding files to git and committing
         git add . && git commit -m "create app and set up app"

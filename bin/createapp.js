@@ -22,7 +22,7 @@ const createRouteDirFiles = require("./createroutedirfile");
 // Creating the main application
 const createApp = async (details) => {
     const { appName, framework, database, orm, tests, testFramework, expectationLibrary } = details;
-    await createMainDir({ appName, tests });
+    await createMainDir({ appName, tests,orm });
     await createRouteDirFiles(appName);
     await installingDependancies({ appName, framework, database, orm, testFramework, expectationLibrary });
 };
@@ -98,7 +98,7 @@ args.forEach(async (value, index) => {
 
         const { database } = collectFrameworkAndDb;
 
-        let ormChoices = [];
+        let ormChoices = ['No ORM'];
 
         /**
          * Select the ORMs based on the database provided above.
