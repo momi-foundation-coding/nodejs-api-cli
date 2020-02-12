@@ -45,7 +45,6 @@ const createSrcDirAndFiles = (details) => {
                 openAppendFile(createDbFileName.path, createDbData);
                 // Create a script to drop tables
 
-                // Use the procedure down
                 const dropDbFile = `${appBaseDirectory}/src/scripts/dropdb.js`;
                 const dropDbFileName = fs.createWriteStream(dropDbFile);
                 let dropDbData;
@@ -56,6 +55,15 @@ const createSrcDirAndFiles = (details) => {
                     dropDbData = dataInFiles.noOrmDropDb
                 }
                 openAppendFile(dropDbFileName.path, dropDbData);
+
+                // Create a script to query database
+                const queriesFile = `${appBaseDirectory}/src/scripts/queries.js`;
+                const queriesFileName = fs.createWriteStream(queriesFile);
+                let queriesData;
+                orm && orm.toLowerCase() === 'no orm' 
+                ? queriesData = dataInFiles.userQueries
+                : queriesData = '';
+                openAppendFile(queriesFileName.path, queriesData);
             }
 
             // Write sequelize instance and create models here
@@ -78,9 +86,13 @@ const createSrcDirAndFiles = (details) => {
                 openAppendFile(pathName, modelData);
 
                 // Create user table and its fields 
+                const userModelData = orm.toLowerCase() === 'no orm'  
+                ? dataInFiles.noSequelizeUserModelData 
+                : dataInFiles.userModelData
+                
                 const userModels = `${appBaseDirectory}/src/models/user.js`;
                 const userModelsFileName = fs.createWriteStream(userModels);
-                openAppendFile(userModelsFileName.path, dataInFiles.userModelData);
+                openAppendFile(userModelsFileName.path, userModelData);
             }
 
             // Write to test file.
@@ -123,7 +135,7 @@ const createSrcDirAndFiles = (details) => {
                 }
                 if (directoryFileName.path === `${appBaseDirectory}/src/controllers/user.js`) {
                     const pathName = directoryFileName.path;
-                    const data = dataInFiles.userController;
+                    const data = orm === 'No ORM' ? dataInFiles.noOrmUserController : dataInFiles.userController;
                     openAppendFile(pathName, data);
                 }
             };

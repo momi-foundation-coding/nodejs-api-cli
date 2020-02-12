@@ -461,7 +461,17 @@ User.init({
     // options
     });
 `;
-
+const noSequelizeUserModelData = `
+export const createTables = async () => {
+    const contactTable = \`CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        first_name VARCHAR(128) NOT NULL,
+        last_name VARCHAR NOT NULL,
+        password VARCHAR NOT NULL,
+        created_date TIMESTAMP)\`;
+    await pool.query(contactTable);
+};
+`
 const dropDb = `import { User } from '../models';
 User.drop(() => {
     console.log('Successfully dropped db')
@@ -469,8 +479,8 @@ User.drop(() => {
     console.log("The Error", error);
 });
 `;
-const noOrmDropDb = `import { query } from '../models';
-query('drop database users', (err, result) => {
+const noOrmDropDb = `import db from '../models/setup';
+db.query('drop database users', (err, result) => {
 if(err){
     console.log("The Error", error); 
 }
@@ -484,8 +494,8 @@ User.sync().then(() => {
     console.log("The error: ", error)
 });
 `;
-const noOrmcreateDb = `import { query } from '../models';
-query('create database users', (err, result) => {
+const noOrmcreateDb = `import db from '../models/setup';
+db.query('create database users', (err, result) => {
 if(err){
     console.log("The Error", error); 
 }
@@ -497,7 +507,117 @@ TEST_DATABASE_URL="postgres://localhost:5432/dbnameTest"
 DATABASE_URL="postgres://localhost:5432/dbname"
 NODE_ENV="development"
 `;
+const queriesData = `
+export const create(table)=>{
 
+}
+export const delete(table, condition)=>{
+
+}
+export const update(table)=>{
+
+}
+`
+const noOrmUserController = `import db from '../models/setup';
+import {allUsersQuery, singleUserQuery, createUserQuery, updateUserQuery, deleteUserQuery} from '../scripts/queries';
+
+const { query } = db;
+export const getAllUsersController = (res) => {
+    query(allUsersQuery, (err, result) => {
+        if (err) {
+            res.status(500).json({
+                status: "500",
+                Error: err
+            })
+        }
+        res.status(200).json({
+            status: '200',
+            message: 'User retrieved succesfully',
+            data: result.rows
+        });
+    });
+}
+export const getUserController = (req, res) => {
+    query(singleUserQuery, (err, result) => {
+        if (err) {
+            return res.status(500).json({
+                status: "500",
+                Error: err
+            })
+        }
+        return res.status(200).json({
+            status: '200',
+            message: 'User retrieved succesfully',
+            data: result.rows
+        });
+    });
+}
+export const signupUserController = (req, res) => {
+    await query(createUserQuery, async (err, result) => {
+        res.status(201).json({
+            data:result,
+            status: 201,
+            message: 'User successfully created',
+            data: resss.rows[0],
+        });
+    })
+}
+export const signinUserController = (req, res) => {}
+export const updateUserController = (req, res) => {
+    query(updateUserQuery, (err, resut) => {
+        if (err) {
+            return res.status(500).json({
+                status: 500,
+                Error: err
+            })
+        }
+        res.status(201).json({
+            status: 201,
+            message: 'Successfully updated user details',
+            data: resut.rows[0],
+        })
+    });
+}
+export const deleteUserController = (req, res) => {
+    query(deleteUserQuery, (err, result) => {
+        res.status(201).json({
+            data:result.rows,
+            status: '201',
+            message: 'User deleted successfully',
+        })
+        if (err) {
+            res.status(500).json({
+                status: 500,
+                Error: err
+            });
+        }
+    });
+}
+
+`;
+const userQueries = `
+export default (req, res) => {
+    const deleteUserQuery = \`DELETE FROM users WHERE id=\${req.params.id\}\`;
+    const updateUserQuery = \`UPDATE users SET' \${key\}=\${req.body[key]\} where id = '\${req.params.id\}'\`;
+    const createUserQuery = \`INSERT INTO  users(
+        firstname, lastname,username, email, phonenumber, address, isadmin, password) 
+        VALUES(
+            '\${req.body.firstname\}', 
+            '\${req.body.lastname\}', 
+            '\${req.body.username\}',
+            '\${req.body.email}',
+            '\${req.body.password\}')\`;
+    const singleUserQuery = \`SELECT * from users where id='\${req.params.id\}'\`
+    const allUsersQuery = 'SELECT * from users'
+    return {
+        allUsersQuery,
+        singleUserQuery,
+        createUserQuery,
+        updateUserQuery,
+        deleteUserQuery
+    }
+}
+`
 module.exports = {
   packageJson,
   gitIgnore,
@@ -518,5 +638,8 @@ module.exports = {
   envExample,
   noOrmDropDb,
   noOrmcreateDb,
-  noSequelizeSetupData
+  noSequelizeSetupData,
+  noSequelizeUserModelData,
+  noOrmUserController,
+  userQueries
 };

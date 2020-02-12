@@ -14,7 +14,7 @@ const installingDependancies = (details) => {
     // define pg which is required for postgres
     let pgForORM;
 
-    if (orm && orm.toLowerCase() === "sequelize") {
+    if (orm && orm.toLowerCase() === "sequelize" || orm === 'No ORM') {
         pgForORM = "pg"
     }
     
@@ -29,7 +29,7 @@ const installingDependancies = (details) => {
         npm install ${framework.toLowerCase()} 
         npm install body-parser 
         npm install cors 
-       ${ orm ? `npm install ${orm.toLowerCase()}`:''}
+       ${ orm && orm !== 'No ORM' ? `npm install ${orm.toLowerCase()}`:''}
         ${pgForORM ? `npm install ${pgForORM.toLowerCase()}` : ''}
         npm install dotenv
         npm install bcrypt
