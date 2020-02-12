@@ -5,7 +5,7 @@
 const fs = require("fs");
 
 const openAppendFile = require("./openandappendfile");
-const dataInFiles = require("../tasks/data");
+const { packageJson, gitIgnore, readMe, babel, envExample } = require("../tasks");
 
 const createRouteDirFiles = (name) => {
     // Create different files such as packages, readme etc.
@@ -17,20 +17,17 @@ const createRouteDirFiles = (name) => {
     const envExampleFile = fs.createWriteStream(`${name}/.envExample`);
 
     // Create data var for all the 
-    const gitIgnoreData = dataInFiles.gitIgnore;
-    const packageJsonData = JSON.stringify(dataInFiles.packageJson(name), null, "\t");
-    const readMeData = dataInFiles.readMe(name);
-    const babelData = dataInFiles.babel;
-    const envExampleData = dataInFiles.envExample;
+    const packageJsonData = JSON.stringify(packageJson(name), null, "\t");
+    const readMeData = readMe(name);
 
     // Create an array for all files needed [pathname, data]
     const fileDataArr = [
         { pathname: packageFile.path, data: packageJsonData },
-        { pathname: gitignoreFile.path, data: gitIgnoreData },
+        { pathname: gitignoreFile.path, data: gitIgnore },
         { pathname: readmeFile.path, data: readMeData },
-        { pathname: babelFile.path, data: babelData },
-        { pathname: envFile.path, data: envExampleData },
-        { pathname: envExampleFile.path, data: envExampleData }
+        { pathname: babelFile.path, data: babel },
+        { pathname: envFile.path, data: envExample },
+        { pathname: envExampleFile.path, data: envExample }
     ];
 
     // For each file, append data using fn openAppendFile

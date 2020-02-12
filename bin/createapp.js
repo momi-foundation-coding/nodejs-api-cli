@@ -33,11 +33,11 @@ const args = process.argv.slice(2);
 // Convert into a module that can be used as CLI
 args.forEach(async (value, index) => {
     /**
-     * Need to test when user only writes kemboijs-cli
+     * Need to test when user only writes nodejs-api-cli
      */
 
     if (!value) {
-        chooseConsoleColorText(colorSet.error, '------\nValue is required  e.g kemboijs-cli init--------\n');
+        chooseConsoleColorText(colorSet.error, '------\nValue is required  e.g nodejs-api-cli init--------\n');
         process.exit(0);
     } else if (value === 'version' || value === '-v') {
         console.log('\n-----------------Check version-------------\n')
@@ -45,9 +45,9 @@ args.forEach(async (value, index) => {
         console.log('\n-------------Thanks for checking our version-------------\n')
     } else if (value === 'help' || value === '-h') {
         console.log('\n-----------------Asking for help-------------\n')
-        chooseConsoleColorText(colorSet.log, 'New Project: kemboijs-cli init\n')
-        chooseConsoleColorText(colorSet.log, 'Help: kemboijs-cli help or kemboijs-cli -- -h \n')
-        chooseConsoleColorText(colorSet.log, 'Version: kemboijs-cli version or kemboijs-cli -- -v \n')
+        chooseConsoleColorText(colorSet.log, 'New Project: nodejs-api-cli init\n')
+        chooseConsoleColorText(colorSet.log, 'Help: nodejs-api-cli help or nodejs-api-cli -- -h \n')
+        chooseConsoleColorText(colorSet.log, 'Version: nodejs-api-cli version or nodejs-api-cli -- -v \n')
         chooseConsoleColorText(colorSet.log, 'Documentation: https://kemboijs.github.io/kemboijs.org/ \n')
         console.log('\n-------------We hope we helped-------------\n')
     } else if (value === 'init') {
@@ -166,7 +166,7 @@ args.forEach(async (value, index) => {
          */
         return createApp({ ...appName, ...collectFrameworkAndDb, ...collectOrm, tests, ...testRunner });
     } else {
-        chooseConsoleColorText(colorSet.error, '\n------Value entered is wrong. Use -- e.g kemboijs-cli -- -h --------\n');
+        chooseConsoleColorText(colorSet.error, '\n------Value entered is wrong. Use -- e.g nodejs-api-cli -- -h --------\n');
         process.exit(0);
     }
 });
