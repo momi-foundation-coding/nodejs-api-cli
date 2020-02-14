@@ -22,7 +22,7 @@ const createRouteDirFiles = require("./createroutedirfile");
 // Creating the main application
 const createApp = async (details) => {
     const { appName, framework, database, orm, tests, testFramework, expectationLibrary } = details;
-    await createMainDir({ appName, tests, orm });
+    await createMainDir({ appName, tests, orm, database });
     await createRouteDirFiles(appName);
     await installingDependancies({ appName, framework, database, orm, testFramework, expectationLibrary });
 };
@@ -91,7 +91,7 @@ args.forEach(async (value, index) => {
                  * Need to add more choices e.g 
                  * choices: ['Postgres', 'MongoDB'],
                  */
-                choices: ['Postgres'],
+                choices: ['Postgres', 'Sqlite'],
                 default: 'Postgres'
             }
         ]);
@@ -105,6 +105,9 @@ args.forEach(async (value, index) => {
          */
         if (database === 'Postgres') {
             ormChoices.push('Sequelize')
+        } else if (database === 'Sqlite') {
+            // sqlite to be installed is version 3
+            ormChoices.push('Sequelize')
         } else if (database === 'MongoDB') {
             ormChoices.push('mongoose')
         } else {
@@ -117,7 +120,20 @@ args.forEach(async (value, index) => {
                 type: 'list',
                 name: 'orm',
                 message: 'Which ORM is your choice?',
-                choices: ormChoices
+                /**
+                 * Just need to remove this comment, but, 
+                 * How can I index[0] in ormChoices, which is 'No ORM`
+                 * and push it to index [-1] - last, so that other 
+                 * ORM especially the default one becomes the index[0]
+                 */
+                choices: ormChoices,
+                /**
+                 * Just makes sure default orm is Sequelize for now
+                 * This need to be checked when we introduce MongoDB.
+                 * As they make use of different ORM such as mongoose
+                 * This comment is removed when Mongo DB is set up.
+                 */
+                default: "Sequelize"
             }
         ]);
 
