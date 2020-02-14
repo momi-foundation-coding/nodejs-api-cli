@@ -8,7 +8,7 @@ const openAppendFile = require("./openandappendfile");
 const dataInFiles = require("../tasks/data");
 
 const createSrcDirAndFiles = (details) => {
-    const { appBaseDirectory, tests } = details;
+    const { appBaseDirectory, tests, orm } = details;
     let foldersToAdd = ['src/controllers', 'src/routes', 'src/config', 'src/scripts', 'src/models', 'src/middlewares', 'src']
     if (tests) {
         foldersToAdd = ['src/controllers', 'src/routes', 'src/config', 'src/scripts', 'src/models', 'src/middlewares', 'test', 'src']
@@ -35,13 +35,33 @@ const createSrcDirAndFiles = (details) => {
                 // Create a script to create tables 
                 const createDbFile = `${appBaseDirectory}/src/scripts/createdb.js`;
                 const createDbFileName = fs.createWriteStream(createDbFile);
-                const createDbData = dataInFiles.createDb;
+                let createDbData;
+                if (orm && orm.toLowerCase() === 'sequelize') {
+                    createDbData = dataInFiles.createDb
+                }
+                else {
+                    createDbData = dataInFiles.noOrmcreateDb
+                }
                 openAppendFile(createDbFileName.path, createDbData);
                 // Create a script to drop tables
+
                 const dropDbFile = `${appBaseDirectory}/src/scripts/dropdb.js`;
                 const dropDbFileName = fs.createWriteStream(dropDbFile);
-                const dropDbData = dataInFiles.dropDb;
+                let dropDbData;
+                if (orm && orm.toLowerCase() === 'sequelize') {
+                    dropDbData = dataInFiles.dropDb
+                }
+                else {
+                    dropDbData = dataInFiles.noOrmDropDb
+                }
                 openAppendFile(dropDbFileName.path, dropDbData);
+
+                // Create a script to query database -> only when no orm
+                if (orm && orm.toLowerCase() === 'no orm') {
+                    const queriesFile = `${appBaseDirectory}/src/scripts/queries.js`;
+                    const queriesFileName = fs.createWriteStream(queriesFile);
+                    openAppendFile(queriesFileName.path, dataInFiles.userQueries);
+                }
             }
 
             // Write sequelize instance and create models here
@@ -54,13 +74,23 @@ const createSrcDirAndFiles = (details) => {
                 const sequelizeSetupFile = `${appBaseDirectory}/src/models/setup.js`;
                 const sequelizeSetupFileName = fs.createWriteStream(sequelizeSetupFile);
                 const pathName = sequelizeSetupFileName.path;
-                const sequelizeData = dataInFiles.sequelizeSetupData;
-                openAppendFile(pathName, sequelizeData);
+                let modelData;
+                if (orm && orm.toLowerCase() === 'sequelize') {
+                    modelData = dataInFiles.sequelizeSetupData;
+                }
+                else {
+                    modelData = dataInFiles.noSequelizeSetupData;
+                }
+                openAppendFile(pathName, modelData);
 
                 // Create user table and its fields 
+                const userModelData = orm.toLowerCase() === 'no orm'
+                    ? dataInFiles.noSequelizeUserModelData
+                    : dataInFiles.userModelData
+
                 const userModels = `${appBaseDirectory}/src/models/user.js`;
                 const userModelsFileName = fs.createWriteStream(userModels);
-                openAppendFile(userModelsFileName.path, dataInFiles.userModelData);
+                openAppendFile(userModelsFileName.path, userModelData);
             }
 
             // Write to test file.
@@ -103,7 +133,7 @@ const createSrcDirAndFiles = (details) => {
                 }
                 if (directoryFileName.path === `${appBaseDirectory}/src/controllers/user.js`) {
                     const pathName = directoryFileName.path;
-                    const data = dataInFiles.userController;
+                    const data = orm === 'No ORM' ? dataInFiles.noOrmUserController : dataInFiles.userController;
                     openAppendFile(pathName, data);
                 }
             };
