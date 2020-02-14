@@ -1,41 +1,47 @@
 {
-    "name": "kemboijs-cli",
-    "version": "1.3.0",
-    "description": "This is one command kemboijs-cli for generating nodejs application. It is a scaffold for generating a customizable app for your nodejs APIs",
-    "main": "./tasks/data.js",
-    "bin": {
-        "kemboijs-cli": "./bin/createapp.js"
-    },
-    "scripts": {
-        "start": "node bin/createapp.js"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/kemboijs/kemboijs-generator.git"
-    },
-    "keywords": [
-        "nodejs",
-        "scaffold",
-        "kemboijs",
-        "generator",
-        "app",
-        "api",
-        "generator"
-    ],
-    "author": "Ezrqn Kemboi <ezrqnkemboi@gmail.com>",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/kemboijs/kemboijs-generator/issues"
-    },
-    "homepage": "https://github.com/kemboijs/kemboijs-generator#readme",
-    "files": [
-        "tasks/",
-        "README.md",
-        "LICENCE",
-        ".babelrc",
-        "bin/"
-    ],
-    "dependencies": {
-        "inquirer": "^7.0.0"
-    }
+  "name": "nodejs-api-cli",
+  "version": "0.1.1",
+  "description": "nodejs-api-cli is a scaffold to start API for different NodeJS fraameworks.  for generating nodejs application.",
+  "main": "./tasks/data.js",
+  "bin": {
+    "nodejs-api-cli": "bin/createapp.js"
+  },
+  "scripts": {
+    "start": "node bin/createapp.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kemboijs/nodejs-api-cli.git"
+  },
+  "keywords": [
+    "nodejs",
+    "scaffold",
+    "kemboijs",
+    "generator",
+    "app",
+    "api",
+    "express",
+    "nodejs-cli",
+    "nodejs-api-cli"
+  ],
+  "author": "Ezrqn Kemboi <ezrqnkemboi@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kemboijs/nodejs-api-cli/issues"
+  },
+  "homepage": "https://github.com/kemboijs/nodejs-api-cli#readme",
+  "files": [
+    "tasks/",
+    "README.md",
+    "LICENCE",
+    ".babelrc",
+    "bin/"
+  ],
+  "dependencies": {
+    "inquirer": "^7.0.0"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "devDependencies": {}
 }
