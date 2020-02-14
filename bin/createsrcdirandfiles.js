@@ -36,10 +36,10 @@ const createSrcDirAndFiles = (details) => {
                 const createDbFile = `${appBaseDirectory}/src/scripts/createdb.js`;
                 const createDbFileName = fs.createWriteStream(createDbFile);
                 let createDbData;
-                if(orm && orm.toLowerCase() === 'sequelize'){
+                if (orm && orm.toLowerCase() === 'sequelize') {
                     createDbData = dataInFiles.createDb
                 }
-                else{
+                else {
                     createDbData = dataInFiles.noOrmcreateDb
                 }
                 openAppendFile(createDbFileName.path, createDbData);
@@ -48,22 +48,20 @@ const createSrcDirAndFiles = (details) => {
                 const dropDbFile = `${appBaseDirectory}/src/scripts/dropdb.js`;
                 const dropDbFileName = fs.createWriteStream(dropDbFile);
                 let dropDbData;
-                if(orm && orm.toLowerCase() === 'sequelize'){
+                if (orm && orm.toLowerCase() === 'sequelize') {
                     dropDbData = dataInFiles.dropDb
                 }
-                else{
+                else {
                     dropDbData = dataInFiles.noOrmDropDb
                 }
                 openAppendFile(dropDbFileName.path, dropDbData);
 
-                // Create a script to query database
-                const queriesFile = `${appBaseDirectory}/src/scripts/queries.js`;
-                const queriesFileName = fs.createWriteStream(queriesFile);
-                let queriesData;
-                orm && orm.toLowerCase() === 'no orm' 
-                ? queriesData = dataInFiles.userQueries
-                : queriesData = '';
-                openAppendFile(queriesFileName.path, queriesData);
+                // Create a script to query database -> only when no orm
+                if (orm && orm.toLowerCase() === 'no orm') {
+                    const queriesFile = `${appBaseDirectory}/src/scripts/queries.js`;
+                    const queriesFileName = fs.createWriteStream(queriesFile);
+                    openAppendFile(queriesFileName.path, dataInFiles.userQueries);
+                }
             }
 
             // Write sequelize instance and create models here
@@ -77,19 +75,19 @@ const createSrcDirAndFiles = (details) => {
                 const sequelizeSetupFileName = fs.createWriteStream(sequelizeSetupFile);
                 const pathName = sequelizeSetupFileName.path;
                 let modelData;
-                if(orm && orm.toLowerCase() === 'sequelize'){
+                if (orm && orm.toLowerCase() === 'sequelize') {
                     modelData = dataInFiles.sequelizeSetupData;
                 }
-                else{
+                else {
                     modelData = dataInFiles.noSequelizeSetupData;
-                }                
+                }
                 openAppendFile(pathName, modelData);
 
                 // Create user table and its fields 
-                const userModelData = orm.toLowerCase() === 'no orm'  
-                ? dataInFiles.noSequelizeUserModelData 
-                : dataInFiles.userModelData
-                
+                const userModelData = orm.toLowerCase() === 'no orm'
+                    ? dataInFiles.noSequelizeUserModelData
+                    : dataInFiles.userModelData
+
                 const userModels = `${appBaseDirectory}/src/models/user.js`;
                 const userModelsFileName = fs.createWriteStream(userModels);
                 openAppendFile(userModelsFileName.path, userModelData);
