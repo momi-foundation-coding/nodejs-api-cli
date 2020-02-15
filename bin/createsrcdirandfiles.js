@@ -6,12 +6,15 @@ const fs = require("fs");
 
 const openAppendFile = require("./openandappendfile");
 const dataInFiles = require("../tasks/data");
+const sequelizeSetupData = require("../tasks/database/sequelizedata");
+const userModelData = require("../tasks/database/model");
+const { controllers, userController } = require("../tasks/controllers/user");
 
 const createSrcDirAndFiles = (details) => {
-    const { appBaseDirectory, tests, orm } = details;
-    let foldersToAdd = ['src/controllers', 'src/routes', 'src/config', 'src/scripts', 'src/models', 'src/middlewares', 'src']
+    const { appBaseDirectory, tests, database, orm } = details;
+    let foldersToAdd = ['src/controllers', 'src/routes', 'src/config', 'src/scripts', 'src/models', 'src/middlewares', 'src'];
     if (tests) {
-        foldersToAdd = ['src/controllers', 'src/routes', 'src/config', 'src/scripts', 'src/models', 'src/middlewares', 'test', 'src']
+        foldersToAdd.push('test');
     }
 
     const folders = foldersToAdd.map(folder => {
@@ -35,33 +38,25 @@ const createSrcDirAndFiles = (details) => {
                 // Create a script to create tables 
                 const createDbFile = `${appBaseDirectory}/src/scripts/createdb.js`;
                 const createDbFileName = fs.createWriteStream(createDbFile);
-                let createDbData;
-                if (orm && orm.toLowerCase() === 'sequelize') {
-                    createDbData = dataInFiles.createDb
-                }
-                else {
-                    createDbData = dataInFiles.noOrmcreateDb
-                }
-                openAppendFile(createDbFileName.path, createDbData);
                 // Create a script to drop tables
-
                 const dropDbFile = `${appBaseDirectory}/src/scripts/dropdb.js`;
                 const dropDbFileName = fs.createWriteStream(dropDbFile);
-                let dropDbData;
+                let createDbData, dropDbData;
                 if (orm && orm.toLowerCase() === 'sequelize') {
-                    dropDbData = dataInFiles.dropDb
-                }
-                else {
-                    dropDbData = dataInFiles.noOrmDropDb
-                }
-                openAppendFile(dropDbFileName.path, dropDbData);
-
-                // Create a script to query database -> only when no orm
-                if (orm && orm.toLowerCase() === 'no orm') {
+                    createDbData = dataInFiles.createDb;
+                    dropDbData = dataInFiles.dropDb;
+                } else if (orm && orm.toLowerCase() === 'no orm') {
+                    // When user does't need any orm
+                    createDbData = dataInFiles.noOrmcreateDb;
+                    dropDbData = dataInFiles.noOrmDropDb;
+                    // Create a script to query database -> only when no orm
                     const queriesFile = `${appBaseDirectory}/src/scripts/queries.js`;
                     const queriesFileName = fs.createWriteStream(queriesFile);
                     openAppendFile(queriesFileName.path, dataInFiles.userQueries);
                 }
+                // append drop database scripts and create db scripts
+                openAppendFile(createDbFileName.path, createDbData);
+                openAppendFile(dropDbFileName.path, dropDbData);
             }
 
             // Write sequelize instance and create models here
@@ -74,37 +69,38 @@ const createSrcDirAndFiles = (details) => {
                 const sequelizeSetupFile = `${appBaseDirectory}/src/models/setup.js`;
                 const sequelizeSetupFileName = fs.createWriteStream(sequelizeSetupFile);
                 const pathName = sequelizeSetupFileName.path;
-                let modelData;
-                if (orm && orm.toLowerCase() === 'sequelize') {
-                    modelData = dataInFiles.sequelizeSetupData;
-                }
-                else {
-                    modelData = dataInFiles.noSequelizeSetupData;
-                }
-                openAppendFile(pathName, modelData);
-
-                // Create user table and its fields 
-                const userModelData = orm.toLowerCase() === 'no orm'
-                    ? dataInFiles.noSequelizeUserModelData
-                    : dataInFiles.userModelData
-
                 const userModels = `${appBaseDirectory}/src/models/user.js`;
                 const userModelsFileName = fs.createWriteStream(userModels);
-                openAppendFile(userModelsFileName.path, userModelData);
+                if (orm) {
+                    if (orm.toLowerCase() === 'sequelize') {
+                        /**
+                        * set up data in sequelize here
+                        */
+                        openAppendFile(pathName, sequelizeSetupData(database));
+                        // add data to user.js models file when sequelize is set
+                        openAppendFile(userModelsFileName.path, userModelData(database));
+                    } else if (orm.toLowerCase() === 'no orm' && database.toLowerCase() === 'postgres') {
+                        /**
+                         * In case sqlite set in the future so that it does'nt make use of orm
+                         * then, we can have another if statement for the same here
+                         */
+                        openAppendFile(pathName, dataInFiles.noSequelizeSetupData);
+                        // Add data to user.js file when no orm is chosen in models 
+                        openAppendFile(userModelsFileName.path, dataInFiles.noSequelizeUserModelData);
+                    }
+                }
             }
 
             // Write to test file.
             if (fileName.path === `${appBaseDirectory}/test/index.js`) {
                 const pathName = fileName.path;
-                const data = dataInFiles.appJsTest;
-                openAppendFile(pathName, data);
+                openAppendFile(pathName, dataInFiles.appJsTest);
             };
 
             // Add data to the main entry point
             if (fileName.path === `${appBaseDirectory}/src/index.js`) {
                 const pathName = fileName.path;
-                const data = dataInFiles.appJs;
-                openAppendFile(pathName, data);
+                openAppendFile(pathName, dataInFiles.appJs);
             };
 
             // Paths that needs files such as user.js, config may not need it.
@@ -122,37 +118,29 @@ const createSrcDirAndFiles = (details) => {
                 const directoryFiles = `${folder}/user.js`;
                 const directoryFileName = fs.createWriteStream(directoryFiles);
                 if (directoryFileName.path === `${appBaseDirectory}/src/middlewares/user.js`) {
-                    const pathName = directoryFileName.path;
-                    const data = dataInFiles.userMiddleware;
-                    openAppendFile(pathName, data);
+                    openAppendFile(directoryFileName.path, dataInFiles.userMiddleware);
                 }
                 if (directoryFileName.path === `${appBaseDirectory}/src/routes/user.js`) {
-                    const pathName = directoryFileName.path;
-                    const data = dataInFiles.userRouter;
-                    openAppendFile(pathName, data);
+                    openAppendFile(directoryFileName.path, dataInFiles.userRouter);
                 }
                 if (directoryFileName.path === `${appBaseDirectory}/src/controllers/user.js`) {
-                    const pathName = directoryFileName.path;
-                    const data = orm === 'No ORM' ? dataInFiles.noOrmUserController : dataInFiles.userController;
-                    openAppendFile(pathName, data);
+                    if (orm === 'No ORM') {
+                        openAppendFile(directoryFileName.path, dataInFiles.noOrmUserController);
+                    } else {
+                        openAppendFile(directoryFileName.path, userController);
+                    }
                 }
             };
 
             // Write to different files including the index.js and other files
             if (fileName.path === `${appBaseDirectory}/src/middlewares/index.js`) {
-                const pathName = fileName.path;
-                const data = dataInFiles.middleware;
-                openAppendFile(pathName, data);
+                openAppendFile(fileName.path, dataInFiles.middleware);
             }
             if (fileName.path === `${appBaseDirectory}/src/routes/index.js`) {
-                const pathName = fileName.path;
-                const data = dataInFiles.routes;
-                openAppendFile(pathName, data);
+                openAppendFile(fileName.path, dataInFiles.routes);
             }
             if (fileName.path === `${appBaseDirectory}/src/controllers/index.js`) {
-                const pathName = fileName.path;
-                const data = dataInFiles.controllers;
-                openAppendFile(pathName, data);
+                openAppendFile(fileName.path, controllers);
             }
             if (fileName.path === `${appBaseDirectory}/src/models/index.js`) {
                 openAppendFile(fileName.path, `export { default as User } from './user';`)

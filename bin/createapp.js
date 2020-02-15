@@ -22,7 +22,7 @@ const createRouteDirFiles = require("./createroutedirfile");
 // Creating the main application
 const createApp = async (details) => {
     const { appName, framework, database, orm, tests, testFramework, expectationLibrary } = details;
-    await createMainDir({ appName, tests, orm });
+    await createMainDir({ appName, tests, orm, database });
     await createRouteDirFiles(appName);
     await installingDependancies({ appName, framework, database, orm, testFramework, expectationLibrary });
 };
@@ -89,21 +89,24 @@ args.forEach(async (value, index) => {
                 message: 'Which database do you want to use?',
                 /**
                  * Need to add more choices e.g 
-                 * choices: ['Postgres', 'MongoDB'],
+                 * choices: ['Postgres', 'MongoDB', 'Sqlite],
                  */
-                choices: ['Postgres'],
+                choices: ['Postgres', 'Sqlite'],
                 default: 'Postgres'
             }
         ]);
 
         const { database } = collectFrameworkAndDb;
 
-        let ormChoices = ['No ORM'];
+        let ormChoices = [];
 
         /**
-         * Select the ORMs based on the database provided above.
+         * Select the ORMs options based on the database provided above.
          */
         if (database === 'Postgres') {
+            ormChoices.push('Sequelize', 'No ORM')
+        } else if (database === 'Sqlite') {
+            // sqlite to be installed is version 3
             ormChoices.push('Sequelize')
         } else if (database === 'MongoDB') {
             ormChoices.push('mongoose')
@@ -117,7 +120,8 @@ args.forEach(async (value, index) => {
                 type: 'list',
                 name: 'orm',
                 message: 'Which ORM is your choice?',
-                choices: ormChoices
+                choices: ormChoices,
+                default: "Sequelize"
             }
         ]);
 

@@ -1,14 +1,14 @@
 // Package file data.
 const packageJson = name => ({
-  name: `${name}`,
-  version: "1.0.0",
-  main: "index.js",
-  scripts: {
-    start: "babel-node src/index.js",
-    test: "nyc --reporter=text mocha --require @babel/register --exit",
-    "create:db": "babel-node src/scripts/createdb.js",
-    "drop:db": "babel-node src/scripts/dropdb.js"
-  }
+    name: `${name}`,
+    version: "1.0.0",
+    main: "index.js",
+    scripts: {
+        start: "babel-node src/index.js",
+        test: "nyc --reporter=text mocha --require @babel/register --exit",
+        "create:db": "babel-node src/scripts/createdb.js",
+        "drop:db": "babel-node src/scripts/dropdb.js"
+    }
 });
 
 const gitIgnore = `# Logs
@@ -77,7 +77,7 @@ typings/
 dist/`;
 
 const readMe = name =>
-  `# ${name.charAt(0).toUpperCase() + name.slice(1)}
+    `# ${name.charAt(0).toUpperCase() + name.slice(1)}
 This is my first app generated using kemboijs-cli
 
 # Project setup
@@ -140,91 +140,8 @@ const userMiddleware = `export default function userMiddleware(req, res, next) {
 
 const middleware = `export {default as UserMiddleware} from './user';`;
 
-const userController = `import {User} from '../models';
-export default class UserController {
-    // Create a user
-    static async createUser(req, res) {
-        const userDetails = req.body;
-        const user = await User.create(userDetails);
-        if(!user) {
-            res.status(400).send({
-                message: "An error occurred while creating user"
-            });
-        }
-        res.status(201).send({
-            message: "User created successfully", 
-            user
-        });
-    }
-    // Get all users from the database
-    static async getUsers(req, res) {
-        const users =  await User.findAll();
-        if(!users || users.length <= 0) {
-            return res.status(404).send({
-                message: "There are no currently users"
-            });
-        }
-        return res.status(200).send({
-            message: "Successfully retrieved users successfully.",
-            users
-        });
-    }
-    // Get a single user from the db
-    static async getUser(req, res) {
-        const { id } = req.params;
-        const user = await User.findAll({
-            where: {
-                id
-            },
-            attributes: { exclude: [ 'password' ] }
-        });
-        if(!user) {
-            res.status(404).send({
-                message: "The user with that id does not exist"
-            });
-        }
-        res.status(200).send({
-            message: "User details retrieved successfully",
-            user
-        })
-    }
-    // Update user details 
-    static async updateUser(req, res) {
-        const userDetails = req.body;
-        const { id } = req.params;
-        const user = await User.update(userDetails, {
-            where: {
-                id
-            }
-        });
-        if(!user) {
-            res.status(400).send({
-                message: "An error occurred while creating user"
-            });
-        }
-        res.status(200).send({
-            message: "User details updated successfully", 
-            user
-        });
-    }
-    // Delete user
-    static async deleteUser(req, res) {
-        const { id } = req.params;
-        const user = await User.destroy({
-            where: {
-                id
-            }
-        });
-        res.status(200).send({
-            message: "User deleted successfully"
-        });
-    }
-}
-`;
-
-const controllers = `export { default as UserController } from './user';`;
-
-const userRouter = `import { Router } from 'express';
+const userRouter =
+    `import { Router } from 'express';
 import { UserController } from '../controllers';
 import { UserMiddleware } from '../middlewares';
 
@@ -378,28 +295,6 @@ describe('Testing app', () => {
 });    
 `;
 
-const sequelizeSetupData = `import Sequelize from 'sequelize';
-import dotenv from 'dotenv';
-
-dotenv.config();
-
-const dbUrl =
-  process.env.NODE_ENV === "test"
-    ? process.env.TEST_DATABASE_URL
-    : process.env.DATABASE_URL;
-
-const sequelize = new Sequelize(dbUrl);
-
-sequelize
-    .authenticate()
-    .then(() => {
-        console.log('Connection has been established successfully.');
-    })
-    .catch(err => {
-        console.error('Unable to connect to the database:', err);
-    });
-export default sequelize;
-`;
 const noSequelizeSetupData = `import { Pool } from 'pg';
 import dotenv from 'dotenv';
 
@@ -420,47 +315,7 @@ export default {
     });
   },
 };`;
-const userModelData = `import Sequelize, { Model } from 'sequelize';
-import bcrypt from 'bcrypt';
-import sequelize from './setup';
 
-export default class User extends Model { }
-User.init({
-    // attributes
-    firstName: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    lastName: {
-        type: Sequelize.STRING
-        // allowNull defaults to true
-    },
-    email: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    password: {
-        type: Sequelize.STRING,
-        allowNull: false
-    }
-}, {
-    // Can add more validation for these methods
-    hooks: {
-        beforeCreate: async (user, options) => {
-            const salt = await bcrypt.genSaltSync(8);
-            user.password = await bcrypt.hashSync(user.password, salt);
-        },
-        beforeUpdate: async (user, options) => {
-            const salt = await bcrypt.genSaltSync(8);
-            user.password = await bcrypt.hashSync(user.password, salt);
-        }
-    },
-    // Calling instance of sequelize created in file setup.js
-    sequelize,
-    modelName: 'user'
-    // options
-    });
-`;
 const noSequelizeUserModelData = `
 export const createTables = async () => {
     const contactTable = \`CREATE TABLE IF NOT EXISTS users (
@@ -481,11 +336,11 @@ User.drop(() => {
 `;
 const noOrmDropDb = `import db from '../models/setup';
 db.query('drop database users', (err, result) => {
-if(err){
-    console.log("The Error", error); 
-}
-console.log('Successfully dropped db')
-});`;
+    if (err) {
+        console.log("The Error", error);
+    }
+    console.log('Successfully dropped db')
+}); `;
 
 const createDb = `import { User } from '../models';
 User.sync().then(() => {
@@ -496,30 +351,20 @@ User.sync().then(() => {
 `;
 const noOrmcreateDb = `import db from '../models/setup';
 db.query('create database users', (err, result) => {
-if(err){
-    console.log("The Error", error); 
-}
-console.log('Successfully dropped db')
-});`;
+    if (err) {
+        console.log("The Error", error);
+    }
+    console.log('Successfully dropped db')
+}); `;
 
 const envExample = `
-TEST_DATABASE_URL="postgres://localhost:5432/dbnameTest"
-DATABASE_URL="postgres://localhost:5432/dbname"
-NODE_ENV="development"
+TEST_DATABASE_URL = "postgres://localhost:5432/dbnameTest"
+DATABASE_URL = "postgres://localhost:5432/dbname"
+NODE_ENV = "development"
 `;
-const queriesData = `
-export const create(table)=>{
 
-}
-export const delete(table, condition)=>{
-
-}
-export const update(table)=>{
-
-}
-`
 const noOrmUserController = `import db from '../models/setup';
-import {allUsersQuery, singleUserQuery, createUserQuery, updateUserQuery, deleteUserQuery} from '../scripts/queries';
+import { allUsersQuery, singleUserQuery, createUserQuery, updateUserQuery, deleteUserQuery } from '../scripts/queries';
 
 const { query } = db;
 export const getAllUsersController = (res) => {
@@ -555,14 +400,14 @@ export const getUserController = (req, res) => {
 export const signupUserController = (req, res) => {
     await query(createUserQuery, async (err, result) => {
         res.status(201).json({
-            data:result,
+            data: result,
             status: 201,
             message: 'User successfully created',
             data: resss.rows[0],
         });
     })
 }
-export const signinUserController = (req, res) => {}
+export const signinUserController = (req, res) => { }
 export const updateUserController = (req, res) => {
     query(updateUserQuery, (err, resut) => {
         if (err) {
@@ -581,7 +426,7 @@ export const updateUserController = (req, res) => {
 export const deleteUserController = (req, res) => {
     query(deleteUserQuery, (err, result) => {
         res.status(201).json({
-            data:result.rows,
+            data: result.rows,
             status: '201',
             message: 'User deleted successfully',
         })
@@ -619,27 +464,23 @@ export default (req, res) => {
 }
 `
 module.exports = {
-  packageJson,
-  gitIgnore,
-  readMe,
-  babel,
-  appJs,
-  appJsTest,
-  userMiddleware,
-  middleware,
-  userController,
-  controllers,
-  userRouter,
-  routes,
-  sequelizeSetupData,
-  userModelData,
-  createDb,
-  dropDb,
-  envExample,
-  noOrmDropDb,
-  noOrmcreateDb,
-  noSequelizeSetupData,
-  noSequelizeUserModelData,
-  noOrmUserController,
-  userQueries
+    packageJson,
+    gitIgnore,
+    readMe,
+    babel,
+    appJs,
+    appJsTest,
+    userMiddleware,
+    middleware,
+    userRouter,
+    routes,
+    createDb,
+    dropDb,
+    envExample,
+    noOrmDropDb,
+    noOrmcreateDb,
+    noSequelizeSetupData,
+    noSequelizeUserModelData,
+    noOrmUserController,
+    userQueries
 };
