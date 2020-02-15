@@ -89,7 +89,7 @@ args.forEach(async (value, index) => {
                 message: 'Which database do you want to use?',
                 /**
                  * Need to add more choices e.g 
-                 * choices: ['Postgres', 'MongoDB'],
+                 * choices: ['Postgres', 'MongoDB', 'Sqlite],
                  */
                 choices: ['Postgres', 'Sqlite'],
                 default: 'Postgres'
@@ -98,13 +98,13 @@ args.forEach(async (value, index) => {
 
         const { database } = collectFrameworkAndDb;
 
-        let ormChoices = ['No ORM'];
+        let ormChoices = [];
 
         /**
-         * Select the ORMs based on the database provided above.
+         * Select the ORMs options based on the database provided above.
          */
         if (database === 'Postgres') {
-            ormChoices.push('Sequelize')
+            ormChoices.push('Sequelize', 'No ORM')
         } else if (database === 'Sqlite') {
             // sqlite to be installed is version 3
             ormChoices.push('Sequelize')
@@ -120,19 +120,7 @@ args.forEach(async (value, index) => {
                 type: 'list',
                 name: 'orm',
                 message: 'Which ORM is your choice?',
-                /**
-                 * Just need to remove this comment, but, 
-                 * How can I index[0] in ormChoices, which is 'No ORM`
-                 * and push it to index [-1] - last, so that other 
-                 * ORM especially the default one becomes the index[0]
-                 */
                 choices: ormChoices,
-                /**
-                 * Just makes sure default orm is Sequelize for now
-                 * This need to be checked when we introduce MongoDB.
-                 * As they make use of different ORM such as mongoose
-                 * This comment is removed when Mongo DB is set up.
-                 */
                 default: "Sequelize"
             }
         ]);
