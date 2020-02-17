@@ -31,8 +31,6 @@ const installingDependancies = (details) => {
     const cmd = `
         cd ${appBaseDirectory}
         set -e 
-        echo setting up git for you application
-        git init
         echo Will install your dependancies shortly....
         echo We are installing dependancies, please wait...
         npm install ${framework.toLowerCase()} 
@@ -43,14 +41,16 @@ const installingDependancies = (details) => {
         npm install dotenv
         npm install bcrypt
         echo Install dev dependancies, please wait...
-        npm install -D @babel/cli 
         npm install -D @babel/core 
+        npm install -D @babel/cli 
         npm install -D @babel/node 
         npm install -D @babel/preset-env 
         npm install -D chai-http 
         ${expectationLibrary ? `npm install -D ${expectationLibrary.toLowerCase()}` : ''}
         ${testFramework ? `npm install -D ${testFramework.toLowerCase()}` : ''} 
         npm install -D nyc
+        echo setting up git for you application
+        git init
         echo adding files to git and committing
         git add . && git commit -m "create app and set up app"
     `
