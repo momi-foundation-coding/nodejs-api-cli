@@ -55,5 +55,4 @@ const userModelData = (database) => {
     )
 }
 
-
 exports = module.exports = userModelData;

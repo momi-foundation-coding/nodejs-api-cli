@@ -84,10 +84,4 @@ export default class UserController {
 }
 `
 
-// This controller will have to go to its file e.g index.js
-const controllers = `export { default as UserController } from './user';`
-
-module.exports = {
-    userController,
-    controllers,
-}
+exports = module.exports = userController;
