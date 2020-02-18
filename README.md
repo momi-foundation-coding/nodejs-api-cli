@@ -1,6 +1,10 @@
+<center>
+
 ![npm](https://img.shields.io/npm/dt/nodejs-api-cli)
 ![npm](https://img.shields.io/npm/v/nodejs-api-cli)
 ![npm](https://img.shields.io/static/v1?label=PR&message=Welcome&color=brightgreen)
+
+</center>
 
 # nodejs-api-cli
 
@@ -27,11 +31,9 @@ Steps:
 - Get help `nodejs-api-cli -- -h` or `nodejs-api-cli help`
 - Get version of app `nodejs-api-cli -- -v` or `nodejs-api-cli version`
 
-## Edit Database details
+## Edit Database/.env details
 
-Navigate to `src/models/setup.js`, edit the database name, username or password.
-
-You can also add these credentials to the `.env` file.
+The app generates `.env` file, where you need to edit its credentials
 
 ```javascript
 DATABASE_URL = "postgres://user:pass@example.com:5432/dbname";
@@ -39,21 +41,13 @@ TEST_DB = "postgres://user:pass@example.com:5432/testdb";
 NODE_ENV = "development";
 ```
 
-In your `src/models/setup.js` file:
+You can now create, drop any database models. The created model is **User**, under `src/models/user.js`
 
-```javascript
-import dotenv from "dotenv";
+# Noted Items
 
-dotenv.config();
-
-const dbUrl =
-  process.env.NODE_ENV === "test"
-    ? process.env.TEST_DB
-    : process.env.DATABASE_URL;
-const sequelize = new Sequelize(dbUrl);
-```
-
-You can now call or edit the database models. The created model is **User**, under `src/models/user.js`
+- License added is default `ISC`. You can change it inside `my-app-name/package.json` and also add `LICENSE` file.
+- Repository is assumed to be of type `git` and its `url` left blank for you to set inside `my-app-name/package.json`
+- Also, feel free to modify or remove some items to meet your expectation/demand
 
 # Folder Structure (More updates expected)
 
