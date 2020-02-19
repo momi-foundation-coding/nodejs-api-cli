@@ -18,7 +18,9 @@ const userMiddleware = require("./middlewares/user");
 const noSequelizeUserModelData = require("./models/nosequelizeusermodel");
 const routes = require("./routes");
 const userRouter = require("./routes/user");
-const appJsTest = require("./tests");
+const routeTest = require("./tests/routes");
+const middlewareTest = require("./tests/middleware");
+const useControllerTest = require("./tests/userController");
 const appJs = require("./app");
 const noOrmUserController = require("./controllers/noormuser");
 const userQueries = require("./database/userqueries");
@@ -28,27 +30,29 @@ const dropDb = require("./database/dropdb");
 const createDb = require("./database/createdb");
 
 module.exports = {
-    packageJson,
-    gitIgnore,
-    readMe,
-    babel,
-    envExample,
-    controllers,
-    userController,
-    userModelData,
-    noSequelizeSetupData,
-    sequelizeSetupData,
-    middleware,
-    userMiddleware,
-    noSequelizeUserModelData,
-    routes,
-    userRouter,
-    appJsTest,
-    appJs,
-    noOrmUserController,
-    userQueries,
-    noOrmDropDb,
-    noOrmcreateDb,
-    dropDb,
-    createDb
+  packageJson,
+  gitIgnore,
+  readMe,
+  babel,
+  envExample,
+  controllers,
+  userController,
+  userModelData,
+  noSequelizeSetupData,
+  sequelizeSetupData,
+  middleware,
+  userMiddleware,
+  noSequelizeUserModelData,
+  routes,
+  userRouter,
+  routeTest,
+  middlewareTest,
+  useControllerTest,
+  appJs,
+  noOrmUserController,
+  userQueries,
+  noOrmDropDb,
+  noOrmcreateDb,
+  dropDb,
+  createDb
 };

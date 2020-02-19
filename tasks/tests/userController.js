@@ -1,7 +1,6 @@
-const appJsTest =
-    `import chai from 'chai';
+const useControllerTest = `import chai from 'chai';
 import chaHttp from 'chai-http';
-import app from '../src';
+import app from '../../src';
 
 chai.should();
 chai.use(chaHttp);
@@ -91,5 +90,5 @@ describe('Testing app', () => {
             });
     });
 });    
-`
-exports = module.exports = appJsTest;
+`;
+exports = module.exports = useControllerTest;
