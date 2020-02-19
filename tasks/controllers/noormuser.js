@@ -1,79 +1,56 @@
 const noOrmUserController = `import db from '../models/setup';
-import { allUsersQuery, singleUserQuery, createUserQuery, updateUserQuery, deleteUserQuery } from '../scripts/queries';
-
-const { query } = db;
+import {
+    allUsersQuery,
+    singleUserQuery,
+    createUserQuery,
+    updateUserQuery,
+    deleteUserQuery
+} from '../scripts/queries';
+import responseHandler from '../helpers/responsehandler';
+const {
+    query
+} = db;
 export const getAllUsersController = (res) => {
     query(allUsersQuery, (err, result) => {
         if (err) {
-            res.status(500).json({
-                status: "500",
-                Error: err
-            })
+            return responseHandler(res, err, 500);
         }
-        res.status(200).json({
-            status: '200',
-            message: 'User retrieved succesfully',
-            data: result.rows
-        });
+        return responseHandler(res, 'User retrieved succesfully', 200, result.rows);
     });
 }
 export const getUserController = (req, res) => {
     query(singleUserQuery, (err, result) => {
         if (err) {
-            return res.status(500).json({
-                status: "500",
-                Error: err
-            })
+            return responseHandler(res, err, 500);
         }
-        return res.status(200).json({
-            status: '200',
-            message: 'User retrieved succesfully',
-            data: result.rows
-        });
+        return responseHandler(res, 'User retrieved succesfully', 200, result.rows)
     });
 }
 export const signupUserController = (req, res) => {
     await query(createUserQuery, async (err, result) => {
-        res.status(201).json({
-            data: result,
-            status: 201,
-            message: 'User successfully created',
-            data: resss.rows[0],
-        });
+        if (err) {
+            return responseHandler(res, err, 500);
+        }
+        return responseHandler(res, 'User successfully created', 201, result.rows)
     })
 }
-export const signinUserController = (req, res) => { }
+export const signinUserController = (req, res) => {}
 export const updateUserController = (req, res) => {
     query(updateUserQuery, (err, resut) => {
         if (err) {
-            return res.status(500).json({
-                status: 500,
-                Error: err
-            })
+            return responseHandler(res, err, 500);
         }
-        res.status(201).json({
-            status: 201,
-            message: 'Successfully updated user details',
-            data: resut.rows[0],
-        })
+        return responseHandler(res, 'Successfully updated user details', 201, resut.rows)
     });
 }
 export const deleteUserController = (req, res) => {
     query(deleteUserQuery, (err, result) => {
-        res.status(201).json({
-            data: result.rows,
-            status: '201',
-            message: 'User deleted successfully',
-        })
         if (err) {
-            res.status(500).json({
-                status: 500,
-                Error: err
-            });
+            return responseHandler(res, err, 500);
         }
-    });
-}
+        return responseHandler(res, 'User deleted successfully', 201)
 
-`;
+    });
+}`;
 
 exports = module.exports = noOrmUserController;

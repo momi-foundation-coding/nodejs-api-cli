@@ -29,7 +29,8 @@ const {
   mongoDbSetup,
   mongoDbUserModelData,
   mongoDbController,
-  serverErrorHandler
+  serverErrorHandler,
+  responseHelper
 } = require("../tasks");
 
 const createSrcDirAndFiles = details => {
@@ -230,6 +231,22 @@ const createSrcDirAndFiles = details => {
           fileName.path,
           `export { default as User } from './user';`
         );
+      }
+      const helpersArr = [`${appBaseDirectory}/src/helpers`];
+      if (helpersArr.includes(folder)) {
+        // Create a response helper file
+        const responseHandlerFile = `${appBaseDirectory}/src/helpers/responsehandler.js`;
+        const responseHandlerFileName = fs.createWriteStream(
+          responseHandlerFile
+        );
+        openAppendFile(responseHandlerFileName.path, responseHelper);
+
+        // Create a error handler helper file
+        const serverErrorHandlerFile = `${appBaseDirectory}/src/helpers/servererrorhandler.js`;
+        const serverErrorHandlerFileName = fs.createWriteStream(
+          serverErrorHandlerFile
+        );
+        openAppendFile(serverErrorHandlerFileName.path, serverErrorHandler);
       }
     });
   });
