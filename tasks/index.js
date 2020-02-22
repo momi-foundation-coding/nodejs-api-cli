@@ -28,6 +28,10 @@ const noOrmDropDb = require("./database/noormdropdb");
 const noOrmcreateDb = require("./database/noormcreatedb");
 const dropDb = require("./database/dropdb");
 const createDb = require("./database/createdb");
+const mongoDbSetup = require("./database/mongodbsetup");
+const mongoDbUserModelData = require('./models/mongodbusermodel');
+const mongoDbController = require('./controllers/mongodbcontroller');
+const serverErrorHandler = require('./helpers/servererrorhandler');
 
 module.exports = {
   packageJson,
@@ -54,5 +58,9 @@ module.exports = {
   noOrmDropDb,
   noOrmcreateDb,
   dropDb,
-  createDb
+  createDb,
+  mongoDbSetup,
+  mongoDbUserModelData,
+  mongoDbController,
+  serverErrorHandler
 };
