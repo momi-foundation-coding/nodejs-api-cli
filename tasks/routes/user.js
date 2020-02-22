@@ -1,39 +1,38 @@
 const userRouter =
     `import { Router } from 'express';
     import { UserController } from '../controllers';
-    import { UserMiddleware } from '../middlewares';
-    import serverErrorHandler from '../helpers/serverErrorHandler'
+    import UserMiddleware from '../middlewares';
     
     const router = new Router();
     
     // Create a new user
     router.route('/').post(
-        UserMiddleware,
-        serverErrorHandler(UserController.createUser)
+        UserMiddleware.createUserMiddleware,
+        UserController.createUser
     );
     
     // Get all users
     router.route('/').get(
-        UserMiddleware,
-        serverErrorHandler(UserController.getUsers)
+        // UserMiddleware,
+        UserController.getUsers
     );
     
     // Get single user
     router.route('/:id').get(
-        UserMiddleware,
-        serverErrorHandler(UserController.getUser)
+        // UserMiddleware,
+        UserController.getUser
     );
     
     // Update user details
     router.route('/:id').put(
-        UserMiddleware,
-        serverErrorHandler(UserController.updateUser)
+        // UserMiddleware,
+        UserController.updateUser
     );
     
     // Delete a single user
     router.route('/:id').delete(
-        UserMiddleware,
-        serverErrorHandler(UserController.deleteUser)
+        // UserMiddleware,
+        UserController.deleteUser
     );
     
     router.use((err, req, res, next) => {
