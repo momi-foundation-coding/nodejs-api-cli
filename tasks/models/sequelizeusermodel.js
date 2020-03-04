@@ -46,10 +46,13 @@ const userModelData = (database) => {
                     user.password = await bcrypt.hashSync(user.password, salt);
                 }
             },
+            // Don't return password in any query
+            defaultScope: {
+                attributes: { exclude: ['password'] }
+            },
             // Calling instance of sequelize created in file setup.js
             sequelize,
             modelName: 'user'
-            // options
             });
         `
     )

@@ -11,7 +11,7 @@
 When developing API based application in NodeJS, it is not easy to set it up as easy as possible.
 The application include but not limited to applications build using Express, Sails.js, kemboijs, Koa.js, hapi, AdonisJS, Nest.js etc.
 We decided to build this library/utility to help faster set up your API based application.
-In the fisrt release, We will focus on supporting Express, but will imrpove on other frameworks and also nodejs itself without use of frameworks.
+In the fisrt release, We will focus on supporting Express, but will improve on other frameworks and also nodejs itself without use of frameworks.
 Also, we will aim at building utility that can enhance faster development of upcoming applications, building controllers, middlewares and also fixing issues on migrations in the near future.
 
 # How to use
