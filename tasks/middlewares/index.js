@@ -1,4 +1,4 @@
-const middleware = `
+const middlewares = `
 import { createUserMiddleware } from './user';
 
 const userMiddleware = {
@@ -9,4 +9,4 @@ export default userMiddleware;
 
 `;
 
-module.exports = middleware;
+module.exports = middlewares;

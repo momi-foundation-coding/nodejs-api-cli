@@ -9,6 +9,7 @@ const userModelData = database => {
   } else if (database.toLowerCase() === "postgres") {
     // Setup Postgress here
   }
+
   return `import Sequelize, { Model } from 'sequelize';
         import bcrypt from 'bcrypt';
         import sequelize from './setup';

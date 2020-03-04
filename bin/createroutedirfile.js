@@ -1,5 +1,5 @@
 /**
- * creating route directory files
+ * creating routes directory files
  * @param {*} name
  */
 const fs = require("fs");

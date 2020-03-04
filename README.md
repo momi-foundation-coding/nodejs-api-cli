@@ -12,7 +12,7 @@ When developing API based application in NodeJS, it is not easy to set it up as 
 The application include but not limited to applications build using Express, Sails.js, kemboijs, Koa.js, hapi, AdonisJS, Nest.js etc.
 We decided to build this library/utility to help faster set up your API based application.
 In the fisrt release, We will focus on supporting Express, but will improve on other frameworks and also nodejs itself without use of frameworks.
-Also, we will aim at building utility that can enhance faster development of upcoming applications, building controllers, middlewares and also fixing issues on migrations in the near future.
+Also, we will aim at building utility that can enhance faster development of upcoming applications i.e creating controllers, services, models or middlewares. In the future, we will also help in fixing issues such as migrations and help with a little debugging.
 
 # How to use
 
@@ -41,7 +41,7 @@ TEST_DB = "postgres://user:pass@example.com:5432/testdb";
 NODE_ENV = "development";
 ```
 
-You can now create, drop any database models. The created model is **User**, under `src/models/user.js`
+You can now create, drop any database models. The created models is **User**, under `src/models/user.js`
 
 # Noted Items
 
@@ -71,11 +71,14 @@ You can now create, drop any database models. The created model is **User**, und
     |       ├─ createdb.js
     |       ├─ dropdb.js
     |       ├─ index.js
-    ├── test
+    |   └─ services
+    |       ├─ index.js
+    |       ├─ user.js
+    ├── tests
     │     ├─ controllers
     │         ├─ index.js
     │         ├─ user.js
-    │     ├─ middleware
+    │     ├─ middlewares
     │         ├─ index.js
     │     ├─ routes
     │         ├─ index.js

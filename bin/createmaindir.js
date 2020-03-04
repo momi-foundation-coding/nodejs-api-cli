@@ -7,8 +7,8 @@ const fs = require("fs");
 const path = require("path");
 
 const createSrcDirAndFiles = require("./createsrcdirandfiles");
-const chooseConsoleColorText = require("./consolecolors");
-const colorSet = require("./colorsets");
+const chooseConsoleColorText = require("./utils/consolecolors");
+const colorSet = require("./utils/colorsets");
 
 const createMainDir = details => {
   const { appName, tests, orm, database } = details;

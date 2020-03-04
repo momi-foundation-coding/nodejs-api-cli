@@ -10,16 +10,18 @@ const readMe = require("./config/readme");
 const babel = require("./config/babel");
 const controllers = require("./controllers");
 const userController = require("./controllers/user");
+const services = require("./services");
+const userService = require("./services/user");
 const userModelData = require("./models/sequelizeusermodel");
 const noSequelizeSetupData = require("./database/nosequelizesetup");
 const sequelizeSetupData = require("./database/sequelizedata");
-const middleware = require("./middlewares");
+const middlewares = require("./middlewares");
 const userMiddleware = require("./middlewares/user");
 const noSequelizeUserModelData = require("./models/nosequelizeusermodel");
 const routes = require("./routes");
 const userRouter = require("./routes/user");
 const routeTest = require("./tests/routes");
-const middlewareTest = require("./tests/middleware");
+const middlewareTest = require("./tests/middlewares");
 const useControllerTest = require("./tests/userController");
 const appJs = require("./app");
 const noOrmUserController = require("./controllers/noormuser");
@@ -42,10 +44,12 @@ module.exports = {
   envExample,
   controllers,
   userController,
+  services,
+  userService,
   userModelData,
   noSequelizeSetupData,
   sequelizeSetupData,
-  middleware,
+  middlewares,
   userMiddleware,
   noSequelizeUserModelData,
   routes,
