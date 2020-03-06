@@ -62,3 +62,6 @@ typings/
 
 # dist file ignored
 dist/
+
+# Webstorm files
+.idea

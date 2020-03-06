@@ -25,7 +25,12 @@ const {
   noOrmDropDb,
   userQueries,
   appJs,
-  noOrmUserController
+  noOrmUserController,
+  mongoDbSetup,
+  mongoDbUserModelData,
+  mongoDbController,
+  serverErrorHandler,
+  responseHelper
 } = require("../tasks");
 
 const createSrcDirAndFiles = details => {
@@ -37,7 +42,8 @@ const createSrcDirAndFiles = details => {
     "src/scripts",
     "src/models",
     "src/middlewares",
-    "src"
+    "src",
+    "src/helpers"
   ];
   if (tests) {
     foldersToAdd.push(
@@ -118,6 +124,9 @@ const createSrcDirAndFiles = details => {
             openAppendFile(pathName, noSequelizeSetupData);
             // Add data to user.js file when no orm is chosen in models
             openAppendFile(userModelsFileName.path, noSequelizeUserModelData);
+          } else if (orm && orm.toLowerCase() === "mongoose") {
+            openAppendFile(pathName, mongoDbSetup);
+            openAppendFile(userModelsFileName.path, mongoDbUserModelData);
           }
         }
       }
@@ -199,6 +208,8 @@ const createSrcDirAndFiles = details => {
         ) {
           if (orm === "No ORM") {
             openAppendFile(directoryFileName.path, noOrmUserController);
+          } else if (orm === "mongoose") {
+            openAppendFile(directoryFileName.path, mongoDbController);
           } else {
             openAppendFile(directoryFileName.path, userController);
           }
@@ -220,6 +231,22 @@ const createSrcDirAndFiles = details => {
           fileName.path,
           `export { default as User } from './user';`
         );
+      }
+      const helpersArr = [`${appBaseDirectory}/src/helpers`];
+      if (helpersArr.includes(folder)) {
+        // Create a response helper file
+        const responseHandlerFile = `${appBaseDirectory}/src/helpers/responsehandler.js`;
+        const responseHandlerFileName = fs.createWriteStream(
+          responseHandlerFile
+        );
+        openAppendFile(responseHandlerFileName.path, responseHelper);
+
+        // Create a error handler helper file
+        const serverErrorHandlerFile = `${appBaseDirectory}/src/helpers/servererrorhandler.js`;
+        const serverErrorHandlerFileName = fs.createWriteStream(
+          serverErrorHandlerFile
+        );
+        openAppendFile(serverErrorHandlerFileName.path, serverErrorHandler);
       }
     });
   });

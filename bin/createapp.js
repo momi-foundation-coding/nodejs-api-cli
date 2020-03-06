@@ -123,7 +123,7 @@ args.forEach(async value => {
          * Need to add more choices e.g
          * choices: ['Postgres', 'MongoDB', 'Sqlite],
          */
-        choices: ["Postgres", "Sqlite"],
+        choices: ["Postgres", "Sqlite", "MongoDB"],
         default: "Postgres"
       }
     ]);
