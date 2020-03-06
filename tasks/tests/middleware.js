@@ -1,3 +1,3 @@
-const middleWareTest = `// middleware tests    
+const middleWareTest = `// middleware tests
 `;
-exports = module.exports = middleWareTest;
+module.exports = middleWareTest;

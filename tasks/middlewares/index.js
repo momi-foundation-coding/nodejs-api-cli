@@ -1,3 +1,3 @@
-const middleware = `export {default as UserMiddleware} from './user';`
+const middleware = `export {default as UserMiddleware} from './user';`;
 
-exports = module.exports = middleware;
+module.exports = middleware;

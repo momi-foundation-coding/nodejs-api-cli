@@ -25,4 +25,4 @@ app.listen(port, () => {
 export default app;
 `;
 
-exports = module.exports = appJs;
+module.exports = appJs;

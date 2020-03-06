@@ -1,3 +1,3 @@
-const routeTest = `// route tests    
+const routeTest = `// route tests
 `;
-exports = module.exports = routeTest;
+module.exports = routeTest;

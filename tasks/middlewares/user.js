@@ -3,4 +3,4 @@ const userMiddleware = `export default function userMiddleware(req, res, next) {
 }
 `;
 
-exports = module.exports = userMiddleware;
+module.exports = userMiddleware;

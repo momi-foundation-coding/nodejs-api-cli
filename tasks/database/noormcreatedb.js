@@ -6,4 +6,4 @@ db.query('create database users', (err, result) => {
     console.log('Successfully dropped db')
 }); `;
 
-exports = module.exports = noOrmcreateDb;
+module.exports = noOrmcreateDb;

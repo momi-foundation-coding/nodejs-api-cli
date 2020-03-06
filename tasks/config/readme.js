@@ -1,5 +1,5 @@
 const readMe = name =>
-    `# ${name.charAt(0).toUpperCase() + name.slice(1)}
+  `# ${name.charAt(0).toUpperCase() + name.slice(1)}
 This is my first app generated using nodejs-api-cli
 
 # Project setup
@@ -15,4 +15,4 @@ npm build
 npm test
 `;
 
-exports = module.exports = readMe;
+module.exports = readMe;

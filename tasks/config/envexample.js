@@ -4,4 +4,4 @@ DATABASE_URL="postgres://localhost:5432/dbname"
 NODE_ENV="development"
 `;
 
-exports = module.exports = envExample;
+module.exports = envExample;

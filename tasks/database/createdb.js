@@ -6,4 +6,4 @@ User.sync().then(() => {
 });
 `;
 
-exports = module.exports = createDb;
+module.exports = createDb;

@@ -8,6 +8,6 @@ export const createTables = async () => {
         created_date TIMESTAMP)\`;
     await pool.query(contactTable);
 };
-`
+`;
 
-exports = module.exports = noSequelizeUserModelData;
+module.exports = noSequelizeUserModelData;

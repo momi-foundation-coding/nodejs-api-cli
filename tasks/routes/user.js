@@ -1,5 +1,4 @@
-const userRouter =
-    `import { Router } from 'express';
+const userRouter = `import { Router } from 'express';
 import { UserController } from '../controllers';
 import { UserMiddleware } from '../middlewares';
 
@@ -42,4 +41,4 @@ router.use((err, req, res, next) => {
 export default router;
 `;
 
-exports = module.exports = userRouter;
+module.exports = userRouter;

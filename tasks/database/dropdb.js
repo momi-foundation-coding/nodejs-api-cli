@@ -6,4 +6,4 @@ User.drop(() => {
 });
 `;
 
-exports = module.exports = dropDb;
+module.exports = dropDb;

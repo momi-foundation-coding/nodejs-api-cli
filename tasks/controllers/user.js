@@ -1,8 +1,7 @@
 /**
  * where to get user controllers
  */
-const userController =
-    `import {User} from '../models';
+const userController = `import {User} from '../models';
 export default class UserController {
     // Create a user
     static async createUser(req, res) {
@@ -14,7 +13,7 @@ export default class UserController {
             });
         }
         res.status(201).send({
-            message: "User created successfully", 
+            message: "User created successfully",
             user
         });
     }
@@ -50,7 +49,7 @@ export default class UserController {
             user
         })
     }
-    // Update user details 
+    // Update user details
     static async updateUser(req, res) {
         const userDetails = req.body;
         const { id } = req.params;
@@ -65,7 +64,7 @@ export default class UserController {
             });
         }
         res.status(200).send({
-            message: "User details updated successfully", 
+            message: "User details updated successfully",
             user
         });
     }
@@ -82,6 +81,6 @@ export default class UserController {
         });
     }
 }
-`
+`;
 
-exports = module.exports = userController;
+module.exports = userController;

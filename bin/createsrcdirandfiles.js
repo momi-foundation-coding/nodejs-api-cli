@@ -30,7 +30,7 @@ const {
 
 const createSrcDirAndFiles = details => {
   const { appBaseDirectory, tests, database, orm } = details;
-  let foldersToAdd = [
+  const foldersToAdd = [
     "src/controllers",
     "src/routes",
     "src/config",
@@ -48,12 +48,11 @@ const createSrcDirAndFiles = details => {
     );
   }
 
-  const folders = foldersToAdd.map(folder => {
+  const folders = foldersToAdd
     // will need to recheck here
-    if (folder || folder !== undefined) {
-      return `${appBaseDirectory}/${folder}`;
-    }
-  });
+    .filter(folder => folder || folder !== undefined)
+    .map(folder => `${appBaseDirectory}/${folder}`);
+
   folders.forEach(folder => {
     fs.mkdir(folder, { recursive: true }, err => {
       if (err) throw err;
@@ -71,7 +70,8 @@ const createSrcDirAndFiles = details => {
         // Create a script to drop tables
         const dropDbFile = `${appBaseDirectory}/src/scripts/dropdb.js`;
         const dropDbFileName = fs.createWriteStream(dropDbFile);
-        let createDbData, dropDbData;
+        let createDbData;
+        let dropDbData;
         if (orm && orm.toLowerCase() === "sequelize") {
           createDbData = createDb;
           dropDbData = dropDb;
@@ -225,4 +225,4 @@ const createSrcDirAndFiles = details => {
   });
 };
 
-exports = module.exports = createSrcDirAndFiles;
+module.exports = createSrcDirAndFiles;

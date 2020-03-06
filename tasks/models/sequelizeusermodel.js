@@ -1,20 +1,18 @@
 /**
- * 
- * @param {*} database 
+ *
+ * @param {*} database
  * model structure for user.
  */
-const userModelData = (database) => {
-
-    if (database.toLowerCase() === 'sqlite') {
-        // Will check difference here
-    } else if (database.toLowerCase() === 'postgres') {
-
-    }
-    return (
-        `import Sequelize, { Model } from 'sequelize';
+const userModelData = database => {
+  if (database.toLowerCase() === "sqlite") {
+    // Will check difference here
+  } else if (database.toLowerCase() === "postgres") {
+    // Setup Postgress here
+  }
+  return `import Sequelize, { Model } from 'sequelize';
         import bcrypt from 'bcrypt';
         import sequelize from './setup';
-        
+
         export default class User extends Model { }
         User.init({
             // attributes
@@ -51,8 +49,7 @@ const userModelData = (database) => {
             modelName: 'user'
             // options
             });
-        `
-    )
-}
+        `;
+};
 
-exports = module.exports = userModelData;
+module.exports = userModelData;

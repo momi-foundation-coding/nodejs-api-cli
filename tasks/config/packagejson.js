@@ -20,4 +20,4 @@ const packageJson = name => ({
   license: "ISC"
 });
 
-exports = module.exports = packageJson;
+module.exports = packageJson;

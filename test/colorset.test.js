@@ -1,7 +1,7 @@
 const assert = require("assert");
-const colorSet = require("../lib/colorsets");
+const colorSet = require("../bin/colorsets");
 
 /**
  * will write and set tests later on
  */
-assert.strictEqual(Object.length(colorSet), 3)
+assert.strictEqual(Object.length(colorSet), 3);
