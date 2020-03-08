@@ -164,6 +164,6 @@ describe('Testing app', () => {
                 done();
             });
     });
-});    
+});
 `;
-exports = module.exports = useControllerTest;
+module.exports = useControllerTest;

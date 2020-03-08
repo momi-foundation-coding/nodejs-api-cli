@@ -10,4 +10,4 @@ const connect = async () => {
   };
   connect();`;
 
-exports = module.exports = mongoDbSetup;
+module.exports = mongoDbSetup;

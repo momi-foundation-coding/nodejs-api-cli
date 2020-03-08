@@ -9,7 +9,7 @@ export default class UserController {
     static async createUser(req, res) {
     const userDetails = req.body;
     const user = await User.create(userDetails);
-  
+
     return responseHandler(
         res,
         "User created successfully",
@@ -93,4 +93,4 @@ export default class UserController {
 }
 `;
 
-exports = module.exports = userController;
+module.exports = userController;

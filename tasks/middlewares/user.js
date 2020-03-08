@@ -15,4 +15,4 @@ export const createUserMiddleware = (req, res, next) => {
 }
 `;
 
-exports = module.exports = userMiddleware;
+module.exports = userMiddleware;

@@ -63,4 +63,4 @@ typings/
 # dist file ignored
 dist/`;
 
-exports = module.exports = gitIgnore;
+module.exports = gitIgnore;

@@ -53,4 +53,4 @@ export const deleteUserController = (req, res) => {
     });
 }`;
 
-exports = module.exports = noOrmUserController;
+module.exports = noOrmUserController;

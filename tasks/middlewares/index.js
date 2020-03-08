@@ -7,6 +7,6 @@ const userMiddleware = {
 
 export default userMiddleware;
 
-`
+`;
 
-exports = module.exports = middleware;
+module.exports = middleware;

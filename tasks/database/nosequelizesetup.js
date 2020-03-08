@@ -19,4 +19,4 @@ export default {
   },
 };`;
 
-exports = module.exports = noSequelizeSetupData;
+module.exports = noSequelizeSetupData;

@@ -34,4 +34,4 @@ export const deleteUser = async (req, res) => {
   const data = await User.remove({ _id });
   responseHandler(res, "User deleted successfully", 201, data);
 };`;
-exports = module.exports = mongoDbController;
+module.exports = mongoDbController;

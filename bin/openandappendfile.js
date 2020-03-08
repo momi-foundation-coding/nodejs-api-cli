@@ -2,15 +2,15 @@
 const fs = require("fs");
 
 const openAppendFile = (pathName, data) => {
-  return fs.open(`${pathName}`, "a", (err, fd) => {
-    if (err) throw err;
-    fs.appendFile(fd, `${data}`, "utf8", err => {
-      fs.close(fd, err => {
-        if (err) throw err;
+  return fs.open(`${pathName}`, "a", (openErr, fd) => {
+    if (openErr) throw openErr;
+    fs.appendFile(fd, `${data}`, "utf8", appendErr => {
+      fs.close(fd, closeErr => {
+        if (closeErr) throw closeErr;
       });
-      if (err) throw err;
+      if (appendErr) throw appendErr;
     });
   });
 };
 
-exports = module.exports = openAppendFile;
+module.exports = openAppendFile;

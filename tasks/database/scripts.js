@@ -1,4 +1,3 @@
-
 const databaseScripts = `
 import createdb from './createdb';
 import dropdb from './dropdb';
@@ -13,6 +12,6 @@ const databaseScripts = {
 }
 
 export default databaseScripts
-`
+`;
 
-exports = module.exports = databaseScripts
+module.exports = databaseScripts;

@@ -12,5 +12,5 @@ const responseHelper = `
         message,
         data,
       });
-    }`
-  exports = module.exports = responseHelper;
+    }`;
+module.exports = responseHelper;

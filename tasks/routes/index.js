@@ -1,5 +1,4 @@
-const routes =
-    `import { Router } from 'express';
+const routes = `import { Router } from 'express';
 import userRouters from './user';
 
 const router = new Router();
@@ -14,6 +13,6 @@ router.get('/', (req, res) => {
 router.use('/user', userRouters);
 
 export default router;
-`
+`;
 
-exports = module.exports = routes;
+module.exports = routes;

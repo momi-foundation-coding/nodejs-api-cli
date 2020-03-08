@@ -1,4 +1,3 @@
-
 const babel = `{
     "presets": [
         [
@@ -12,4 +11,4 @@ const babel = `{
     ]
 }`;
 
-exports = module.exports = babel;
+module.exports = babel;

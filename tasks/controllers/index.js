@@ -1,3 +1,3 @@
-const controllers = `export { default as UserController } from './user';`
+const controllers = `export { default as UserController } from './user';`;
 
-exports = module.exports = controllers;
+module.exports = controllers;
