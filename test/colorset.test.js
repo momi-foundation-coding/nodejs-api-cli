@@ -1,5 +1,5 @@
 const assert = require("assert");
-const colorSet = require("../bin/colorsets");
+const colorSet = require("../bin/utils/colorsets");
 
 /**
  * will write and set tests later on

@@ -5,8 +5,8 @@ const { exec } = require("child_process");
 const path = require("path");
 
 // Internal imports
-const chooseConsoleColorText = require("./consolecolors");
-const colorSet = require("./colorsets");
+const chooseConsoleColorText = require("./utils/consolecolors");
+const colorSet = require("./utils/colorsets");
 
 const installingDependancies = details => {
   const {
@@ -53,11 +53,7 @@ const installingDependancies = details => {
         npm install -D @babel/node
         npm install -D @babel/preset-env
         npm install -D chai-http
-        ${
-          expectationLibrary
-            ? `npm install -D ${expectationLibrary.toLowerCase()}`
-            : ""
-        }
+        ${expectationLibrary ? `npm install -D ${expectationLibrary.toLowerCase()}` : ""}
         ${testFramework ? `npm install -D ${testFramework.toLowerCase()}` : ""}
         npm install -D nyc
         echo setting up git for you application

@@ -8,10 +8,12 @@ const openAppendFile = require("./openandappendfile");
 const {
   controllers,
   userController,
+  services,
+  userService,
   userModelData,
   noSequelizeSetupData,
   sequelizeSetupData,
-  middleware,
+  middlewares,
   userMiddleware,
   noSequelizeUserModelData,
   routes,
@@ -29,7 +31,6 @@ const {
   mongoDbSetup,
   mongoDbUserModelData,
   mongoDbController,
-  serverErrorHandler,
   responseHelper
 } = require("../tasks");
 
@@ -37,6 +38,7 @@ const createSrcDirAndFiles = details => {
   const { appBaseDirectory, tests, database, orm } = details;
   const foldersToAdd = [
     "src/controllers",
+    "src/services",
     "src/routes",
     "src/config",
     "src/scripts",
@@ -47,10 +49,10 @@ const createSrcDirAndFiles = details => {
   ];
   if (tests) {
     foldersToAdd.push(
-      "test/controllers",
-      "test/middleware",
-      "test/routes",
-      "test"
+      "tests/controllers",
+      "tests/middlewares",
+      "tests/routes",
+      "tests"
     );
   }
 
@@ -96,9 +98,9 @@ const createSrcDirAndFiles = details => {
       }
 
       // Write sequelize instance and create models here
-      const modelsArr = [`${appBaseDirectory}/src/models`];
+      const modelArrs = [`${appBaseDirectory}/src/models`];
 
-      if (modelsArr.includes(folder)) {
+      if (modelArrs.includes(folder)) {
         // Set up for sequelize database
         const sequelizeSetupFile = `${appBaseDirectory}/src/models/setup.js`;
         const sequelizeSetupFileName = fs.createWriteStream(sequelizeSetupFile);
@@ -131,18 +133,18 @@ const createSrcDirAndFiles = details => {
         }
       }
 
-      // Write to test files
+      // Write to tests files
       const testsArr = [
-        `${appBaseDirectory}/test/controllers`,
-        `${appBaseDirectory}/test/middleware`,
-        `${appBaseDirectory}/test/routes`
+        `${appBaseDirectory}/tests/controllers`,
+        `${appBaseDirectory}/tests/middlewares`,
+        `${appBaseDirectory}/tests/routes`
       ];
 
       if (testsArr.includes(folder)) {
         switch (folder) {
-          case `${appBaseDirectory}/test/controllers`:
+          case `${appBaseDirectory}/tests/controllers`:
             {
-              // Create a test script for user controller
+              // Create a tests script for user controllers
               const userControllerFile = `${folder}/user.js`;
               const userControllerFileName = fs.createWriteStream(
                 userControllerFile
@@ -151,9 +153,9 @@ const createSrcDirAndFiles = details => {
             }
             break;
 
-          case `${appBaseDirectory}/test/middleware`:
+          case `${appBaseDirectory}/tests/middlewares`:
             {
-              // Create a test script for middlewares
+              // Create a tests script for middlewares
               const middlewareFile = `${folder}/index.js`;
               const middlewareFileName = fs.createWriteStream(middlewareFile);
               openAppendFile(middlewareFileName.path, middlewareTest);
@@ -162,10 +164,10 @@ const createSrcDirAndFiles = details => {
 
           default:
             {
-              // Create a test script for routes
-              const routesFile = `${folder}/index.js`;
-              const routesFileName = fs.createWriteStream(routesFile);
-              openAppendFile(routesFileName.path, routeTest);
+              // Create a tests script for routes
+              const routeFile = `${folder}/index.js`;
+              const routeFileName = fs.createWriteStream(routeFile);
+              openAppendFile(routeFileName.path, routeTest);
             }
             break;
         }
@@ -181,13 +183,14 @@ const createSrcDirAndFiles = details => {
       const pathsThatNeedBaseFiles = [
         `${appBaseDirectory}/src/middlewares`,
         `${appBaseDirectory}/src/routes`,
-        `${appBaseDirectory}/src/controllers`
+        `${appBaseDirectory}/src/controllers`,
+        `${appBaseDirectory}/src/services`
       ];
       // Now create file user.js in specified directories
       if (pathsThatNeedBaseFiles.includes(folder)) {
         /**
          * In the base directories create user.js file
-         * [For middleware, routes, controllers]
+         * [For middlewares, routes, controllers]
          */
         const directoryFiles = `${folder}/user.js`;
         const directoryFileName = fs.createWriteStream(directoryFiles);
@@ -201,6 +204,8 @@ const createSrcDirAndFiles = details => {
           directoryFileName.path === `${appBaseDirectory}/src/routes/user.js`
         ) {
           openAppendFile(directoryFileName.path, userRouter);
+        } if (directoryFileName.path === `${appBaseDirectory}/src/services/user.js`) {
+          openAppendFile(directoryFileName.path, userService)
         }
         if (
           directoryFileName.path ===
@@ -218,13 +223,15 @@ const createSrcDirAndFiles = details => {
 
       // Write to different files including the index.js and other files
       if (fileName.path === `${appBaseDirectory}/src/middlewares/index.js`) {
-        openAppendFile(fileName.path, middleware);
+        openAppendFile(fileName.path, middlewares);
       }
       if (fileName.path === `${appBaseDirectory}/src/routes/index.js`) {
         openAppendFile(fileName.path, routes);
       }
       if (fileName.path === `${appBaseDirectory}/src/controllers/index.js`) {
         openAppendFile(fileName.path, controllers);
+      } if (fileName.path === `${appBaseDirectory}/src/services/index.js`) {
+        openAppendFile(fileName.path, services);
       }
       if (fileName.path === `${appBaseDirectory}/src/models/index.js`) {
         openAppendFile(
@@ -232,21 +239,14 @@ const createSrcDirAndFiles = details => {
           `export { default as User } from './user';`
         );
       }
-      const helpersArr = [`${appBaseDirectory}/src/helpers`];
-      if (helpersArr.includes(folder)) {
-        // Create a response helper file
+      const helperArr = [`${appBaseDirectory}/src/helpers`];
+      if (helperArr.includes(folder)) {
+        // Create a response helpers file
         const responseHandlerFile = `${appBaseDirectory}/src/helpers/responsehandler.js`;
         const responseHandlerFileName = fs.createWriteStream(
           responseHandlerFile
         );
         openAppendFile(responseHandlerFileName.path, responseHelper);
-
-        // Create a error handler helper file
-        const serverErrorHandlerFile = `${appBaseDirectory}/src/helpers/servererrorhandler.js`;
-        const serverErrorHandlerFileName = fs.createWriteStream(
-          serverErrorHandlerFile
-        );
-        openAppendFile(serverErrorHandlerFileName.path, serverErrorHandler);
       }
     });
   });

@@ -12,8 +12,8 @@ const inquirer = require("inquirer");
 /**
  * Internal imports goes here
  */
-const chooseConsoleColorText = require("./consolecolors");
-const colorSet = require("./colorsets");
+const chooseConsoleColorText = require("./utils/consolecolors");
+const colorSet = require("./utils/colorsets");
 const installingDependancies = require("./installingdependancies");
 const createMainDir = require("./createmaindir");
 const createRouteDirFiles = require("./createroutedirfile");
@@ -48,7 +48,7 @@ const args = process.argv.slice(2);
 // eslint-disable-next-line consistent-return
 args.forEach(async value => {
   /**
-   * Need to test when user only writes nodejs-api-cli
+   * Need to tests when user only writes nodejs-api-cli
    */
 
   if (!value) {
