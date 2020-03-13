@@ -20,7 +20,7 @@ const createRouteDirFiles = name => {
   const envFile = fs.createWriteStream(`${name}/.env`);
   const readmeFile = fs.createWriteStream(`${name}/README.md`);
   const babelFile = fs.createWriteStream(`${name}/.babelrc`);
-  const envExampleFile = fs.createWriteStream(`${name}/.envExample`);
+  const envExampleFile = fs.createWriteStream(`${name}/.envexample`);
 
   // Create data var for all the
   const packageJsonData = JSON.stringify(packageJson(name), null, "\t");
