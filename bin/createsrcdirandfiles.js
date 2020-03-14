@@ -205,11 +205,14 @@ const createSrcDirAndFiles = details => {
           directoryFileName.path === `${appBaseDirectory}/src/routes/user.js`
         ) {
           openAppendFile(directoryFileName.path, userRouter);
-        } if (directoryFileName.path === `${appBaseDirectory}/src/services/user.js`) {
-          if (database.toLowerCase() === 'postgres') {
-            openAppendFile(directoryFileName.path, userService)
-          } else if (database.toLowerCase() === 'mongodb') {
-            openAppendFile(directoryFileName.path, userServiceMongo)
+        }
+        if (
+          directoryFileName.path === `${appBaseDirectory}/src/services/user.js`
+        ) {
+          if (database.toLowerCase() === "postgres") {
+            openAppendFile(directoryFileName.path, userService);
+          } else if (database.toLowerCase() === "mongodb") {
+            openAppendFile(directoryFileName.path, userServiceMongo);
           }
         }
         if (
@@ -235,7 +238,8 @@ const createSrcDirAndFiles = details => {
       }
       if (fileName.path === `${appBaseDirectory}/src/controllers/index.js`) {
         openAppendFile(fileName.path, controllers);
-      } if (fileName.path === `${appBaseDirectory}/src/services/index.js`) {
+      }
+      if (fileName.path === `${appBaseDirectory}/src/services/index.js`) {
         openAppendFile(fileName.path, services);
       }
       if (fileName.path === `${appBaseDirectory}/src/models/index.js`) {
