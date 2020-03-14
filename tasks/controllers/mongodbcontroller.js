@@ -1,37 +1,38 @@
 const mongoDbController = `
-import { User } from "../models/user";
+import { UserService } from "../services";
 import responseHandler from "../helpers/responsehandler";
 
-export const createUser = async (req, res) => {
-  const { firstName, lastName, email, password } = req.body;
-  const newUserDetails = { firstName, lastName, email, password };
-  const Newuser = new User(newUserDetails);
-  const data = await Newuser.save();
-  responseHandler(res, "User created successfully", 201, data);
-};
-export const getUsers = async (req, res) => {
-  const data = await User.find({});
-  responseHandler(res, "Users fetched successfully", 200, data);
-};
-
-export const getUser = async (req, res) => {
-  const _id = req.params.id;
-  const data = await User.findById({ _id });
-  responseHandler(res, "User fetched successfully", 200, data);
-};
-export const updateUser = async (req, res) => {
-  const _id = req.params.id;
-  const { firstName, lastName, email, password } = req.body;
-  const data = await User.update(
-    { _id },
-    { $set: { firstName, lastName, email, password } },
-    { multi: true, new: true }
-  );
-  responseHandler(res, "User updated successfully", 201, data);
-};
-export const deleteUser = async (req, res) => {
-  const _id = req.params.id;
-  const data = await User.remove({ _id });
-  responseHandler(res, "User deleted successfully", 201, data);
-};`;
+export default class UserController {
+  // create user
+  static async createUser(req, res) {
+    const newUserDetails = req.body;
+    const user = await UserService.createUser(newUserDetails)
+    return responseHandler(res, "User created successfully", 201, user);
+  }
+  // get all users 
+  static async getUsers(req, res) {
+    const users = await UserService.getUsers();
+    return responseHandler(res, "Users fetched successfully", 200, users);
+  }
+  // get user
+  static async getUser(req, res) {
+    const _id = req.params.id;
+    const user = await UserService.getUser(_id);
+    return responseHandler(res, "User fetched successfully", 200, user);
+  }
+  // update user
+  static async updateUser(req, res) {
+    const _id = req.params.id;
+    const userDetails = req.body;
+    const user = await UserService.updateUser(_id, userDetails);
+    return responseHandler(res, "User updated successfully", 200, user);
+  }
+  // delete user
+  static async deleteUser(req, res) {
+    const _id = req.params.id;
+    const user = UserService.deleteUser(_id);
+    return responseHandler(res, "User deleted successfully", 200, user);
+  }
+}
+`;
 module.exports = mongoDbController;

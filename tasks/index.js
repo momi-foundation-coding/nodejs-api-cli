@@ -12,6 +12,7 @@ const controllers = require("./controllers");
 const userController = require("./controllers/user");
 const services = require("./services");
 const userService = require("./services/user");
+const userServiceMongo = require("./services/usermongoversion");
 const userModelData = require("./models/sequelizeusermodel");
 const noSequelizeSetupData = require("./database/nosequelizesetup");
 const sequelizeSetupData = require("./database/sequelizedata");
@@ -46,6 +47,7 @@ module.exports = {
   userController,
   services,
   userService,
+  userServiceMongo,
   userModelData,
   noSequelizeSetupData,
   sequelizeSetupData,

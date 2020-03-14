@@ -4,13 +4,13 @@
  * model structure for user.
  */
 const userModelData = database => {
-  if (database.toLowerCase() === "sqlite") {
-    // Will check difference here
-  } else if (database.toLowerCase() === "postgres") {
-    // Setup Postgress here
-  }
+    if (database.toLowerCase() === "sqlite") {
+        // Will check difference here
+    } else if (database.toLowerCase() === "postgres") {
+        // Setup Postgress here
+    }
 
-  return `import Sequelize, { Model } from 'sequelize';
+    return `import Sequelize, { Model } from 'sequelize';
         import bcrypt from 'bcrypt';
         import sequelize from './setup';
 
@@ -40,9 +40,10 @@ const userModelData = database => {
                     const salt = await bcrypt.genSaltSync(8);
                     user.password = await bcrypt.hashSync(user.password, salt);
                 },
-                beforeUpdate: async (user, options) => {
+                beforeBulkUpdate: async (user, options) => {
+                    const { attributes } = user;
                     const salt = await bcrypt.genSaltSync(8);
-                    user.password = await bcrypt.hashSync(user.password, salt);
+                    attributes.password = await bcrypt.hashSync(attributes.password, salt);
                 }
             },
             // Don't return password in any query

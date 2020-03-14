@@ -1,11 +1,8 @@
-<center>
-
 [![Build Status](https://travis-ci.org/kemboijs/nodejs-api-cli.svg?branch=master)](https://travis-ci.org/kemboijs/nodejs-api-cli)
 [![Coverage Status](https://coveralls.io/repos/github/kemboijs/nodejs-api-cli/badge.svg?branch=master)](https://coveralls.io/github/kemboijs/nodejs-api-cli?branch=master)
 ![npm](https://img.shields.io/npm/dt/nodejs-api-cli)
 ![npm](https://img.shields.io/npm/v/nodejs-api-cli)
 ![npm](https://img.shields.io/static/v1?label=PR&message=Welcome&color=brightgreen)
-</center>
 
 # nodejs-api-cli
 
