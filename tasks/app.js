@@ -2,6 +2,7 @@ const appJs = `import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import routes from './routes';
+import "./models/setup";
 
 const port = 8000;
 const app = express();

@@ -10,6 +10,7 @@ const {
   userController,
   services,
   userService,
+  userServiceMongo,
   userModelData,
   noSequelizeSetupData,
   sequelizeSetupData,
@@ -205,7 +206,11 @@ const createSrcDirAndFiles = details => {
         ) {
           openAppendFile(directoryFileName.path, userRouter);
         } if (directoryFileName.path === `${appBaseDirectory}/src/services/user.js`) {
-          openAppendFile(directoryFileName.path, userService)
+          if (database.toLowerCase() === 'postgres') {
+            openAppendFile(directoryFileName.path, userService)
+          } else if (database.toLowerCase() === 'mongodb') {
+            openAppendFile(directoryFileName.path, userServiceMongo)
+          }
         }
         if (
           directoryFileName.path ===

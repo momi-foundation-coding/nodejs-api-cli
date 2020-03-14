@@ -34,7 +34,7 @@ export const signupUserController = (req, res) => {
         return responseHandler(res, 'User successfully created', 201, result.rows)
     })
 }
-export const signinUserController = (req, res) => {}
+
 export const updateUserController = (req, res) => {
     query(updateUserQuery, (err, resut) => {
         if (err) {
