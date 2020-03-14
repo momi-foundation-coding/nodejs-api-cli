@@ -40,7 +40,7 @@
     "bin/"
   ],
   "dependencies": {
-    "inquirer": "^7.0.0"
+    "inquirer": "^7.1.0"
   },
   "directories": {
     "test": "tests"

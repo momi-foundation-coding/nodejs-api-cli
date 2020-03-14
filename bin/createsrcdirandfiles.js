@@ -10,7 +10,6 @@ const {
   userController,
   services,
   userService,
-  userServiceMongo,
   userModelData,
   noSequelizeSetupData,
   sequelizeSetupData,
@@ -31,7 +30,6 @@ const {
   noOrmUserController,
   mongoDbSetup,
   mongoDbUserModelData,
-  mongoDbController,
   responseHelper
 } = require("../tasks");
 
@@ -74,28 +72,30 @@ const createSrcDirAndFiles = details => {
 
       if (scriptsArr.includes(folder)) {
         // Create a script to create tables
-        const createDbFile = `${appBaseDirectory}/src/scripts/createdb.js`;
-        const createDbFileName = fs.createWriteStream(createDbFile);
-        // Create a script to drop tables
-        const dropDbFile = `${appBaseDirectory}/src/scripts/dropdb.js`;
-        const dropDbFileName = fs.createWriteStream(dropDbFile);
-        let createDbData;
-        let dropDbData;
-        if (orm && orm.toLowerCase() === "sequelize") {
-          createDbData = createDb;
-          dropDbData = dropDb;
-        } else if (orm && orm.toLowerCase() === "no orm") {
-          // When user does't need any orm
-          createDbData = noOrmcreateDb;
-          dropDbData = noOrmDropDb;
-          // Create a script to query database -> only when no orm
-          const queriesFile = `${appBaseDirectory}/src/scripts/queries.js`;
-          const queriesFileName = fs.createWriteStream(queriesFile);
-          openAppendFile(queriesFileName.path, userQueries);
+        if (database.toLowerCase() !== "mongodb") {
+          const createDbFile = `${appBaseDirectory}/src/scripts/createdb.js`;
+          const createDbFileName = fs.createWriteStream(createDbFile);
+          // Create a script to drop tables
+          const dropDbFile = `${appBaseDirectory}/src/scripts/dropdb.js`;
+          const dropDbFileName = fs.createWriteStream(dropDbFile);
+          let createDbData;
+          let dropDbData;
+          if (orm && orm.toLowerCase() === "sequelize") {
+            createDbData = createDb;
+            dropDbData = dropDb;
+          } else if (orm && orm.toLowerCase() === "no orm") {
+            // When user does't need any orm
+            createDbData = noOrmcreateDb;
+            dropDbData = noOrmDropDb;
+            // Create a script to query database -> only when no orm
+            const queriesFile = `${appBaseDirectory}/src/scripts/queries.js`;
+            const queriesFileName = fs.createWriteStream(queriesFile);
+            openAppendFile(queriesFileName.path, userQueries);
+          }
+          // append drop database scripts and create db scripts
+          openAppendFile(createDbFileName.path, createDbData);
+          openAppendFile(dropDbFileName.path, dropDbData);
         }
-        // append drop database scripts and create db scripts
-        openAppendFile(createDbFileName.path, createDbData);
-        openAppendFile(dropDbFileName.path, dropDbData);
       }
 
       // Write sequelize instance and create models here
@@ -150,7 +150,10 @@ const createSrcDirAndFiles = details => {
               const userControllerFileName = fs.createWriteStream(
                 userControllerFile
               );
-              openAppendFile(userControllerFileName.path, useControllerTest);
+              openAppendFile(
+                userControllerFileName.path,
+                useControllerTest(database)
+              );
             }
             break;
 
@@ -176,8 +179,7 @@ const createSrcDirAndFiles = details => {
 
       // Add data to the main entry point
       if (fileName.path === `${appBaseDirectory}/src/index.js`) {
-        const pathName = fileName.path;
-        openAppendFile(pathName, appJs);
+        openAppendFile(fileName.path, appJs(database));
       }
 
       // Paths that needs files such as user.js, config may not need it.
@@ -209,11 +211,7 @@ const createSrcDirAndFiles = details => {
         if (
           directoryFileName.path === `${appBaseDirectory}/src/services/user.js`
         ) {
-          if (database.toLowerCase() === "postgres") {
-            openAppendFile(directoryFileName.path, userService);
-          } else if (database.toLowerCase() === "mongodb") {
-            openAppendFile(directoryFileName.path, userServiceMongo);
-          }
+          openAppendFile(directoryFileName.path, userService(database));
         }
         if (
           directoryFileName.path ===
@@ -221,10 +219,8 @@ const createSrcDirAndFiles = details => {
         ) {
           if (orm === "No ORM") {
             openAppendFile(directoryFileName.path, noOrmUserController);
-          } else if (orm === "mongoose") {
-            openAppendFile(directoryFileName.path, mongoDbController);
           } else {
-            openAppendFile(directoryFileName.path, userController);
+            openAppendFile(directoryFileName.path, userController(database));
           }
         }
       }

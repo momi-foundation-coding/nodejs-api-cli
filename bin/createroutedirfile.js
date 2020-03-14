@@ -13,7 +13,7 @@ const {
   envExample
 } = require("../tasks");
 
-const createRouteDirFiles = name => {
+const createRouteDirFiles = (name, database) => {
   // Create different files such as packages, readme etc.
   const packageFile = fs.createWriteStream(`${name}/package.json`);
   const gitignoreFile = fs.createWriteStream(`${name}/.gitignore`);
@@ -32,8 +32,8 @@ const createRouteDirFiles = name => {
     { pathname: gitignoreFile.path, data: gitIgnore },
     { pathname: readmeFile.path, data: readMeData },
     { pathname: babelFile.path, data: babel },
-    { pathname: envFile.path, data: envExample },
-    { pathname: envExampleFile.path, data: envExample }
+    { pathname: envFile.path, data: envExample(database) },
+    { pathname: envExampleFile.path, data: envExample(database) }
   ];
 
   // For each file, append data using fn openAppendFile
