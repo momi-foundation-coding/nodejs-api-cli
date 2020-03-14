@@ -38,6 +38,6 @@ export default class UserService {
     const deletedUser = await User.remove({ _id });
     return deletedUser;
   }
-}`
+}`;
 
 module.exports = userService;

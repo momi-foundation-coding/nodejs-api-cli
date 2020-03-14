@@ -4,13 +4,13 @@
  * model structure for user.
  */
 const userModelData = database => {
-    if (database.toLowerCase() === "sqlite") {
-        // Will check difference here
-    } else if (database.toLowerCase() === "postgres") {
-        // Setup Postgress here
-    }
+  if (database.toLowerCase() === "sqlite") {
+    // Will check difference here
+  } else if (database.toLowerCase() === "postgres") {
+    // Setup Postgress here
+  }
 
-    return `import Sequelize, { Model } from 'sequelize';
+  return `import Sequelize, { Model } from 'sequelize';
         import bcrypt from 'bcrypt';
         import sequelize from './setup';
 
