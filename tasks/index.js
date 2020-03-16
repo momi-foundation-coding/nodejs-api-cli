@@ -12,7 +12,6 @@ const controllers = require("./controllers");
 const userController = require("./controllers/user");
 const services = require("./services");
 const userService = require("./services/user");
-const userServiceMongo = require("./services/usermongoversion");
 const userModelData = require("./models/sequelizeusermodel");
 const noSequelizeSetupData = require("./database/nosequelizesetup");
 const sequelizeSetupData = require("./database/sequelizedata");
@@ -33,7 +32,6 @@ const dropDb = require("./database/dropdb");
 const createDb = require("./database/createdb");
 const mongoDbSetup = require("./database/mongodbsetup");
 const mongoDbUserModelData = require("./models/mongodbusermodel");
-const mongoDbController = require("./controllers/mongodbcontroller");
 const responseHelper = require("./helpers/responsehelper");
 const databaseScripts = require("./database/scripts");
 
@@ -47,7 +45,6 @@ module.exports = {
   userController,
   services,
   userService,
-  userServiceMongo,
   userModelData,
   noSequelizeSetupData,
   sequelizeSetupData,
@@ -68,7 +65,6 @@ module.exports = {
   createDb,
   mongoDbSetup,
   mongoDbUserModelData,
-  mongoDbController,
   responseHelper,
   databaseScripts
 };

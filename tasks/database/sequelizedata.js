@@ -17,22 +17,18 @@ const sequelizeSetupData = database => {
      * or, this can be added to the documentation on how to make change.
      */
     requirePath = `import path from 'path';`;
-    dbUrl = `
-        process.env.NODE_ENV === "test"
+    dbUrl = `process.env.NODE_ENV === "test"
         ? path.resolve(__dirname, "app.sqlite")
-        : path.resolve(__dirname, "test.sqlite")
-        `;
+        : path.resolve(__dirname, "test.sqlite")`;
     newSequelizeInstance = `new Sequelize({
             dialect: 'sqlite',
             storage: dbUrl
         });`;
     closeSequelize = `sequelize.sync().done()`;
   } else if (database.toLowerCase() === "postgres") {
-    dbUrl = `
-        process.env.NODE_ENV === "test"
+    dbUrl = `process.env.NODE_ENV === "test"
         ? process.env.TEST_DATABASE_URL
-        : process.env.DATABASE_URL;
-        `;
+        : process.env.DATABASE_URL;`;
     newSequelizeInstance = `new Sequelize(dbUrl)`;
   }
 
@@ -43,21 +39,19 @@ const sequelizeSetupData = database => {
     dotenv.config();
 
     const dbUrl = ${dbUrl}
-
     const sequelize = ${newSequelizeInstance};
 
     sequelize
-        .authenticate()
-        .then(() => {
-            console.log('Connection has been established successfully.');
-        })
-        .catch(err => {
-            console.error('Unable to connect to the database:', err);
-        });
+      .authenticate()
+      .then(() => {
+          console.log('Connection has been established successfully.');
+      })
+      .catch(err => {
+        console.error('Unable to connect to the database:', err);
+      });
     ${closeSequelize || ""}
 
-    export default sequelize;
-    `;
+    export default sequelize;`;
 };
 
 module.exports = sequelizeSetupData;

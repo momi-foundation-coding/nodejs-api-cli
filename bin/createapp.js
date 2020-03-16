@@ -30,7 +30,7 @@ const createApp = async details => {
     expectationLibrary
   } = details;
   await createMainDir({ appName, tests, orm, database });
-  await createRouteDirFiles(appName);
+  await createRouteDirFiles(appName, database);
   await installingDependancies({
     appName,
     framework,
