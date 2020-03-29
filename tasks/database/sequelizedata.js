@@ -3,7 +3,7 @@
  * postgres or sqlite
  */
 
-const sequelizeSetupData = database => {
+const sequelizeSetupData = (database) => {
   let newSequelizeInstance;
   let dbUrl;
   let requirePath;

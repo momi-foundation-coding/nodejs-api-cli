@@ -20,7 +20,7 @@ const createMainDir = require("./createmaindir");
 const createRouteDirFiles = require("./createroutedirfile");
 
 // Creating the main application
-const createApp = async details => {
+const createApp = async (details) => {
   const {
     appName,
     framework,
@@ -28,7 +28,7 @@ const createApp = async details => {
     orm,
     tests,
     testFramework,
-    expectationLibrary
+    expectationLibrary,
   } = details;
   await createMainDir({ appName, tests, orm, database });
   await createRouteDirFiles(appName, database);
@@ -38,7 +38,7 @@ const createApp = async details => {
     database,
     orm,
     testFramework,
-    expectationLibrary
+    expectationLibrary,
   });
 };
 
@@ -47,7 +47,7 @@ const args = process.argv.slice(2);
 
 // Convert into a module that can be used as CLI
 // eslint-disable-next-line consistent-return
-args.forEach(async value => {
+args.forEach(async (value) => {
   /**
    * Need to tests when user only writes nodejs-api-cli
    */
@@ -96,8 +96,8 @@ args.forEach(async value => {
             return process.exit(0);
           }
           return true;
-        }
-      }
+        },
+      },
     ]);
 
     const collectFrameworkAndDb = await inquirer.prompt([
@@ -110,7 +110,7 @@ args.forEach(async value => {
          * choices: ['Express', 'KemboiJs', 'Koa'],
          */
         choices: ["Express"],
-        default: "Express"
+        default: "Express",
       },
       {
         type: "list",
@@ -121,8 +121,8 @@ args.forEach(async value => {
          * choices: ['Postgres', 'MongoDB', 'Sqlite],
          */
         choices: ["Postgres", "Sqlite", "MongoDB"],
-        default: "Postgres"
-      }
+        default: "Postgres",
+      },
     ]);
 
     const { database } = collectFrameworkAndDb;
@@ -153,8 +153,8 @@ args.forEach(async value => {
         name: "orm",
         message: "Which ORM is your choice?",
         choices: ormChoices,
-        default: "Sequelize"
-      }
+        default: "Sequelize",
+      },
     ]);
 
     const needTests = await inquirer.prompt([
@@ -162,8 +162,8 @@ args.forEach(async value => {
         type: "confirm",
         name: "tests",
         message: "Do you needs tests(Y/N)?",
-        default: ["Y"]
-      }
+        default: ["Y"],
+      },
     ]);
 
     let testRunner;
@@ -180,22 +180,22 @@ args.forEach(async value => {
            * choices: ['Mocha', 'Jasmine'],
            */
           choices: ["Mocha"],
-          default: "Mocha"
+          default: "Mocha",
         },
         {
           type: "list",
           name: "expectationLibrary",
           message: "Which expectation library do you want to use?",
           choices: ["chai"],
-          default: "chai"
-        }
+          default: "chai",
+        },
       ]);
     } else {
       return createApp({
         ...appName,
         ...collectFrameworkAndDb,
         ...collectOrm,
-        tests
+        tests,
       });
     }
 
@@ -207,7 +207,7 @@ args.forEach(async value => {
       ...collectFrameworkAndDb,
       ...collectOrm,
       tests,
-      ...testRunner
+      ...testRunner,
     });
   } else {
     chooseConsoleColorText(

@@ -10,7 +10,7 @@ const {
   gitIgnore,
   readMe,
   babel,
-  envExample
+  envExample,
 } = require("../tasks");
 
 const createRouteDirFiles = (name, database) => {
@@ -33,11 +33,11 @@ const createRouteDirFiles = (name, database) => {
     { pathname: readmeFile.path, data: readMeData },
     { pathname: babelFile.path, data: babel },
     { pathname: envFile.path, data: envExample(database) },
-    { pathname: envExampleFile.path, data: envExample(database) }
+    { pathname: envExampleFile.path, data: envExample(database) },
   ];
 
   // For each file, append data using fn openAppendFile
-  fileDataArr.forEach(file => {
+  fileDataArr.forEach((file) => {
     openAppendFile(file.pathname, file.data);
   });
 };

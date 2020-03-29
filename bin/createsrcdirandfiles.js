@@ -30,10 +30,10 @@ const {
   noOrmUserController,
   mongoDbSetup,
   mongoDbUserModelData,
-  responseHelper
+  responseHelper,
 } = require("../tasks");
 
-const createSrcDirAndFiles = details => {
+const createSrcDirAndFiles = (details) => {
   const { appBaseDirectory, tests, database, orm } = details;
   const foldersToAdd = [
     "src/controllers",
@@ -44,7 +44,7 @@ const createSrcDirAndFiles = details => {
     "src/models",
     "src/middlewares",
     "src",
-    "src/helpers"
+    "src/helpers",
   ];
   if (tests) {
     foldersToAdd.push(
@@ -57,11 +57,11 @@ const createSrcDirAndFiles = details => {
 
   const folders = foldersToAdd
     // will need to recheck here
-    .filter(folder => folder || folder !== undefined)
-    .map(folder => `${appBaseDirectory}/${folder}`);
+    .filter((folder) => folder || folder !== undefined)
+    .map((folder) => `${appBaseDirectory}/${folder}`);
 
-  folders.forEach(folder => {
-    fs.mkdir(folder, { recursive: true }, err => {
+  folders.forEach((folder) => {
+    fs.mkdir(folder, { recursive: true }, (err) => {
       if (err) throw err;
       // Check created files and createstream of the files
       const mainFiles = `${folder}/index.js`;
@@ -138,7 +138,7 @@ const createSrcDirAndFiles = details => {
       const testsArr = [
         `${appBaseDirectory}/tests/controllers`,
         `${appBaseDirectory}/tests/middlewares`,
-        `${appBaseDirectory}/tests/routes`
+        `${appBaseDirectory}/tests/routes`,
       ];
 
       if (testsArr.includes(folder)) {
@@ -187,7 +187,7 @@ const createSrcDirAndFiles = details => {
         `${appBaseDirectory}/src/middlewares`,
         `${appBaseDirectory}/src/routes`,
         `${appBaseDirectory}/src/controllers`,
-        `${appBaseDirectory}/src/services`
+        `${appBaseDirectory}/src/services`,
       ];
       // Now create file user.js in specified directories
       if (pathsThatNeedBaseFiles.includes(folder)) {

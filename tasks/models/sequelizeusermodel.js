@@ -3,7 +3,7 @@
  * @param {*} database
  * model structure for user.
  */
-const userModelData = database => {
+const userModelData = (database) => {
   if (database.toLowerCase() === "sqlite") {
     // Will check difference here
   } else if (database.toLowerCase() === "postgres") {

@@ -12,7 +12,7 @@ const colorSet = {
   normal: "\x1b[0m", // Setting color, the same as reset value
   warn: "\x1b[33m", // Yellow
   error: "\x1b[31m", // Red
-  log: "\x1b[34m" // Blue
+  log: "\x1b[34m", // Blue
 };
 
 module.exports = colorSet;

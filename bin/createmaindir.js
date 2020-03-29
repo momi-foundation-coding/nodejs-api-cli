@@ -10,9 +10,9 @@ const createSrcDirAndFiles = require("./createsrcdirandfiles");
 const chooseConsoleColorText = require("./utils/consolecolors");
 const colorSet = require("./utils/colorsets");
 
-const createMainDir = details => {
+const createMainDir = (details) => {
   const { appName, tests, orm, database } = details;
-  fs.mkdir(appName, err => {
+  fs.mkdir(appName, (err) => {
     if (err) {
       chooseConsoleColorText(
         colorSet.error,

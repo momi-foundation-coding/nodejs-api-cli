@@ -1,4 +1,4 @@
-const useControllerTest = db => {
+const useControllerTest = (db) => {
   let dbScriptRequired = "";
   let idNotFound = "";
   let userIdFound = "";

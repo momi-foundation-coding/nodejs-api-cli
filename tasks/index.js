@@ -66,5 +66,5 @@ module.exports = {
   mongoDbSetup,
   mongoDbUserModelData,
   responseHelper,
-  databaseScripts
+  databaseScripts,
 };

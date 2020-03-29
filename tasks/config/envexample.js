@@ -1,4 +1,4 @@
-const envExample = db => {
+const envExample = (db) => {
   let mainUrl = "postgres://localhost:5432/dbname";
   let testUrl = "postgres://localhost:5432/dbnametest";
 

@@ -8,14 +8,14 @@ const path = require("path");
 const chooseConsoleColorText = require("./utils/consolecolors");
 const colorSet = require("./utils/colorsets");
 
-const installingDependancies = details => {
+const installingDependancies = (details) => {
   const {
     appName,
     framework,
     database,
     orm,
     testFramework,
-    expectationLibrary
+    expectationLibrary,
   } = details;
   const appBaseDirectory = path.basename(appName);
   /**

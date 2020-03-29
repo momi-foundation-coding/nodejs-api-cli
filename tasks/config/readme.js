@@ -1,4 +1,4 @@
-const readMe = name =>
+const readMe = (name) =>
   `# ${name.charAt(0).toUpperCase() + name.slice(1)}
 This is my first app generated using nodejs-api-cli
 

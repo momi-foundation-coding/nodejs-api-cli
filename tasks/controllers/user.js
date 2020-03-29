@@ -1,7 +1,7 @@
 /**
  * where to get user controllers
  */
-const userController = db => {
+const userController = (db) => {
   let position = "";
 
   if (db.toLowerCase() === "mongodb") {

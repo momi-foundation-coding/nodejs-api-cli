@@ -1,4 +1,4 @@
-const userService = db => {
+const userService = (db) => {
   let createUserData = "";
   let findUsers = "";
   let findUser = "";

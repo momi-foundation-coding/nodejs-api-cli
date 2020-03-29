@@ -1,4 +1,4 @@
-const appJs = db => {
+const appJs = (db) => {
   let setUpRequired = "";
 
   if (db.toLowerCase() === "mongodb") {
