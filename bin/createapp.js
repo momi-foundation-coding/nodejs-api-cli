@@ -7,9 +7,7 @@
 /**
  * External dependancies installed through npm
  */
-const inquirer = require("inquirer");
 const { version } = require("../package.json");
-
 /**
  * Internal imports goes here
  */
@@ -18,6 +16,7 @@ const colorSet = require("./utils/colorsets");
 const installingDependancies = require("./installingdependancies");
 const createMainDir = require("./createmaindir");
 const createRouteDirFiles = require("./createroutedirfile");
+const { promptAppName, promptFrameworkDb, promptOrm, promptTest, promptTestRunner } = require("./utils/inquirer")
 
 // Creating the main application
 const createApp = async (details) => {
@@ -49,9 +48,9 @@ const args = process.argv.slice(2);
 // eslint-disable-next-line consistent-return
 args.forEach(async (value) => {
   /**
-   * Need to tests when user only writes nodejs-api-cli
+   * Can this be tested?
+   * E.g ensure that an application is created
    */
-
   if (!value) {
     chooseConsoleColorText(
       colorSet.error,
@@ -61,7 +60,6 @@ args.forEach(async (value) => {
   } else if (value === "version" || value === "-v") {
     chooseConsoleColorText(colorSet.log, version);
   } else if (value === "help" || value === "-h") {
-    console.log("\n-----------------Asking for help-------------\n");
     chooseConsoleColorText(colorSet.log, "New Project: nodejs-api-cli init\n");
     chooseConsoleColorText(
       colorSet.log,
@@ -75,58 +73,11 @@ args.forEach(async (value) => {
       colorSet.log,
       "Documentation: https://kemboijs.github.io/kemboijs.org/ \n"
     );
-    console.log("\n-------------We hope we helped-------------\n");
   } else if (value === "init") {
-    const appName = await inquirer.prompt([
-      {
-        name: "appName",
-        message: "What is the name of your application? ",
-        validate(input) {
-          /**
-           * More validation for app name can be done in the future
-           * E.g allowing only alpha or eliminating spaces and other stuff.
-           * Can just have regex here
-           */
 
-          if (!input) {
-            chooseConsoleColorText(
-              colorSet.error,
-              "\n\n------App name should not be empty-------\n"
-            );
-            return process.exit(0);
-          }
-          return true;
-        },
-      },
-    ]);
-
-    const collectFrameworkAndDb = await inquirer.prompt([
-      {
-        type: "list",
-        name: "framework",
-        message: "Which framework do you want to use?",
-        /**
-         * Need to add more choices e.g
-         * choices: ['Express', 'KemboiJs', 'Koa'],
-         */
-        choices: ["Express"],
-        default: "Express",
-      },
-      {
-        type: "list",
-        name: "database",
-        message: "Which database do you want to use?",
-        /**
-         * Need to add more choices e.g
-         * choices: ['Postgres', 'MongoDB', 'Sqlite],
-         */
-        choices: ["Postgres", "Sqlite", "MongoDB"],
-        default: "Postgres",
-      },
-    ]);
-
+    const appName = await promptAppName();
+    const collectFrameworkAndDb = await promptFrameworkDb();
     const { database } = collectFrameworkAndDb;
-
     const ormChoices = [];
 
     /**
@@ -147,49 +98,13 @@ args.forEach(async (value) => {
       process.exit(0);
     }
 
-    const collectOrm = await inquirer.prompt([
-      {
-        type: "list",
-        name: "orm",
-        message: "Which ORM is your choice?",
-        choices: ormChoices,
-        default: "Sequelize",
-      },
-    ]);
-
-    const needTests = await inquirer.prompt([
-      {
-        type: "confirm",
-        name: "tests",
-        message: "Do you needs tests(Y/N)?",
-        default: ["Y"],
-      },
-    ]);
-
+    const collectOrm = await promptOrm(ormChoices);
+    const needTests = await promptTest()
     let testRunner;
     const { tests } = needTests;
 
     if (tests) {
-      testRunner = await inquirer.prompt([
-        {
-          type: "list",
-          name: "testFramework",
-          message: "Which testing framework do you want to use?",
-          /**
-           * Need to add more choices e.g
-           * choices: ['Mocha', 'Jasmine'],
-           */
-          choices: ["Mocha"],
-          default: "Mocha",
-        },
-        {
-          type: "list",
-          name: "expectationLibrary",
-          message: "Which expectation library do you want to use?",
-          choices: ["chai"],
-          default: "chai",
-        },
-      ]);
+      testRunner = await promptTestRunner()
     } else {
       return createApp({
         ...appName,
@@ -199,9 +114,7 @@ args.forEach(async (value) => {
       });
     }
 
-    /**
-     * Spread to get details on the tools to make use of.
-     */
+    // send details of app
     return createApp({
       ...appName,
       ...collectFrameworkAndDb,
