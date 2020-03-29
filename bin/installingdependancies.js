@@ -78,16 +78,16 @@ const installingDependancies = async (details) => {
     );
   });
 
+  execPromisified(
+    `cd ${appBaseDirectory} && 
+    git init && 
+    git add . && 
+    git commit -m "Set up application"`
+  );
+
   // install all if not added to node_modules
   process.on("exit", async () => {
     await execPromisified(`cd ${appBaseDirectory} && npm install`);
-    // initialize git command on exit
-    await execPromisified(
-      `cd ${appBaseDirectory} && 
-      git init && 
-      git add . && 
-      git commit -m "Set up application"`
-    );
     chooseConsoleColorText(colorSet.normal, `\n Clean up installs`);
   });
 };
