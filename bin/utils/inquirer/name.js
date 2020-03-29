@@ -1,5 +1,6 @@
-const { prompt } = require('inquirer');
-const chooseConsoleColorText = require("../../utils/consolecolors");
+const { prompt } = require("inquirer");
+const chooseConsoleColorText = require("../consolecolors");
+const colorSet = require("../colorsets");
 
 const promptAppName = () => {
   return prompt([
@@ -15,10 +16,9 @@ const promptAppName = () => {
           return process.exit(0);
         }
         return true;
-      }
-    }
+      },
+    },
   ]);
-}
-
+};
 
 module.exports = promptAppName;

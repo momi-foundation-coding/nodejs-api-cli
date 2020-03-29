@@ -16,7 +16,13 @@ const colorSet = require("./utils/colorsets");
 const installingDependancies = require("./installingdependancies");
 const createMainDir = require("./createmaindir");
 const createRouteDirFiles = require("./createroutedirfile");
-const { promptAppName, promptFrameworkDb, promptOrm, promptTest, promptTestRunner } = require("./utils/inquirer")
+const {
+  promptAppName,
+  promptFrameworkDb,
+  promptOrm,
+  promptTest,
+  promptTestRunner,
+} = require("./utils/inquirer");
 
 // Creating the main application
 const createApp = async (details) => {
@@ -74,7 +80,6 @@ args.forEach(async (value) => {
       "Documentation: https://kemboijs.github.io/kemboijs.org/ \n"
     );
   } else if (value === "init") {
-
     const appName = await promptAppName();
     const collectFrameworkAndDb = await promptFrameworkDb();
     const { database } = collectFrameworkAndDb;
@@ -99,12 +104,12 @@ args.forEach(async (value) => {
     }
 
     const collectOrm = await promptOrm(ormChoices);
-    const needTests = await promptTest()
+    const needTests = await promptTest();
     let testRunner;
     const { tests } = needTests;
 
     if (tests) {
-      testRunner = await promptTestRunner()
+      testRunner = await promptTestRunner();
     } else {
       return createApp({
         ...appName,
