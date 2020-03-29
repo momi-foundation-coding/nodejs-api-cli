@@ -11,7 +11,7 @@ const { version } = require("../package.json");
 /**
  * Internal imports goes here
  */
-const chooseConsoleColorText = require("./utils/consolecolors");
+const { chooseConsoleColorText } = require("./utils/consolecolors");
 const colorSet = require("./utils/colorsets");
 const installingDependancies = require("./installingdependancies");
 const createMainDir = require("./createmaindir");
@@ -64,20 +64,20 @@ args.forEach(async (value) => {
     );
     process.exit(0);
   } else if (value === "version" || value === "-v") {
-    chooseConsoleColorText(colorSet.log, version);
+    chooseConsoleColorText(colorSet.normal, version);
   } else if (value === "help" || value === "-h") {
-    chooseConsoleColorText(colorSet.log, "New Project: nodejs-api-cli init\n");
+    chooseConsoleColorText(colorSet.normal, "New Project: nodejs-api-cli init\n");
     chooseConsoleColorText(
-      colorSet.log,
-      "Help: nodejs-api-cli help or nodejs-api-cli -- -h \n"
+      colorSet.normal,
+      "Help: nodejs-api-cli help or nodejs-api-cli -- -h\n"
     );
     chooseConsoleColorText(
-      colorSet.log,
-      "Version: nodejs-api-cli version or nodejs-api-cli -- -v \n"
+      colorSet.normal,
+      "Version: nodejs-api-cli version or nodejs-api-cli -- -v\n"
     );
     chooseConsoleColorText(
-      colorSet.log,
-      "Documentation: https://kemboijs.github.io/kemboijs.org/ \n"
+      colorSet.normal,
+      "Documentation: https://kemboijs.github.io/kemboijs.org/\n"
     );
   } else if (value === "init") {
     const appName = await promptAppName();

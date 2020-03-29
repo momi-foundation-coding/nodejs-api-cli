@@ -20,14 +20,18 @@ Also, we will aim at building utility that can enhance faster development of upc
 - Run app: `npm start`
 - Drop tables: `npm run drop:db`
 - Create tables: `npm run create:db`
-- Run tests: `npm test`
+- Run tests: `npm test` 
+
+NB: Make sure all dependancies are installed. `npm install`.
 
 NB: When installing make sure you have admin priviledges otherwise, you will have to use `sudo npm i -g nodejs-api-cli`
 
 Steps:
 
-- Get help `nodejs-api-cli -- -h` or `nodejs-api-cli help`
-- Get version of app `nodejs-api-cli -- -v` or `nodejs-api-cli version`
+- Get help `nodejs-api-cli -h` or `nodejs-api-cli help`
+- Get version of app `nodejs-api-cli -v` or `nodejs-api-cli version`
+
+NB: During development make use of `nodejs-api-cli -- -h` or `nodejs-api-cli -- -v`
 
 ## Edit Database/.env details
 
@@ -95,7 +99,7 @@ You can now create, drop any database models. The created models is **User**, un
 # Contributors
 
 <a href="https://github.com/kemboijs/nodejs-api-cli/graphs/contributors">
-  <img src="https://contributors-img.firebaseapp.com/image?repo=kemboijs/nodejs-api-cli" width="100"/>
+  <img src="https://contributors-img.firebaseapp.com/image?repo=kemboijs/nodejs-api-cli" width="250"/>
 </a>
 
 # How To Contribute

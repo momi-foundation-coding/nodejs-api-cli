@@ -14,8 +14,11 @@ const colorString = (color, string) => {
 };
 
 // Console log your chosen color and string
-const chooseYourColorText = (color, string) => {
+const chooseConsoleColorText = (color, string) => {
   console.log(colorString(color, string));
 };
 
-module.exports = chooseYourColorText;
+module.exports = {
+  chooseConsoleColorText,
+  colorString
+}

@@ -7,7 +7,7 @@ const { exec } = require("child_process");
 
 const execPromisified = util.promisify(exec);
 // Internal imports
-const chooseConsoleColorText = require("./utils/consolecolors");
+const { chooseConsoleColorText, colorString } = require("./utils/consolecolors");
 const colorSet = require("./utils/colorsets");
 
 const installingDependancies = async (details) => {
@@ -63,7 +63,7 @@ const installingDependancies = async (details) => {
     );
     chooseConsoleColorText(
       colorSet.normal,
-      `\n Installed ${dependancy} in the application.`
+      `\n Installed ${colorString(colorSet.log, `${dependancy}`)} in the application.`
     );
   });
 
@@ -74,7 +74,7 @@ const installingDependancies = async (details) => {
     );
     chooseConsoleColorText(
       colorSet.normal,
-      `\n Installed dev dependancy ${dependancy} in the application.`
+      `\n Installed dev dependancy ${colorString(colorSet.log, `${dependancy}`)} in the application.`
     );
   });
 
