@@ -8,6 +8,7 @@
  * External dependancies installed through npm
  */
 const inquirer = require("inquirer");
+const { version } = require("../package.json");
 
 /**
  * Internal imports goes here
@@ -58,11 +59,7 @@ args.forEach(async value => {
     );
     process.exit(0);
   } else if (value === "version" || value === "-v") {
-    console.log("\n-----------------Check version-------------\n");
-    chooseConsoleColorText(colorSet.log, "Version: 1.2.0");
-    console.log(
-      "\n-------------Thanks for checking our version-------------\n"
-    );
+    chooseConsoleColorText(colorSet.log, version);
   } else if (value === "help" || value === "-h") {
     console.log("\n-----------------Asking for help-------------\n");
     chooseConsoleColorText(colorSet.log, "New Project: nodejs-api-cli init\n");
