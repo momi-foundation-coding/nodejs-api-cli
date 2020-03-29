@@ -1,4 +1,4 @@
-const { prompt } = require('inquirer');
+const { prompt } = require("inquirer");
 
 const promptFrameworkDb = () => {
   return prompt([
@@ -11,7 +11,7 @@ const promptFrameworkDb = () => {
        * choices: ['Express', 'KemboiJs', 'Koa'],
        */
       choices: ["Express"],
-      default: "Express"
+      default: "Express",
     },
     {
       type: "list",
@@ -22,9 +22,9 @@ const promptFrameworkDb = () => {
        * choices: ['Postgres', 'MongoDB', 'Sqlite],
        */
       choices: ["Postgres", "Sqlite", "MongoDB"],
-      default: "Postgres"
-    }
+      default: "Postgres",
+    },
   ]);
-}
+};
 
 module.exports = promptFrameworkDb;

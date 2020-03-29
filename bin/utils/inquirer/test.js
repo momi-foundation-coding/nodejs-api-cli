@@ -1,4 +1,4 @@
-const { prompt } = require('inquirer');
+const { prompt } = require("inquirer");
 
 const promptTest = () => {
   return prompt([
@@ -6,10 +6,10 @@ const promptTest = () => {
       type: "confirm",
       name: "tests",
       message: "Do you needs tests(Y/N)?",
-      default: ["Y"]
-    }
+      default: ["Y"],
+    },
   ]);
-}
+};
 
 const promptTestRunner = () => {
   return prompt([
@@ -22,19 +22,19 @@ const promptTestRunner = () => {
        * choices: ['Mocha', 'Jasmine'],
        */
       choices: ["Mocha"],
-      default: "Mocha"
+      default: "Mocha",
     },
     {
       type: "list",
       name: "expectationLibrary",
       message: "Which expectation library do you want to use?",
       choices: ["chai"],
-      default: "chai"
-    }
+      default: "chai",
+    },
   ]);
-}
+};
 
 module.exports = {
   promptTest,
-  promptTestRunner
-}
+  promptTestRunner,
+};
