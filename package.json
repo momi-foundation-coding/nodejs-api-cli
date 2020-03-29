@@ -1,6 +1,6 @@
 {
   "name": "nodejs-api-cli",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "nodejs-api-cli is a scaffold to start API for different NodeJS fraameworks.  for generating nodejs application.",
   "main": "./tasks/data.js",
   "bin": {
