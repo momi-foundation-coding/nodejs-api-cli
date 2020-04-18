@@ -54,6 +54,7 @@ const installingDependancies = async (details) => {
     "@babel/preset-env",
     "@babel/cli",
     "@babel/node",
+    "standard"
   ];
 
   // install @ dependancy
@@ -87,6 +88,7 @@ const installingDependancies = async (details) => {
 
   // install all if not added to node_modules
   process.on("exit", async () => {
+    await execPromisified(`cd ${appBaseDirectory} && npm run fix`)
     await execPromisified(`cd ${appBaseDirectory} && npm install`);
     chooseConsoleColorText(colorSet.normal, `\n Clean up installs`);
   });
