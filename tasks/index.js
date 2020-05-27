@@ -34,6 +34,7 @@ const mongoDbSetup = require("./database/mongodbsetup");
 const mongoDbUserModelData = require("./models/mongodbusermodel");
 const responseHelper = require("./helpers/responsehelper");
 const databaseScripts = require("./database/scripts");
+const license = require("./config/license");
 
 module.exports = {
   packageJson,
@@ -67,4 +68,5 @@ module.exports = {
   mongoDbUserModelData,
   responseHelper,
   databaseScripts,
+  license,
 };

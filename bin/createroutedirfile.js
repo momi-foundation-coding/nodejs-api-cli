@@ -11,6 +11,7 @@ const {
   readMe,
   babel,
   envExample,
+  license,
 } = require("../tasks");
 
 const createRouteDirFiles = (name, database) => {
@@ -21,6 +22,7 @@ const createRouteDirFiles = (name, database) => {
   const readmeFile = fs.createWriteStream(`${name}/README.md`);
   const babelFile = fs.createWriteStream(`${name}/.babelrc`);
   const envExampleFile = fs.createWriteStream(`${name}/.envexample`);
+  const licenseFile = fs.createWriteStream(`${name}/LICENSE`);
 
   // Create data var for all the
   const packageJsonData = JSON.stringify(packageJson(name), null, "\t");
@@ -34,6 +36,7 @@ const createRouteDirFiles = (name, database) => {
     { pathname: babelFile.path, data: babel },
     { pathname: envFile.path, data: envExample(database) },
     { pathname: envExampleFile.path, data: envExample(database) },
+    { pathname: licenseFile.path, data: license },
   ];
 
   // For each file, append data using fn openAppendFile

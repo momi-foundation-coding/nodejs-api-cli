@@ -7,7 +7,10 @@ const { exec } = require("child_process");
 
 const execPromisified = util.promisify(exec);
 // Internal imports
-const { chooseConsoleColorText, colorString } = require("./utils/consolecolors");
+const {
+  chooseConsoleColorText,
+  colorString,
+} = require("./utils/consolecolors");
 const colorSet = require("./utils/colorsets");
 
 const installingDependancies = async (details) => {
@@ -54,7 +57,7 @@ const installingDependancies = async (details) => {
     "@babel/preset-env",
     "@babel/cli",
     "@babel/node",
-    "standard"
+    "standard",
   ];
 
   // install @ dependancy
@@ -64,7 +67,10 @@ const installingDependancies = async (details) => {
     );
     chooseConsoleColorText(
       colorSet.normal,
-      `\n Installed ${colorString(colorSet.log, `${dependancy}`)} in the application.`
+      `\n Installed ${colorString(
+        colorSet.log,
+        `${dependancy}`
+      )} in the application.`
     );
   });
 
@@ -75,7 +81,10 @@ const installingDependancies = async (details) => {
     );
     chooseConsoleColorText(
       colorSet.normal,
-      `\n Installed dev dependancy ${colorString(colorSet.log, `${dependancy}`)} in the application.`
+      `\n Installed dev dependancy ${colorString(
+        colorSet.log,
+        `${dependancy}`
+      )} in the application.`
     );
   });
 
@@ -88,7 +97,7 @@ const installingDependancies = async (details) => {
 
   // install all if not added to node_modules
   process.on("exit", async () => {
-    await execPromisified(`cd ${appBaseDirectory} && npm run fix`)
+    await execPromisified(`cd ${appBaseDirectory} && npm run fix`);
     await execPromisified(`cd ${appBaseDirectory} && npm install`);
     chooseConsoleColorText(colorSet.normal, `\n Clean up installs`);
   });
