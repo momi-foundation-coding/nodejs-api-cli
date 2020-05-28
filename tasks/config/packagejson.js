@@ -19,6 +19,18 @@ const packageJson = (name) => ({
   keywords: ["nodejs", "api", "nodejs-api-cli"],
   author: "",
   license: "ISC",
+  babel: {
+    presets: [
+      [
+        "@babel/preset-env",
+        {
+          targets: {
+            node: "current"
+          }
+        }
+      ]
+    ]
+  }
 });
 
 module.exports = packageJson;

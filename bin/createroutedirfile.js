@@ -9,7 +9,6 @@ const {
   packageJson,
   gitIgnore,
   readMe,
-  babel,
   envExample,
   license,
 } = require("../tasks");
@@ -20,7 +19,6 @@ const createRouteDirFiles = (name, database) => {
   const gitignoreFile = fs.createWriteStream(`${name}/.gitignore`);
   const envFile = fs.createWriteStream(`${name}/.env`);
   const readmeFile = fs.createWriteStream(`${name}/README.md`);
-  const babelFile = fs.createWriteStream(`${name}/.babelrc`);
   const envExampleFile = fs.createWriteStream(`${name}/.envexample`);
   const licenseFile = fs.createWriteStream(`${name}/LICENSE`);
 
@@ -33,7 +31,6 @@ const createRouteDirFiles = (name, database) => {
     { pathname: packageFile.path, data: packageJsonData },
     { pathname: gitignoreFile.path, data: gitIgnore },
     { pathname: readmeFile.path, data: readMeData },
-    { pathname: babelFile.path, data: babel },
     { pathname: envFile.path, data: envExample(database) },
     { pathname: envExampleFile.path, data: envExample(database) },
     { pathname: licenseFile.path, data: license },

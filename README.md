@@ -89,7 +89,6 @@ You can now create, drop any database models. The created models is **User**, un
     │     ├─ routes
     │         ├─ index.js
     │     └─ index.js
-    └── .babelrc
     └── .env
     └── .envexample
     └── .gitignore
