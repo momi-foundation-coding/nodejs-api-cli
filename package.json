@@ -4,7 +4,7 @@
   "description": "nodejs-api-cli is a scaffold to start API for different NodeJS fraameworks.  for generating nodejs application.",
   "main": "./tasks/data.js",
   "bin": {
-    "nodejs-api-cli": "bin/createapp.js"
+    "nodejs-api-cli": "src/createapp.js"
   },
   "scripts": {
     "start:dev": "babel-node src/createapp.js",

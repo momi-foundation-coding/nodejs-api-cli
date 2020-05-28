@@ -31,6 +31,12 @@ Steps:
 - Get help `nodejs-api-cli -h` or `nodejs-api-cli help`
 - Get version of app `nodejs-api-cli -v` or `nodejs-api-cli version`
 
+## Development 
+
+- run `npm run start:dev`
+- build: `npm run build`
+- production: `npm start`
+
 NB: During development make use of `nodejs-api-cli -- -h` or `nodejs-api-cli -- -v`
 
 ## Edit Database/.env details

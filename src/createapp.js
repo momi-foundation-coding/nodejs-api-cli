@@ -11,18 +11,18 @@ const { version } = require("../package.json");
 /**
  * Internal imports goes here
  */
-const { chooseConsoleColorText } = require("./lib/utils/consolecolors");
-const colorSet = require("./lib/utils/colorsets");
-const installingDependancies = require("./lib/installingdependancies");
-const createMainDir = require("./lib/createmaindir");
-const createRouteDirFiles = require("./lib/createroutedirfile");
+const { chooseConsoleColorText } = require("./utils/consolecolors");
+const colorSet = require("./utils/colorsets");
+const installingDependancies = require("./installingdependancies");
+const createMainDir = require("./createmaindir");
+const createRouteDirFiles = require("./createroutedirfile");
 const {
   promptAppName,
   promptFrameworkDb,
   promptOrm,
   promptTest,
   promptTestRunner,
-} = require("./lib/utils/inquirer");
+} = require("./utils/inquirer");
 
 // Creating the main application
 const createApp = async (details) => {
