@@ -20,5 +20,5 @@ const chooseConsoleColorText = (color, string) => {
 
 module.exports = {
   chooseConsoleColorText,
-  colorString
-}
+  colorString,
+};

@@ -66,7 +66,10 @@ args.forEach(async (value) => {
   } else if (value === "version" || value === "-v") {
     chooseConsoleColorText(colorSet.normal, version);
   } else if (value === "help" || value === "-h") {
-    chooseConsoleColorText(colorSet.normal, "New Project: nodejs-api-cli init\n");
+    chooseConsoleColorText(
+      colorSet.normal,
+      "New Project: nodejs-api-cli init\n"
+    );
     chooseConsoleColorText(
       colorSet.normal,
       "Help: nodejs-api-cli help or nodejs-api-cli -- -h\n"
