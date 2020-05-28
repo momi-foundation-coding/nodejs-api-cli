@@ -1,15 +1,17 @@
 {
   "name": "nodejs-api-cli",
-  "version": "0.2.4",
+  "version": "0.3.0",
   "description": "nodejs-api-cli is a scaffold to start API for different NodeJS fraameworks.  for generating nodejs application.",
   "main": "./tasks/data.js",
   "bin": {
-    "nodejs-api-cli": "bin/createapp.js"
+    "nodejs-api-cli": "src/createapp.js"
   },
   "scripts": {
+    "start:dev": "babel-node src/createapp.js",
+    "start": "node lib/createapp.js",
+    "build": "rm -r lib && babel src --presets minify --out-dir lib",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "start": "node bin/createapp.js"
+    "lint:fix": "eslint . --fix"
   },
   "repository": {
     "type": "git",
@@ -33,10 +35,9 @@
   },
   "homepage": "https://github.com/kemboijs/nodejs-api-cli#readme",
   "files": [
-    "tasks/",
     "README.md",
     "LICENCE",
-    "bin/"
+    "lib/"
   ],
   "dependencies": {
     "inquirer": "^7.1.0"
@@ -45,6 +46,11 @@
     "test": "tests"
   },
   "devDependencies": {
+    "@babel/cli": "^7.10.1",
+    "@babel/core": "^7.10.1",
+    "@babel/node": "^7.10.1",
+    "@babel/preset-env": "^7.10.1",
+    "babel-preset-minify": "^0.5.1",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-config-prettier": "^6.10.1",
@@ -54,5 +60,20 @@
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
+  },
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "targets": {
+            "node": "current"
+          }
+        }
+      ],
+      [
+        "minify"
+      ]
+    ]
   }
 }
