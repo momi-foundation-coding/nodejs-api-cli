@@ -7,7 +7,6 @@ const envExample = require("./config/envexample");
 const packageJson = require("./config/packagejson");
 const gitIgnore = require("./config/gitignore");
 const readMe = require("./config/readme");
-const babel = require("./config/babel");
 const controllers = require("./controllers");
 const userController = require("./controllers/user");
 const services = require("./services");
@@ -39,7 +38,6 @@ module.exports = {
   packageJson,
   gitIgnore,
   readMe,
-  babel,
   envExample,
   controllers,
   userController,
