@@ -31,7 +31,7 @@ const {
   mongoDbSetup,
   mongoDbUserModelData,
   responseHelper,
-} = require("../tasks");
+} = require("./tasks");
 
 const createSrcDirAndFiles = (details) => {
   const { appBaseDirectory, tests, database, orm } = details;

@@ -11,7 +11,7 @@ const {
   readMe,
   envExample,
   license,
-} = require("../tasks");
+} = require("./tasks");
 
 const createRouteDirFiles = (name, database) => {
   // Create different files such as packages, readme etc.
