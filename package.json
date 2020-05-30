@@ -1,6 +1,6 @@
 {
   "name": "nodejs-api-cli",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "nodejs-api-cli is a scaffold to start API for different NodeJS fraameworks.  for generating nodejs application.",
   "main": "src/createapp.js",
   "bin": {
@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start:dev": "babel-node src/createapp.js",
-    "start": "node lib/createapp.js",
+    "start": "node src/createapp.js",
     "build": "rm -r lib && babel src --presets minify --out-dir lib",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
@@ -37,7 +37,9 @@
   "files": [
     "README.md",
     "LICENCE",
-    "lib/"
+    "src/",
+    "lib",
+    "package.json"
   ],
   "dependencies": {
     "inquirer": "^7.1.0"
