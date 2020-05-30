@@ -2,7 +2,7 @@
   "name": "nodejs-api-cli",
   "version": "0.3.0",
   "description": "nodejs-api-cli is a scaffold to start API for different NodeJS fraameworks.  for generating nodejs application.",
-  "main": "./tasks/data.js",
+  "main": "src/createapp.js",
   "bin": {
     "nodejs-api-cli": "src/createapp.js"
   },
@@ -57,9 +57,6 @@
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-prettier": "^3.1.2",
     "prettier": "^2.0.2"
-  },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
   },
   "babel": {
     "presets": [
