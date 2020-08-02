@@ -140,12 +140,12 @@ const installingDependancies = async (details) => {
   ]
 
   const newOperations = new DependancyLinkedList()
-  await newOperations.runFinalCommands(runLastOperations)
+  await newOperations.addAll(runLastOperations)
 
   // install all if not added to node_modules
   process.on("exit", async () => {
     // run linter fix, npm install & git operations
-    await newOperations.run(appBaseDirectory)
+    await newOperations.runFinalCommands(appBaseDirectory)
     chooseConsoleColorText(colorSet.normal, `\n Successfully created the application`);
   });
 };
