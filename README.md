@@ -33,11 +33,15 @@ Steps:
 
 ## Development 
 
-- run `npm run start:dev`
+- run: `npm run start:dev`
 - build: `npm run build`
 - production: `npm start`
 
-NB: During development make use of `nodejs-api-cli -- -h` or `nodejs-api-cli -- -v`
+NB: During development, if you need help or run an app test use the following:
+
+- help: `npm start -- -h`
+- create-app: `npm start init`
+- version: `npm start -- -v`
 
 ## Edit Database/.env details
 
