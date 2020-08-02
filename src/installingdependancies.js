@@ -12,6 +12,64 @@ const {
   colorString,
 } = require("./utils/consolecolors");
 const colorSet = require("./utils/colorsets");
+const { LinkedList } = require("./common-ds")
+
+/**
+ * make use of linked list when installing dependancies
+ * to make sure that the first dependancy is added 
+ * before the second dependancy -> in order installation
+ */
+class DependancyLinkedList extends LinkedList {
+  constructor() {
+      super()
+  }
+
+  async installDependancy(command, appBaseDirectory) {
+      if(!this.head) {
+          console.log('No dependancies added to this linked list')
+      } else {
+          let curr = this.head
+          
+          while(curr) {
+              if(curr.value) {
+                  let dependancy = curr.value
+                  console.log(`..........Starting to install ${dependancy}`)
+                  // install dependancies in order
+                  await execPromisified(
+                    `cd ${appBaseDirectory} && ${command} ${dependancy}`
+                  );
+                  chooseConsoleColorText(
+                    colorSet.normal,
+                    `\n Installed ${colorString(
+                      colorSet.log,
+                      `${dependancy}`
+                    )} in the application.`
+                  );
+              } 
+              // move current to the next node
+              curr = curr.next
+          }
+      }
+  }
+
+  // run any operations/commands such as git init
+  runFinalCommands(appBaseDirectory) {
+    if(!this.head) {
+      console.log('No commands to run')
+    } else {
+      let curr = this.head
+      while(curr) {
+        if(curr.value) {
+          let command = curr.value
+          console.log(`.......Running command: ${command}`)
+          execPromisified(`cd ${appBaseDirectory} && ${command}`);
+        }
+        // move current to the next node
+        curr = curr.next
+      }
+    }
+  }
+}
 
 const installingDependancies = async (details) => {
   const {
@@ -57,49 +115,38 @@ const installingDependancies = async (details) => {
     "@babel/preset-env",
     "@babel/cli",
     "@babel/node",
+    "@babel/register",
     "standard",
   ];
 
   // install @ dependancy
-  dependancies.forEach(async (dependancy) => {
-    await execPromisified(
-      `cd ${appBaseDirectory} && npm install ${dependancy}`
-    );
-    chooseConsoleColorText(
-      colorSet.normal,
-      `\n Installed ${colorString(
-        colorSet.log,
-        `${dependancy}`
-      )} in the application.`
-    );
-  });
+  const dependanciesLinkedList = new DependancyLinkedList()
+  // add all dependancies to linked list
+  await dependanciesLinkedList.addAll(dependancies)
+  // iterate through each and install dependancies
+  await dependanciesLinkedList.installDependancy('npm install', appBaseDirectory)
 
   // install all dev dependancies
-  devDependancies.forEach(async (dependancy) => {
-    await execPromisified(
-      `cd ${appBaseDirectory} && npm install -D ${dependancy}`
-    );
-    chooseConsoleColorText(
-      colorSet.normal,
-      `\n Installed dev dependancy ${colorString(
-        colorSet.log,
-        `${dependancy}`
-      )} in the application.`
-    );
-  });
+  const devDependanciesLinkedList = new DependancyLinkedList()
+  // add all dev dependancies to list
+  await devDependanciesLinkedList.addAll(devDependancies)
+  // iterate through each and install dependancies
+  await devDependanciesLinkedList.installDependancy('npm install -D', appBaseDirectory)
 
-  execPromisified(
-    `cd ${appBaseDirectory} && 
-    git init && 
-    git add . && 
-    git commit -m "Set up application"`
-  );
+  // operations to run after installation of dependancies
+  const runLastOperations = [
+    'npm run fix', 'npm install', 
+    'git init', 'git add .', 'git commit -m "initial set up'
+  ]
+
+  const newOperations = new DependancyLinkedList()
+  await newOperations.runFinalCommands(runLastOperations)
 
   // install all if not added to node_modules
   process.on("exit", async () => {
-    await execPromisified(`cd ${appBaseDirectory} && npm run fix`);
-    await execPromisified(`cd ${appBaseDirectory} && npm install`);
-    chooseConsoleColorText(colorSet.normal, `\n Clean up installs`);
+    // run linter fix, npm install & git operations
+    await newOperations.run(appBaseDirectory)
+    chooseConsoleColorText(colorSet.normal, `\n Successfully created the application`);
   });
 };
 

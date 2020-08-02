@@ -38,8 +38,7 @@
   "files": [
     "README.md",
     "LICENCE",
-    "src/",
-    "lib",
+    "lib/",
     "package.json"
   ],
   "dependencies": {
