@@ -8,9 +8,10 @@
   },
   "scripts": {
     "start:dev": "babel-node src/createapp.js",
-    "start": "node src/createapp.js",
-    "build": "rm -r lib && babel src --presets minify --out-dir lib",
+    "start": "node lib/createapp.js",
+    "build": "npm run mkdir-lib && babel src --presets minify --out-dir lib",
     "lint": "eslint .",
+    "mkdir-lib": "sh scripts/mkdir.sh lib",
     "lint:fix": "eslint . --fix"
   },
   "repository": {
