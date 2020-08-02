@@ -1,5 +1,4 @@
-[![Build Status](https://travis-ci.org/kemboijs/nodejs-api-cli.svg?branch=master)](https://travis-ci.org/kemboijs/nodejs-api-cli)
-[![Coverage Status](https://coveralls.io/repos/github/kemboijs/nodejs-api-cli/badge.svg?branch=master)](https://coveralls.io/github/kemboijs/nodejs-api-cli?branch=master)
+[![KemboiJs](https://circleci.com/gh/kemboijs/nodejs-api-cli.svg?style=svg)](https://app.circleci.com/pipelines/github/kemboijs/nodejs-api-cli)
 ![npm](https://img.shields.io/npm/dt/nodejs-api-cli)
 ![npm](https://img.shields.io/npm/v/nodejs-api-cli)
 ![npm](https://img.shields.io/static/v1?label=PR&message=Welcome&color=brightgreen)
@@ -40,7 +39,8 @@ Steps:
 NB: During development, if you need help or run an app test use the following:
 
 - help: `npm start -- -h`
-- create-app: `npm start init`
+- create-app-development: `npm run start:dev init`
+- create-app-production: `npm start init`
 - version: `npm start -- -v`
 
 ## Edit Database/.env details
