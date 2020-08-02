@@ -26,6 +26,9 @@ class LinkedList {
 
     // if modified -> it might lead to errors
     addAll(arr) {
+        // catch items passed that are not of type array
+        if(!Array.isArray(arr)) return
+
         arr.forEach(item => {
             this.append(item)
         })
