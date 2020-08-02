@@ -38,10 +38,13 @@ Steps:
 
 NB: During development, if you need help or run an app test use the following:
 
-- help: `npm start -- -h`
+- help: `npm run start:dev -- -h`
+- version: `npm run start:dev -- -v`
 - create-app-development: `npm run start:dev init`
+
+To check if production works when developing: Run-
+- build: `npm run build`
 - create-app-production: `npm start init`
-- version: `npm start -- -v`
 
 ## Edit Database/.env details
 

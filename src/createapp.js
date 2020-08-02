@@ -72,11 +72,11 @@ args.forEach(async (value) => {
     );
     chooseConsoleColorText(
       colorSet.normal,
-      "Help: nodejs-api-cli help or nodejs-api-cli -- -h\n"
+      "Help: nodejs-api-cli help or nodejs-api-cli -h\n"
     );
     chooseConsoleColorText(
       colorSet.normal,
-      "Version: nodejs-api-cli version or nodejs-api-cli -- -v\n"
+      "Version: nodejs-api-cli version or nodejs-api-cli -v\n"
     );
     chooseConsoleColorText(
       colorSet.normal,
@@ -133,7 +133,7 @@ args.forEach(async (value) => {
   } else {
     chooseConsoleColorText(
       colorSet.error,
-      "\n------Value entered is wrong. Use -- e.g nodejs-api-cli -- -h --------\n"
+      "\n------Value entered is wrong. Use -- e.g nodejs-api-cli -h --------\n"
     );
     process.exit(0);
   }
