@@ -8,7 +8,7 @@ const packageJson = (name) => ({
     start: "babel-node src/index.js",
     test:
       "nyc --reporter=text mocha tests/**/*.js --require @babel/register --exit",
-    "create:db": "babel-node src/scripts/createdb.js",
+    "create:db": "babel-node src/scripts/createTables.js",
     "drop:db": "babel-node src/scripts/dropdb.js",
     fix: "standard --fix",
   },

@@ -1,11 +1,11 @@
-const createDb = `
+const createTables = `
 import { User } from '../models';
 
 export default User.sync().then(() => {
-    console.log("Successfully created User tables tables")
+    console.log("Successfully created User tables")
 }).catch(error => {
     console.log("The error: ", error)
 });
 `;
 
-module.exports = createDb;
+module.exports = createTables;

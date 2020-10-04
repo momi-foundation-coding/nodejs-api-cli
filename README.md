@@ -86,7 +86,7 @@ You can now create, drop any database models. The created models is **User**, un
     |       ├─ index.js
     |       ├─ user.js
     |   └─ scripts
-    |       ├─ createdb.js
+    |       ├─ create-tables.js
     |       ├─ dropdb.js
     |       ├─ index.js
     |   └─ services

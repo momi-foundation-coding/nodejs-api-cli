@@ -21,7 +21,7 @@ const {
   routeTest,
   middlewareTest,
   useControllerTest,
-  createDb,
+  createTables,
   dropDb,
   noOrmcreateDb,
   noOrmDropDb,
@@ -73,19 +73,19 @@ const createSrcDirAndFiles = (details) => {
       if (scriptsArr.includes(folder)) {
         // Create a script to create tables
         if (database.toLowerCase() !== "mongodb") {
-          const createDbFile = `${appBaseDirectory}/src/scripts/createdb.js`;
-          const createDbFileName = fs.createWriteStream(createDbFile);
+          const createTablesFile = `${appBaseDirectory}/src/scripts/create-tables.js`;
+          const createTablesFileName = fs.createWriteStream(createTablesFile);
           // Create a script to drop tables
           const dropDbFile = `${appBaseDirectory}/src/scripts/dropdb.js`;
           const dropDbFileName = fs.createWriteStream(dropDbFile);
-          let createDbData;
+          let createTablesData;
           let dropDbData;
           if (orm && orm.toLowerCase() === "sequelize") {
-            createDbData = createDb;
+            createTablesData = createTables;
             dropDbData = dropDb;
           } else if (orm && orm.toLowerCase() === "no orm") {
             // When user does't need any orm
-            createDbData = noOrmcreateDb;
+            createTablesData = noOrmcreateDb;
             dropDbData = noOrmDropDb;
             // Create a script to query database -> only when no orm
             const queriesFile = `${appBaseDirectory}/src/scripts/queries.js`;
@@ -93,7 +93,7 @@ const createSrcDirAndFiles = (details) => {
             openAppendFile(queriesFileName.path, userQueries);
           }
           // append drop database scripts and create db scripts
-          openAppendFile(createDbFileName.path, createDbData);
+          openAppendFile(createTablesFileName.path, createTablesData);
           openAppendFile(dropDbFileName.path, dropDbData);
         }
       }

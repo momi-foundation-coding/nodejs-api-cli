@@ -17,7 +17,7 @@ const useControllerTest = (db) => {
     hooksScript = `before(async () => {
       // create and drop database before
       await databaseScripts.dropdb
-      await databaseScripts.createdb
+      await databaseScripts.createTables
     })
   
     after(async () => {
@@ -28,7 +28,7 @@ const useControllerTest = (db) => {
     beforeEach(async () => {
       // create tables before each test.
       await databaseScripts.dropdb
-      await databaseScripts.createdb
+      await databaseScripts.createTables
     })
   
     afterEach(async () => {
