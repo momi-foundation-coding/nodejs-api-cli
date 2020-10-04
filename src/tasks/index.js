@@ -28,7 +28,7 @@ const userQueries = require("./database/userqueries");
 const noOrmDropDb = require("./database/noormdropdb");
 const noOrmcreateDb = require("./database/noormcreatedb");
 const dropDb = require("./database/dropdb");
-const createDb = require("./database/createdb");
+const createTables = require("./database/create-tables");
 const mongoDbSetup = require("./database/mongodbsetup");
 const mongoDbUserModelData = require("./models/mongodbusermodel");
 const responseHelper = require("./helpers/responsehelper");
@@ -61,7 +61,7 @@ module.exports = {
   noOrmDropDb,
   noOrmcreateDb,
   dropDb,
-  createDb,
+  createTables,
   mongoDbSetup,
   mongoDbUserModelData,
   responseHelper,

@@ -65,3 +65,6 @@ dist/
 
 # Webstorm files
 .idea
+
+# generated build files
+lib/

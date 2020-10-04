@@ -1,5 +1,5 @@
 const databaseScripts = `
-import createdb from './createdb';
+import createTables from './create-tables';
 import dropdb from './dropdb';
 
 /**
@@ -7,7 +7,7 @@ import dropdb from './dropdb';
  * running on create database and drop db in tests
  */
 const databaseScripts = {
-    createdb,
+    createTables,
     dropdb
 }
 
