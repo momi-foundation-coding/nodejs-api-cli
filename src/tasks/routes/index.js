@@ -1,4 +1,4 @@
-const routes = `import { Router } from 'express';
+const routes = (appName) => `import { Router } from 'express';
 import userRouters from './user';
 
 const router = new Router();
@@ -6,7 +6,7 @@ const router = new Router();
 // / url
 router.get('/', (req, res) => {
     res.status(200).send({
-        message: "Welcome to my first app"
+        message: "Welcome to ${appName}"
     });
 });
 
