@@ -21,7 +21,7 @@ const createMainDir = (details) => {
       process.exit(0);
     } else {
       const appBaseDirectory = path.basename(appName);
-      createSrcDirAndFiles({ appBaseDirectory, tests, database, orm });
+      createSrcDirAndFiles({ appBaseDirectory, appName, tests, database, orm });
     }
   });
 };

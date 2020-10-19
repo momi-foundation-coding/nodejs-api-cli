@@ -34,7 +34,7 @@ const {
 } = require("./tasks");
 
 const createSrcDirAndFiles = (details) => {
-  const { appBaseDirectory, tests, database, orm } = details;
+  const { appBaseDirectory, appName, tests, database, orm } = details;
   const foldersToAdd = [
     "src/controllers",
     "src/services",
@@ -230,7 +230,7 @@ const createSrcDirAndFiles = (details) => {
         openAppendFile(fileName.path, middlewares);
       }
       if (fileName.path === `${appBaseDirectory}/src/routes/index.js`) {
-        openAppendFile(fileName.path, routes);
+        openAppendFile(fileName.path, routes(appName));
       }
       if (fileName.path === `${appBaseDirectory}/src/controllers/index.js`) {
         openAppendFile(fileName.path, controllers);
