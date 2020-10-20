@@ -17,8 +17,8 @@ Also, we will aim at building utility that can enhance faster development of upc
 - Create app: `nodejs-api-cli init`
   - Follow the steps and select your options
 - Run app: `npm start`
-- Drop tables: `npm run drop:db`
-- Create tables: `npm run create:db`
+- Drop tables: `npm run drop:Tables`
+- Create tables: `npm run create:Tables`
 - Run tests: `npm test` 
 
 NB: Make sure all dependancies are installed. `npm install`.
@@ -89,7 +89,7 @@ You can now create, drop any database models. The created models is **User**, un
     |       ├─ user.js
     |   └─ scripts
     |       ├─ create-tables.js
-    |       ├─ dropdb.js
+    |       ├─ drop-tables.js
     |       ├─ index.js
     |   └─ services
     |       ├─ index.js

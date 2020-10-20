@@ -16,24 +16,24 @@ const useControllerTest = (db) => {
     deleteWithId = "1";
     hooksScript = `before(async () => {
       // create and drop database before
-      await databaseScripts.dropdb
+      await databaseScripts.dropTables
       await databaseScripts.createTables
     })
   
     after(async () => {
       // drop database after all tests
-      await databaseScripts.dropdb
+      await databaseScripts.dropTables
     })
   
     beforeEach(async () => {
       // create tables before each test.
-      await databaseScripts.dropdb
+      await databaseScripts.dropTables
       await databaseScripts.createTables
     })
   
     afterEach(async () => {
       // drop tables after each test.
-      await databaseScripts.dropdb
+      await databaseScripts.dropTables
     })`;
   }
   return `import chai, { expect } from 'chai';

@@ -6,10 +6,9 @@ const packageJson = (name) => ({
   main: "src/index.js",
   scripts: {
     start: "babel-node src/index.js",
-    test:
-      "nyc --reporter=text mocha tests/**/*.js --require @babel/register --exit",
-    "create:db": "babel-node src/scripts/createTables.js",
-    "drop:db": "babel-node src/scripts/dropdb.js",
+    test: "nyc --reporter=text mocha tests/**/*.js --require @babel/register --exit",
+    "create:Tables": "babel-node src/scripts/createTables.js",
+    "drop:Tables": "babel-node src/scripts/dropTables.js",
     fix: "standard --fix",
   },
   repository: {
