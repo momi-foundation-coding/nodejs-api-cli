@@ -50,6 +50,19 @@ const createApp = async (details) => {
 // Remove the first 2 arguments
 const args = process.argv.slice(2);
 
+if(args.length <= 0) {
+  let message = "------\nValue is required  e.g nodejs-api-cli init--------\n";
+
+  if(process.env.NODE_ENV === "development") {
+    message = "------\nValue is required  e.g npm run start:dev init--------\n";
+  }
+  chooseConsoleColorText(
+    colorSet.error,
+    message
+  );
+  process.exit(0);
+}
+
 // Convert into a module that can be used as CLI
 // eslint-disable-next-line consistent-return
 args.forEach(async (value) => {

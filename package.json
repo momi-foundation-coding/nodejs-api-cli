@@ -7,7 +7,7 @@
     "nodejs-api-cli": "src/createapp.js"
   },
   "scripts": {
-    "start:dev": "babel-node src/createapp.js",
+    "start:dev": "NODE_ENV=development babel-node src/createapp.js",
     "start": "node lib/createapp.js",
     "build": "npm run mkdir-lib && babel src --presets minify --out-dir lib",
     "lint": "eslint .",

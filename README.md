@@ -34,9 +34,11 @@ Steps:
 
 - run: `npm run start:dev`
 - build: `npm run build`
-- production: `npm start`
+- production: `npm start` 
 
-NB: During development, if you need help or run an app test use the following:
+NB: `For production` purpose testing, be sure to do build first, which generates a folder named `lib/` that is ignored
+
+NB: `During development`, if you need help or run an app test use the following:
 
 - help: `npm run start:dev -- -h`
 - version: `npm run start:dev -- -v`
