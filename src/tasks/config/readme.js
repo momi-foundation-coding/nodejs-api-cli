@@ -1,6 +1,6 @@
 const readMe = (name) =>
   `# ${name.charAt(0).toUpperCase() + name.slice(1)}
-This is my first app generated using nodejs-api-cli
+This is ${name} generated using nodejs-api-cli
 
 # Project setup
 npm install
