@@ -7,10 +7,13 @@ const appJs = (db) => {
   return `import express from 'express';
         import bodyParser from 'body-parser';
         import cors from 'cors';
+        import dotenv from 'dotenv';
         import routes from './routes';
         ${setUpRequired}
         
-        const port = 8000;
+        dotenv.config();
+        
+        const port = process.env.PORT || 8000;
         const app = express();
         
         app.use(bodyParser.json());
