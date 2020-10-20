@@ -27,7 +27,7 @@ const noOrmUserController = require("./controllers/noormuser");
 const userQueries = require("./database/userqueries");
 const noOrmDropDb = require("./database/noormdropdb");
 const noOrmcreateDb = require("./database/noormcreatedb");
-const dropDb = require("./database/dropdb");
+const dropTables = require("./database/drop-tables");
 const createTables = require("./database/create-tables");
 const mongoDbSetup = require("./database/mongodbsetup");
 const mongoDbUserModelData = require("./models/mongodbusermodel");
@@ -60,7 +60,7 @@ module.exports = {
   userQueries,
   noOrmDropDb,
   noOrmcreateDb,
-  dropDb,
+  dropTables,
   createTables,
   mongoDbSetup,
   mongoDbUserModelData,

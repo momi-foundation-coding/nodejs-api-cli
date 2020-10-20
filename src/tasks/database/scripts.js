@@ -1,6 +1,6 @@
 const databaseScripts = `
 import createTables from './create-tables';
-import dropdb from './dropdb';
+import dropTables from './drop-tables';
 
 /**
  * Export scripts to allow easy
@@ -8,7 +8,7 @@ import dropdb from './dropdb';
  */
 const databaseScripts = {
     createTables,
-    dropdb
+    dropTables
 }
 
 export default databaseScripts

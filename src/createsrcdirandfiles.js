@@ -22,7 +22,7 @@ const {
   middlewareTest,
   useControllerTest,
   createTables,
-  dropDb,
+  dropTables,
   noOrmcreateDb,
   noOrmDropDb,
   userQueries,
@@ -76,17 +76,17 @@ const createSrcDirAndFiles = (details) => {
           const createTablesFile = `${appBaseDirectory}/src/scripts/create-tables.js`;
           const createTablesFileName = fs.createWriteStream(createTablesFile);
           // Create a script to drop tables
-          const dropDbFile = `${appBaseDirectory}/src/scripts/dropdb.js`;
-          const dropDbFileName = fs.createWriteStream(dropDbFile);
+          const dropTablesFile = `${appBaseDirectory}/src/scripts/drop-tables.js`;
+          const dropTablesFileName = fs.createWriteStream(dropTablesFile);
           let createTablesData;
-          let dropDbData;
+          let dropTablesData;
           if (orm && orm.toLowerCase() === "sequelize") {
             createTablesData = createTables;
-            dropDbData = dropDb;
+            dropTablesData = dropTables;
           } else if (orm && orm.toLowerCase() === "no orm") {
             // When user does't need any orm
             createTablesData = noOrmcreateDb;
-            dropDbData = noOrmDropDb;
+            dropTablesData = noOrmDropDb;
             // Create a script to query database -> only when no orm
             const queriesFile = `${appBaseDirectory}/src/scripts/queries.js`;
             const queriesFileName = fs.createWriteStream(queriesFile);
@@ -94,7 +94,7 @@ const createSrcDirAndFiles = (details) => {
           }
           // append drop database scripts and create db scripts
           openAppendFile(createTablesFileName.path, createTablesData);
-          openAppendFile(dropDbFileName.path, dropDbData);
+          openAppendFile(dropTablesFileName.path, dropTablesData);
         }
       }
 
