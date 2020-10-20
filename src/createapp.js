@@ -47,6 +47,25 @@ const createApp = async (details) => {
   });
 };
 
+// log message/errors in console
+const loggingMessage = (consoleColorSet, message) => {
+  chooseConsoleColorText(
+    consoleColorSet,
+    message
+  );
+}
+// when we need to log more than 1 message in console
+const logMoreThanOneMsg = (arr) => {
+  if(Array.isArray(arr)) {
+    arr.forEach(msg => {
+      chooseConsoleColorText(
+        msg.consoleColorSet,
+        msg.message
+      );
+    })
+  }
+}
+
 // Remove the first 2 arguments
 const args = process.argv.slice(2);
 
@@ -70,84 +89,77 @@ args.forEach(async (value) => {
    * Can this be tested?
    * E.g ensure that an application is created
    */
-  if (!value) {
-    chooseConsoleColorText(
-      colorSet.error,
-      "------\nValue is required  e.g nodejs-api-cli init--------\n"
-    );
-    process.exit(0);
-  } else if (value === "version" || value === "-v") {
-    chooseConsoleColorText(colorSet.normal, version);
-  } else if (value === "help" || value === "-h") {
-    chooseConsoleColorText(
-      colorSet.normal,
-      "New Project: nodejs-api-cli init\n"
-    );
-    chooseConsoleColorText(
-      colorSet.normal,
-      "Help: nodejs-api-cli help or nodejs-api-cli -h\n"
-    );
-    chooseConsoleColorText(
-      colorSet.normal,
-      "Version: nodejs-api-cli version or nodejs-api-cli -v\n"
-    );
-    chooseConsoleColorText(
-      colorSet.normal,
-      "Documentation: https://kemboijs.github.io/kemboijs.org/\n"
-    );
-  } else if (value === "init") {
+  let message = "\n------Value entered is wrong. Use -- e.g nodejs-api-cli -h --------\n";
+  let consoleColorSet = colorSet.error;
+  
+  if (value === "version" || value === "-v") {
+    message = version
+    consoleColorSet = colorSet.normal
+  }
+
+  if(value ===  "help" || value === "-h") {
+    let helpMsgs = [
+      {
+        consoleColorSet: colorSet.log,
+        message: "New Project: nodejs-api-cli init\n"
+      },
+      {
+        consoleColorSet: colorSet.log,
+        message: "Help: nodejs-api-cli help or nodejs-api-cli help\n"
+      },
+      {
+        consoleColorSet: colorSet.log,
+        message:  "Version: nodejs-api-cli version or nodejs-api-cli -v\n"
+      },
+      {
+        consoleColorSet: colorSet.log,
+        message:  "Documentation: https://kemboijs.github.io/kemboijs.org/\n"
+      }
+    ]
+    return logMoreThanOneMsg(helpMsgs);
+  }
+
+  if(value === "init") {
     const appName = await promptAppName();
     const collectFrameworkAndDb = await promptFrameworkDb();
     const { database } = collectFrameworkAndDb;
     const ormChoices = [];
-
     /**
      * Select the ORMs options based on the database provided above.
      */
     if (database === "Postgres") {
       ormChoices.push("Sequelize", "No ORM");
-    } else if (database === "Sqlite") {
+    } 
+    if (database === "Sqlite") {
       // sqlite to be installed is version 3
       ormChoices.push("Sequelize");
-    } else if (database === "MongoDB") {
+    } 
+    if (database === "MongoDB") {
       ormChoices.push("mongoose");
-    } else {
-      chooseConsoleColorText(
-        colorSet.error,
-        "\n------Error occurred while collecting database details------\n"
-      );
-      process.exit(0);
     }
 
     const collectOrm = await promptOrm(ormChoices);
     const needTests = await promptTest();
     let testRunner;
     const { tests } = needTests;
-
-    if (tests) {
-      testRunner = await promptTestRunner();
-    } else {
-      return createApp({
-        ...appName,
-        ...collectFrameworkAndDb,
-        ...collectOrm,
-        tests,
-      });
-    }
-
-    // send details of app
-    return createApp({
+    let requiredItems = {
       ...appName,
       ...collectFrameworkAndDb,
       ...collectOrm,
-      tests,
-      ...testRunner,
-    });
-  } else {
-    chooseConsoleColorText(
-      colorSet.error,
-      "\n------Value entered is wrong. Use -- e.g nodejs-api-cli -h --------\n"
-    );
-    process.exit(0);
+      tests
+    }
+    if(!tests) {
+      return createApp(requiredItems);
+    }
+
+    if(tests) {
+      let appDetails = {};
+      testRunner = await promptTestRunner();
+      appDetails = { ...requiredItems, ...testRunner };
+      return createApp(appDetails);
+    }
   }
+
+  // log message 
+  loggingMessage(consoleColorSet, message);
 });
