@@ -27,7 +27,7 @@ export const getUserController = (req, res) => {
     });
 }
 export const signupUserController = (req, res) => {
-    await query(createUserQuery, async (err, result) => {
+    query(createUserQuery, (err, result) => {
         if (err) {
             return responseHandler(res, err, 500);
         }
