@@ -1,7 +1,7 @@
 set -e 
 
 echo We are installing dependancies, please wait...
-npm install express body-parser cors 
+npm install express cors 
 
 echo All dependancies installed 
 

@@ -97,7 +97,6 @@ const installingDependancies = async (details) => {
   chooseConsoleColorText(colorSet.log, `\n ${startInstallation.stdout}`);
 
   const dependancies = [
-    "body-parser",
     "dotenv",
     "cors",
     "bcrypt",
