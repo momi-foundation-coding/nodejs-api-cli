@@ -5,7 +5,7 @@ const promptTest = () => {
     {
       type: "confirm",
       name: "tests",
-      message: "Do you needs tests(Y/N)?",
+      message: "Require Unit Tests(Y/N)?",
       default: ["Y"],
     },
   ]);
@@ -16,7 +16,7 @@ const promptTestRunner = () => {
     {
       type: "list",
       name: "testFramework",
-      message: "Which testing framework do you want to use?",
+      message: "Choose testing framework?",
       /**
        * Need to add more choices e.g
        * choices: ['Mocha', 'Jasmine'],
@@ -27,7 +27,7 @@ const promptTestRunner = () => {
     {
       type: "list",
       name: "expectationLibrary",
-      message: "Which expectation library do you want to use?",
+      message: "Choose testing library?",
       choices: ["chai"],
       default: "chai",
     },
