@@ -11,7 +11,7 @@ const promptAppName = () => {
         if (!input) {
           chooseConsoleColorText(
             colorSet.error,
-            "\n\n------App name should not be empty-------\n"
+            "\n\n------Name of Application is required-------\n"
           );
           return process.exit(0);
         }
