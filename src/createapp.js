@@ -49,36 +49,27 @@ const createApp = async (details) => {
 
 // log message/errors in console
 const loggingMessage = (consoleColorSet, message) => {
-  chooseConsoleColorText(
-    consoleColorSet,
-    message
-  );
-}
+  chooseConsoleColorText(consoleColorSet, message);
+};
 // when we need to log more than 1 message in console
 const logMoreThanOneMsg = (arr) => {
-  if(Array.isArray(arr)) {
-    arr.forEach(msg => {
-      chooseConsoleColorText(
-        msg.consoleColorSet,
-        msg.message
-      );
-    })
+  if (Array.isArray(arr)) {
+    arr.forEach((msg) => {
+      chooseConsoleColorText(msg.consoleColorSet, msg.message);
+    });
   }
-}
+};
 
 // Remove the first 2 arguments
 const args = process.argv.slice(2);
 
-if(args.length <= 0) {
+if (args.length <= 0) {
   let message = "------\nValue is required  e.g nodejs-api-cli init--------\n";
 
-  if(process.env.NODE_ENV === "development") {
+  if (process.env.NODE_ENV === "development") {
     message = "------\nValue is required  e.g npm run start:dev init--------\n";
   }
-  chooseConsoleColorText(
-    colorSet.error,
-    message
-  );
+  chooseConsoleColorText(colorSet.error, message);
   process.exit(0);
 }
 
@@ -89,37 +80,38 @@ args.forEach(async (value) => {
    * Can this be tested?
    * E.g ensure that an application is created
    */
-  let message = "\n------Value entered is wrong. Use -- e.g nodejs-api-cli -h --------\n";
+  let message =
+    "\n------Value entered is wrong. Use -- e.g nodejs-api-cli -h --------\n";
   let consoleColorSet = colorSet.error;
-  
+
   if (value === "version" || value === "-v") {
-    message = version
-    consoleColorSet = colorSet.normal
+    message = version;
+    consoleColorSet = colorSet.normal;
   }
 
-  if(value ===  "help" || value === "-h") {
-    let helpMsgs = [
+  if (value === "help" || value === "-h") {
+    const helpMsgs = [
       {
         consoleColorSet: colorSet.log,
-        message: "New Project: nodejs-api-cli init\n"
+        message: "New Project: nodejs-api-cli init\n",
       },
       {
         consoleColorSet: colorSet.log,
-        message: "Help: nodejs-api-cli help or nodejs-api-cli help\n"
+        message: "Help: nodejs-api-cli help or nodejs-api-cli help\n",
       },
       {
         consoleColorSet: colorSet.log,
-        message:  "Version: nodejs-api-cli version or nodejs-api-cli -v\n"
+        message: "Version: nodejs-api-cli version or nodejs-api-cli -v\n",
       },
       {
         consoleColorSet: colorSet.log,
-        message:  "Documentation: https://kemboijs.github.io/kemboijs.org/\n"
-      }
-    ]
+        message: "Documentation: https://kemboijs.github.io/kemboijs.org/\n",
+      },
+    ];
     return logMoreThanOneMsg(helpMsgs);
   }
 
-  if(value === "init") {
+  if (value === "init") {
     const appName = await promptAppName();
     const collectFrameworkAndDb = await promptFrameworkDb();
     const { database } = collectFrameworkAndDb;
@@ -129,11 +121,11 @@ args.forEach(async (value) => {
      */
     if (database === "Postgres") {
       ormChoices.push("Sequelize", "No ORM");
-    } 
+    }
     if (database === "Sqlite") {
       // sqlite to be installed is version 3
       ormChoices.push("Sequelize");
-    } 
+    }
     if (database === "MongoDB") {
       ormChoices.push("mongoose");
     }
@@ -142,17 +134,17 @@ args.forEach(async (value) => {
     const needTests = await promptTest();
     let testRunner;
     const { tests } = needTests;
-    let requiredItems = {
+    const requiredItems = {
       ...appName,
       ...collectFrameworkAndDb,
       ...collectOrm,
-      tests
-    }
-    if(!tests) {
+      tests,
+    };
+    if (!tests) {
       return createApp(requiredItems);
     }
 
-    if(tests) {
+    if (tests) {
       let appDetails = {};
       testRunner = await promptTestRunner();
       appDetails = { ...requiredItems, ...testRunner };
@@ -160,6 +152,6 @@ args.forEach(async (value) => {
     }
   }
 
-  // log message 
+  // log message
   loggingMessage(consoleColorSet, message);
 });

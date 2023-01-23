@@ -1,11 +1,8 @@
 const middlewares = `
 import { createUserMiddleware } from './user';
 
-const userMiddleware = {
-    createUserMiddleware
-}
-
-export default userMiddleware;
+// allow dynamic export
+export { createUserMiddleware }
 
 `;
 

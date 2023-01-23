@@ -147,9 +147,8 @@ const createSrcDirAndFiles = (details) => {
             {
               // Create a tests script for user controllers
               const userControllerFile = `${folder}/user.js`;
-              const userControllerFileName = fs.createWriteStream(
-                userControllerFile
-              );
+              const userControllerFileName =
+                fs.createWriteStream(userControllerFile);
               openAppendFile(
                 userControllerFileName.path,
                 useControllerTest(database)
@@ -248,9 +247,8 @@ const createSrcDirAndFiles = (details) => {
       if (helperArr.includes(folder)) {
         // Create a response helpers file
         const responseHandlerFile = `${appBaseDirectory}/src/helpers/responsehandler.js`;
-        const responseHandlerFileName = fs.createWriteStream(
-          responseHandlerFile
-        );
+        const responseHandlerFileName =
+          fs.createWriteStream(responseHandlerFile);
         openAppendFile(responseHandlerFileName.path, responseHelper);
       }
     });
