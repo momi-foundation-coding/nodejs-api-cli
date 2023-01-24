@@ -12,7 +12,8 @@
     "build": "npm run mkdir-lib && babel src --presets minify --out-dir lib",
     "lint": "eslint .",
     "mkdir-lib": "sh scripts/mkdir.sh lib",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "test": "cross-env NODE_ENV=test nyc --reporter lcov --reporter text mocha --exist --recursive --timeout=150000 src/tasks/tests/*.js"
   },
   "repository": {
     "type": "git",
@@ -54,11 +55,15 @@
     "@babel/node": "^7.14.7",
     "@babel/preset-env": "^7.14.7",
     "babel-preset-minify": "^0.5.1",
+    "chai": "^4.3.7",
+    "cross-env": "^7.0.3",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-import": "^2.23.4",
     "eslint-plugin-prettier": "^3.4.0",
+    "mocha": "^10.2.0",
+    "nyc": "^15.1.0",
     "prettier": "^2.3.2"
   },
   "babel": {
